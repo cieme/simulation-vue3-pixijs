@@ -3,6 +3,7 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div></div>
-  <RouterView />
+  <a-config-provider :csp="{ nonce: 'YourNonceCode' }" component-size="middle">
+    <RouterView />
+  </a-config-provider>
 </template>
