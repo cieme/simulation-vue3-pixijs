@@ -1,0 +1,78 @@
+<template>
+  <div class="login-container flex justify-center items-center">
+    <div class="login-wrapper p-10 rounded-lg">
+      <a-config-provider
+        :csp="{ nonce: 'YourNonceCode' }"
+        component-size="middle"
+        :theme="{
+          algorithm: theme.defaultAlgorithm,
+        }"
+      >
+        <a-typography-title class="text-center !mb-3" :level="1"> 欢迎回来 </a-typography-title>
+        <a-typography-title class="text-center !mt-0" :level="4"> 离散仿真工具 </a-typography-title>
+
+        <a-form
+          class="mt-6"
+          :model="formState"
+          name="basic"
+          :label-col="{ span: 0 }"
+          :wrapper-col="{ span: 24 }"
+          autocomplete="off"
+          @finish="onFinish"
+          @finishFailed="onFinishFailed"
+        >
+          <a-form-item
+            label=""
+            name="username"
+            :rules="[{ required: true, message: '请输入用户名!' }]"
+          >
+            <a-input placeholder="用户名" v-model:value="formState.username" />
+          </a-form-item>
+
+          <a-form-item
+            label=""
+            name="password"
+            :rules="[{ required: true, message: '请输入密码!' }]"
+          >
+            <a-input-password placeholder="密码" v-model:value="formState.password" />
+          </a-form-item>
+
+          <a-form-item class="m-0" :wrapper-col="{ offset: 0, span: 24 }">
+            <div class="pt-2">
+              <a-button class="w-full" type="primary" html-type="submit">登陆</a-button>
+            </div>
+          </a-form-item>
+        </a-form>
+      </a-config-provider>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import { theme } from 'ant-design-vue'
+import { APLogin } from '@/api/user/user'
+
+const formState = reactive({
+  username: 'admin',
+  password: '1',
+})
+const onFinish = (values: any) => {
+  APLogin({ userName: formState.username, passWord: formState.password }).then((res) => {})
+}
+
+const onFinishFailed = (errorInfo: any) => {
+  console.log('Failed:', errorInfo)
+}
+</script>
+<style lang="scss" scoped>
+.login-container {
+  background: url('./login_bg.jpg') center center / cover no-repeat;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+.login-wrapper {
+  background-color: rgba(#fff, 0.2);
+  backdrop-filter: blur(4px);
+  width: 400px;
+}
+</style>
