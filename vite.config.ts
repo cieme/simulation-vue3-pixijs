@@ -11,7 +11,6 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig((config) => {
   let base = undefined
   const env = loadEnv(config.mode, process.cwd())
-  console.log(env)
   if (config.mode === 'production') {
     base = '/dist/'
   }

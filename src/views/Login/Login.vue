@@ -1,6 +1,7 @@
 <template>
-  <div class="login-container flex justify-center items-center">
-    <div class="login-wrapper p-10 rounded-lg">
+  <div class="login-container flex justify-center items-center overflow-hidden">
+    <LoginBg class="absolute top-0 left-0 w-full h-full -z-0" />
+    <div class="login-wrapper p-10 rounded-lg relative">
       <a-config-provider
         :csp="{ nonce: 'YourNonceCode' }"
         component-size="middle"
@@ -34,7 +35,11 @@
             name="password"
             :rules="[{ required: true, message: '请输入密码!' }]"
           >
-            <a-input-password placeholder="密码" v-model:value="formState.password" />
+            <a-input-password
+              autocomplete="off"
+              placeholder="密码"
+              v-model:value="formState.password"
+            />
           </a-form-item>
 
           <a-form-item class="m-0" :wrapper-col="{ offset: 0, span: 24 }">
@@ -50,14 +55,25 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { theme } from 'ant-design-vue'
+import LoginBg from './LoginBg.vue'
+import { useUserStore } from '@/stores/user'
 import { APLogin } from '@/api/user/user'
+
+const userStore = useUserStore()
 
 const formState = reactive({
   username: 'admin',
   password: '1',
 })
 const onFinish = (values: any) => {
-  APLogin({ userName: formState.username, passWord: formState.password }).then((res) => {})
+  APLogin({ userName: formState.username, passWord: formState.password }).then((res) => {
+    const { dbId, roleLevel, realName } = res.data
+    userStore.setUserInfo({
+      dbId,
+      roleLevel,
+      realName,
+    })
+  })
 }
 
 const onFinishFailed = (errorInfo: any) => {
