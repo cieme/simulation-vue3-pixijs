@@ -18,7 +18,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@easytable/vue": "^0.0.6",
     "@vueuse/core": "^12.7.0",
-    "ant-design-vue": "4.x",
+    "ant-design-vue": "4.2.6",
     "axios": "^1.7.9",
     "handsontable": "^15.0.1",
     "js-cookie": "^3.0.5",

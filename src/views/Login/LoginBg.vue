@@ -12,7 +12,7 @@ const sprite = ref<Sprite>()
 const texture = ref<Texture>()
 const assets = {
   images: {
-    login_bg: '/login_bg.jpg',
+    LOGINBG: '/technology-8280863_1920.jpg',
   },
 }
 const filter = new BulgePinchFilter()
@@ -28,7 +28,7 @@ onUnmounted(() => {
 })
 
 function destroyAll() {
-  Assets.unload(assets.images.login_bg)
+  Assets.unload(assets.images.LOGINBG)
   if (app.value) {
     // 销毁 Application
     app.value.destroy(true, {
@@ -96,7 +96,7 @@ async function initApplication() {
 }
 
 async function addBgTexture() {
-  texture.value = await Assets.load(assets.images.login_bg)
+  texture.value = await Assets.load(assets.images.LOGINBG)
   texture.value!.source.addressMode = DEPRECATED_WRAP_MODES.REPEAT
   // 图像尺寸
   sprite.value = new Sprite(texture.value)

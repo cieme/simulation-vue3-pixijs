@@ -4,10 +4,9 @@
     <div class="slide flex flex-col">
       <div class="flex flex-col justify-center">
         <div class="pt-4 pb-4 pl-7 pr-7">
-          <a-button class="block" type="primary">
-            <template #icon><PlusOutlined /> </template>
-            新建项目
-          </a-button>
+          <a-button class="w-full" type="primary"
+            ><template #icon><PlusOutlined /></template>新建项目</a-button
+          >
         </div>
       </div>
       <Intersection class="intersection" :callback="getData"></Intersection>

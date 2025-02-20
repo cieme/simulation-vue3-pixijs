@@ -16,6 +16,7 @@
           class="mt-6"
           :model="formState"
           name="basic"
+          layout="vertical"
           :label-col="{ span: 0 }"
           :wrapper-col="{ span: 24 }"
           autocomplete="off"
@@ -23,7 +24,7 @@
           @finishFailed="onFinishFailed"
         >
           <a-form-item
-            label=""
+            label="用户名"
             name="username"
             :rules="[{ required: true, message: '请输入用户名!' }]"
           >
@@ -31,7 +32,7 @@
           </a-form-item>
 
           <a-form-item
-            label=""
+            label="密码"
             name="password"
             :rules="[{ required: true, message: '请输入密码!' }]"
           >
@@ -54,6 +55,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { theme } from 'ant-design-vue'
 import LoginBg from './LoginBg.vue'
 import { useUserStore } from '@/stores/user'
@@ -65,6 +67,7 @@ const formState = reactive({
   username: 'admin',
   password: '1',
 })
+const router = useRouter()
 const onFinish = (values: any) => {
   APLogin({ userName: formState.username, passWord: formState.password }).then((res) => {
     const { dbId, roleLevel, realName } = res.data
@@ -73,6 +76,7 @@ const onFinish = (values: any) => {
       roleLevel,
       realName,
     })
+    router.replace({ path: '/' })
   })
 }
 
@@ -82,13 +86,13 @@ const onFinishFailed = (errorInfo: any) => {
 </script>
 <style lang="scss" scoped>
 .login-container {
-  background: url('./login_bg.jpg') center center / cover no-repeat;
   min-width: 100vw;
   min-height: 100vh;
 }
 .login-wrapper {
-  background-color: rgba(#fff, 0.2);
-  backdrop-filter: blur(4px);
+  background-color: rgba(#fff, 0.4);
+  backdrop-filter: blur(8px);
   width: 400px;
+  width: 1rpx;
 }
 </style>
