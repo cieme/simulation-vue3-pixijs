@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="project-item-content pt-1 pb-1 flex items-center justify-between text">
-      <div>{{}}</div>
+      <div>{{ mode.projectName }}</div>
       <div>
         <Icon class="">
           <template #component="svgProps">
@@ -27,8 +27,10 @@
       </div>
     </div>
     <div class="project-item-footer mt-1 flex items-center justify-between">
-      <div class="text-xs text">共 <span class="text-base text-white">18</span> 个方案</div>
-      <div class="text-xs">2024-08-15 09:21:50</div>
+      <div class="text-xs text">
+        共 <span class="text-base text-white">{{ mode.countScene }}</span> 个方案
+      </div>
+      <div class="text-xs">{{ mode.createTime }}</div>
     </div>
   </section>
 </template>

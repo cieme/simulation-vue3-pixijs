@@ -8,6 +8,10 @@ export interface IProject {
 }
 export interface IProjectScene {
   dbId: string
+  createTime: string
+  createUser: string
+  projectName: string
   roleLevel: string
   realName: string
+  countScene: string
 }
