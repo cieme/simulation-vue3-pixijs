@@ -1,7 +1,7 @@
 import { type AxiosRequestConfig, type AxiosResponse } from 'axios'
 import service from '@/utils/request/request'
 import { type IResponse } from '@/utils/request/types'
-import { type ILoginParams, type ILoginResponse } from '@/api/user/types'
+import { type ILoginParams, type ILoginResponse } from '@/api/types/user_types'
 export function APLogin(
   data: ILoginParams,
   config?: AxiosRequestConfig,

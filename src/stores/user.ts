@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { type ILoginResponse } from '@/api/user/types'
+import { type ILoginResponse } from '@/api/types/user_types'
 import { getCookie, setCookie } from '@/utils/auth/auth'
 export const useUserStore = defineStore('userStore', () => {
   const cookie = getCookie()

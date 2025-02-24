@@ -1,4 +1,4 @@
-import HomeView from '../views/HomeView.vue'
+import HomeView from '../views/Project/Project.vue'
 import { type RouteRecordRaw } from 'vue-router'
 export const baseRoutes: RouteRecordRaw[] = [
   {

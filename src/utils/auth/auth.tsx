@@ -1,6 +1,6 @@
 const KEY = 'USER_INFO'
 import JScookie from 'js-cookie'
-import { type ILoginResponse } from '@/api/user/types'
+import { type ILoginResponse } from '@/api/types/user_types'
 export const setCookie = (value: ILoginResponse): void => {
   JScookie.set(KEY, JSON.stringify(value), {
     expires: 7, // 7 days

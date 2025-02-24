@@ -11,6 +11,9 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN'
     :locale="zhCN"
     :theme="{
       algorithm: theme.darkAlgorithm,
+      token: {
+        colorPrimary: '#407cf4',
+      },
     }"
   >
     <RouterView />

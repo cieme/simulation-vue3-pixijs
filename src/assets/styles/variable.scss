@@ -1,4 +1,34 @@
+@use 'sass:color';
 $header-bg: #3c404a;
 $header-height: 42px;
 $project-list-bg: #303238;
 $project-list-width: 300px;
+
+// 颜色变白
+@function toWhite($color, $percentage: 50%) {
+  @return color.mix(white, $color, $percentage);
+}
+
+// 颜色变黑
+@function toBlack($color, $percentage: 50%) {
+  @return color.mix(black, $color, $percentage);
+}
+// 滚动条
+@mixin scroll-bar($color: rgba(0, 0, 0, 0), $white: true) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: $color;
+    @apply rounded-sm;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-sm;
+    @if $white {
+      background-color: toWhite($color, 30%);
+    } @else {
+      background-color: toBlack($color);
+    }
+  }
+}

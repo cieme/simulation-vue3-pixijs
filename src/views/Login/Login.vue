@@ -64,8 +64,8 @@ import { APLogin } from '@/api/user/user'
 const userStore = useUserStore()
 
 const formState = reactive({
-  username: 'admin',
-  password: '1',
+  username: '',
+  password: '',
 })
 const router = useRouter()
 const onFinish = (values: any) => {
