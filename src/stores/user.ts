@@ -1,15 +1,17 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { type ILoginResponse } from '@/api/types/user_types'
-import { getCookie, setCookie } from '@/utils/auth/auth'
+import { getCookie, setCookie, removeCookie } from '@/utils/auth/auth'
 export const useUserStore = defineStore('userStore', () => {
   const cookie = getCookie()
-
-  const userInfo = ref<ILoginResponse>({
-    dbId: '',
-    roleLevel: '',
-    realName: '',
-  })
+  const defaultInfo = () => {
+    return {
+      dbId: '',
+      roleLevel: '',
+      realName: '',
+    }
+  }
+  const userInfo = ref<ILoginResponse>(defaultInfo())
   if (cookie) {
     userInfo.value = cookie
   }
@@ -20,6 +22,10 @@ export const useUserStore = defineStore('userStore', () => {
     userInfo.value = value
     setCookie(value)
   }
+  const logout = () => {
+    userInfo.value = defaultInfo()
+    removeCookie()
+  }
 
-  return { userInfo, isLogin, setUserInfo }
+  return { userInfo, isLogin, setUserInfo, logout }
 })

@@ -1,19 +1,37 @@
 <template>
   <div>
     <Header></Header>
-    <div class="slide flex flex-col">
-      <div class="flex flex-col justify-center">
-        <div class="pt-4 pb-4 pl-7 pr-7">
-          <a-button class="w-full" type="primary"
-            ><template #icon><PlusOutlined /></template>新建项目</a-button
-          >
+    <div class="flex">
+      <div class="slide flex flex-col pb-2">
+        <div class="flex flex-col justify-center">
+          <div class="pt-4 pb-4 pl-7 pr-7">
+            <a-button class="w-full" type="primary"
+              ><template #icon><PlusOutlined /></template>新建项目</a-button
+            >
+          </div>
         </div>
+        <Intersection class="intersection" :callback="getData">
+          <div class="pl-2 pr-2 flex flex-col gap-2">
+            <ProjectItem
+              :mode="item"
+              :is-active="item.dbId === current"
+              v-for="item in list"
+              :key="item.dbId"
+              @click="setCurrent(item.dbId)"
+            />
+          </div>
+        </Intersection>
       </div>
-      <Intersection class="intersection" :callback="getData">
-        <div class="pl-2 pr-2 flex flex-col gap-2">
-          <ProjectItem :mode="item" v-for="item in list" :key="item.dbId" />
+      <div class="content flex flex-col">
+        <div class="flex justify-between items-center p-4">
+          <span class="text-gray-900">场景管理</span>
+          <a-button type="primary" class="ml-2">
+            <template #icon><PlusOutlined /></template>
+            新建场景
+          </a-button>
         </div>
-      </Intersection>
+        <Scene class="pt-0 p-4" v-if="current" :key="current" :project-id="current" />
+      </div>
     </div>
   </div>
 </template>
@@ -23,6 +41,7 @@ import { PlusOutlined } from '@ant-design/icons-vue'
 import Header from '@/components/Header/index.vue'
 import Intersection from '@/components/Intersection/Intersection.vue'
 import ProjectItem from './components/ProjectItem.vue'
+import Scene from './components/Scene.vue'
 import { usePagination } from '@/utils/hooks/usePagination'
 
 import { type IProject, type IProjectScene } from '@/api/types/project_types'
@@ -36,6 +55,7 @@ const { currentPage, limit, count, hasNextPage, reset, nextPage } = usePaginatio
   total: 1,
 })
 const list = ref<IProjectScene[]>([])
+const current = ref<string>()
 const getData = () => {
   if (!hasNextPage.value) {
     return
@@ -50,10 +70,23 @@ const getData = () => {
     // 处理数据
     list.value.push(...res.data.records)
     count.value = res.data.total
+    setCurrent('0')
+    console.log(current.value)
   })
 }
 const resetParams = () => {
   reset()
+}
+const setCurrent = (id: string) => {
+  if (id === current.value) {
+    return
+  }
+  const inList = list.value.find((item) => item.dbId === id)
+  if (inList) {
+    current.value = id
+  } else {
+    current.value = list.value?.[0]?.dbId
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -65,5 +98,10 @@ const resetParams = () => {
 }
 .intersection {
   overflow-y: auto;
+}
+.content {
+  width: calc(100% - $project-list-width);
+  height: calc(100vh - #{$header-height});
+  @apply overflow-y-auto;
 }
 </style>

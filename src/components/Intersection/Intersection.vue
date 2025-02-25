@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
-    <slot :visible="targetIsVisible"></slot>
-    <div ref="refObserver" class=""></div>
+    <slot :visible="visible"></slot>
+    <div ref="refObserver" :style="{ height: distance + 'px' }"></div>
   </div>
 </template>
 <script setup lang="ts">
@@ -10,20 +10,26 @@ import { useIntersectionObserver } from '@vueuse/core'
 
 interface IIntersection {
   callback?: () => void
+  distance?: number
 }
 const props = withDefaults(defineProps<IIntersection>(), {
   callback: undefined,
+  distance: 0,
 })
 
 const refObserver = ref<HTMLDivElement>()
-const targetIsVisible = ref(false)
+const visible = ref(false)
 
 const { stop } = useIntersectionObserver(refObserver, ([{ isIntersecting }], observerElement) => {
-  targetIsVisible.value = isIntersecting
+  visible.value = isIntersecting
   if (isIntersecting) {
     props.callback && props.callback()
   }
 })
 onUnmounted(() => stop())
+
+defineExpose({
+  visible,
+})
 </script>
 <style lang="scss" scoped></style>

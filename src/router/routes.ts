@@ -21,6 +21,8 @@ export const afterRoutes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'common',
-    redirect: '/404',
+    redirect: (to) => {
+      return { path: '/404' }
+    },
   },
 ]

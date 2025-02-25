@@ -1,5 +1,7 @@
 <template>
-  <section class="project-item text-sm text-gray-200">
+  <section
+    :class="['project-item text-sm text-gray-200 text-light-primary', isActive ? 'is-active' : '']"
+  >
     <div class="project-item-header flex items-center justify-between">
       <img src="@/assets/images/icon_project-item.png" class="icon_project-item" />
       <div class="relative" ref="target">
@@ -16,7 +18,7 @@
         </nav>
       </div>
     </div>
-    <div class="project-item-content pt-1 pb-1 flex items-center justify-between text">
+    <div class="project-item-content pl-3 pt-1 pb-1 flex items-center justify-between text-xs">
       <div>{{ mode.projectName }}</div>
       <div>
         <Icon class="">
@@ -26,11 +28,11 @@
         </Icon>
       </div>
     </div>
-    <div class="project-item-footer mt-1 flex items-center justify-between">
-      <div class="text-xs text">
-        共 <span class="text-base text-white">{{ mode.countScene }}</span> 个方案
+    <div class="project-item-footer pl-3 mt-1 flex justify-between items-center text-xs">
+      <div class="">
+        共 <span class="text-sm text-white">{{ mode.countScene }}</span> 个方案
       </div>
-      <div class="text-xs">{{ mode.createTime }}</div>
+      <div class="">{{ mode.createTime }}</div>
     </div>
   </section>
 </template>
@@ -43,9 +45,11 @@ import { User } from '@vicons/fa'
 import { type IProject, type IProjectScene } from '@/api/types/project_types'
 interface IProjectItem {
   mode: IProjectScene
+  isActive: boolean
 }
 const props = withDefaults(defineProps<IProjectItem>(), {
   mode: () => ({}) as IProjectScene,
+  isActive: false,
 })
 
 const target = ref()
@@ -78,9 +82,9 @@ onClickOutside(target, () => (visible.value = false))
 }
 
 .btn {
-  @apply text-primary hover:text-white hover:bg-primary w-6 h-6 rounded flex justify-center items-center text-sm;
+  @apply text-primary hover:text-white hover:bg-primary w-6 h-6 rounded flex justify-center items-center text-sm cursor-pointer;
 }
-.text {
+.text-light-primary {
   color: #d2e1ff;
 }
 </style>
