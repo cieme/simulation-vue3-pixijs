@@ -10,6 +10,6 @@
       "@/assets/*": ["./src/assets/*"],
       "@resources/*": ["./src/assets/resources/*"]
     },
-    "types": ["./components.d.ts"]
+    "types": ["./components.d.ts", "./proxy.d.ts"]
   }
 }

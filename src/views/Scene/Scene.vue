@@ -17,7 +17,10 @@ import { ref } from 'vue'
 import Header from '@/components/Header/index.vue'
 import SceneCore from '@/components/SceneCore/SceneCore.vue'
 import Source from '@/components/SceneCore/components/Source.vue'
-const list = ref([{ label: '源', id: 1 }])
+const list = ref([
+  { label: '源', id: 1, position: { x: 0, y: 0 } },
+  { label: '源2', id: 2, position: { x: 80, y: 80 } },
+])
 </script>
 <style lang="scss" scoped>
 .left {

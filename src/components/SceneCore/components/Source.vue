@@ -10,7 +10,11 @@ const props = defineProps({
   config: {
     type: Object,
     required: true,
-    default: {},
+    default: () => ({}),
+  },
+  selectedComponent: {
+    type: Array,
+    default: () => [],
   },
 })
 
@@ -18,6 +22,7 @@ const { app, assets, root } = useApp()
 
 function init(app: Application, assets: any) {
   const { addToScene } = useCreateNode({
+    props,
     config: props.config,
     assets,
     root,

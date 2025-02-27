@@ -2,10 +2,12 @@ import { watchEffect } from 'vue'
 import { Application, Container, Text, TextStyle, Sprite, Assets } from 'pixi.js'
 import { type IAssets } from './assets'
 export function useCreateNode({
+  props,
   config,
   assets,
   root,
 }: {
+  props: any
   config: any
   assets: IAssets
   root: Container
@@ -13,6 +15,7 @@ export function useCreateNode({
   const baseWidth = 40
   /* 盒子 */
   const container = new Container()
+  container.position = config.position
   /* 图标 */
   const sprite = new Sprite()
   sprite.width = baseWidth
@@ -31,6 +34,24 @@ export function useCreateNode({
   const iconTexture = assets.sheet?.textures['images/source/icon_source_000.png']
   icon.texture = iconTexture!
 
+  const select = new Sprite()
+  select.width = baseWidth
+  select.height = baseWidth
+  select.anchor.x = 0.5
+  select.anchor.y = 0.5
+  select.tint = 0x407cf4
+  const selectTexture = assets.sheet?.textures['images/icon/selected-9.png']
+  select.texture = selectTexture!
+  select.visible = false
+
+  icon.interactive = true
+  icon.cursor = 'pointer'
+  icon.on('click', () => {
+    select.visible = true
+    props.selectedComponent.push(config.id)
+    console.log(props.selectedComponent)
+  })
+
   /* 文字 */
   const _textStyle = new TextStyle({
     fontSize: 14,
@@ -48,6 +69,7 @@ export function useCreateNode({
 
   container.addChild(sprite)
   container.addChild(icon)
+  container.addChild(select)
   container.addChild(text)
 
   watchEffect(() => {
@@ -57,8 +79,18 @@ export function useCreateNode({
   /*  */
   return {
     container,
+    sprite,
+    select,
+    icon,
+    text,
     addToScene: (app: Application) => {
       root.addChild(container)
     },
   }
+}
+
+export function useRootContainer() {
+  const root = new Container()
+  root.label = 'root'
+  return { root }
 }
