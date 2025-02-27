@@ -25,5 +25,9 @@ declare module 'vue' {
     Intersection: typeof import('./src/components/Intersection/Intersection.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Scene: typeof import('./src/components/SceneCore/Scene.vue')['default']
+    SceneCore: typeof import('./src/components/SceneCore/SceneCore.vue')['default']
+    Source: typeof import('./src/components/SceneCore/components/Source.vue')['default']
+    Stage: typeof import('./src/components/SceneCore/Stage.vue')['default']
   }
 }

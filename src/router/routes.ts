@@ -7,6 +7,11 @@ export const baseRoutes: RouteRecordRaw[] = [
     component: HomeView,
   },
   {
+    path: '/scene',
+    name: 'scene',
+    component: () => import('../views/Scene/Scene.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login/Login.vue'),
