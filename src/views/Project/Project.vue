@@ -2,7 +2,7 @@
   <div>
     <Header></Header>
     <div class="flex">
-      <div class="slide flex flex-col pb-2">
+      <div class="slide flex flex-col pb-2" :class="collapsed && 'collapsed'">
         <div class="flex flex-col justify-center">
           <div class="pt-4 pb-4 pl-7 pr-7">
             <a-button class="w-full" type="primary"
@@ -22,7 +22,8 @@
           </div>
         </Intersection>
       </div>
-      <div class="content flex flex-col">
+      <div class="content flex flex-col relative" :class="collapsed && 'collapsed'">
+        <div class="collapsed-btn" @click="collapsed = !collapsed"><LeftOutlined /></div>
         <div class="flex justify-between items-center p-4">
           <span class="text-gray-900">场景管理</span>
           <a-button type="primary" class="ml-2">
@@ -30,18 +31,18 @@
             新建场景
           </a-button>
         </div>
-        <Scene class="pt-0 p-4" v-if="current" :key="current" :project-id="current" />
+        <SceneList class="pt-0 p-4" v-if="current" :key="current" :project-id="current" />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, reactive, toRaw, computed } from 'vue'
-import { PlusOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, LeftOutlined } from '@ant-design/icons-vue'
 import Header from '@/components/Header/index.vue'
 import Intersection from '@/components/Intersection/Intersection.vue'
 import ProjectItem from './components/ProjectItem.vue'
-import Scene from './components/Scene.vue'
+import SceneList from './components/SceneList.vue'
 import { usePagination } from '@/utils/hooks/usePagination'
 
 import { type IProject, type IProjectScene } from '@/api/types/project_types'
@@ -88,6 +89,8 @@ const setCurrent = (id: string) => {
     current.value = list.value?.[0]?.dbId
   }
 }
+
+const collapsed = ref(false)
 </script>
 <style lang="scss" scoped>
 @use '@/assets/styles/variable.scss' as *;
@@ -95,6 +98,11 @@ const setCurrent = (id: string) => {
   width: $project-list-width;
   background-color: $project-list-bg;
   height: calc(100vh - #{$header-height});
+  overflow: hidden;
+  transition: width 0.2s linear;
+  &.collapsed {
+    width: 0;
+  }
 }
 .intersection {
   overflow-y: auto;
@@ -103,5 +111,17 @@ const setCurrent = (id: string) => {
   width: calc(100% - $project-list-width);
   height: calc(100vh - #{$header-height});
   @apply overflow-y-auto;
+  transition: width 0.2s linear;
+  &.collapsed {
+    width: 100%;
+  }
+}
+
+.collapsed-btn {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  transition: all 0.2s;
+  @apply w-6 h-10 flex justify-center items-center z-10 text-xs absolute rounded-full bg-white shadow-lg cursor-pointer hover:h-12;
 }
 </style>

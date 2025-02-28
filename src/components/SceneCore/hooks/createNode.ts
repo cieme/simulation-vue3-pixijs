@@ -46,10 +46,9 @@ export function useCreateNode({
 
   icon.interactive = true
   icon.cursor = 'pointer'
-  icon.on('click', () => {
-    select.visible = true
+  icon.on('click', (event) => {
+    event.stopPropagation()
     props.selectedComponent.push(config.id)
-    console.log(props.selectedComponent)
   })
 
   /* 文字 */
@@ -76,6 +75,17 @@ export function useCreateNode({
     container.label = config.label
     text.text = config.label
   })
+  watchEffect(() => {
+    const hasSelect = props.selectedComponent.find((item: number) => {
+      return item === config.id
+    })
+    if (hasSelect) {
+      select.visible = true
+    } else {
+      select.visible = false
+    }
+  })
+
   /*  */
   return {
     container,

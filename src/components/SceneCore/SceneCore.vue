@@ -1,5 +1,4 @@
 <template>
-  {{ selectedComponent }}
   <div class="pixi-wrapper w-full h-full" ref="refTarget">
     <slot v-if="showComponent" :selectedComponent="selectedComponent"></slot>
   </div>

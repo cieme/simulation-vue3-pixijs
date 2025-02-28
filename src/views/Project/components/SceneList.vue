@@ -1,7 +1,17 @@
 <template>
   <Intersection class="intersection h-full" :callback="getData">
     <a-row :gutter="[16, 16]">
-      <a-col :span="6" v-for="item in list" :key="item.dbId"><SceneItem :mode="item" /></a-col>
+      <a-col
+        :xs="24"
+        :sm="12"
+        :md="12"
+        :lg="8"
+        :xl="6"
+        :xxl="6"
+        v-for="item in list"
+        :key="item.dbId"
+        ><SceneItem :mode="item"
+      /></a-col>
     </a-row>
   </Intersection>
 </template>

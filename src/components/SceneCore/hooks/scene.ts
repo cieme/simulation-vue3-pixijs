@@ -54,7 +54,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     root.addChild(grid.node)
     app.stage.addChild(root)
     resize()
+
     refTarget.value!.appendChild(app.canvas)
+    appClick()
     hasApp.value = true
   }
 
@@ -91,7 +93,13 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   })
   /* 4 */
   const selectedComponent = ref<Array<any>>([])
-  app.stage.on('click', function () {})
+  function appClick() {
+    app.stage.interactive = true
+    app.stage.on('click', function () {
+      selectedComponent.value.length = 0
+      console.log('1')
+    })
+  }
 
   return {
     app,

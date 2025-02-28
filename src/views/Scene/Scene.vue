@@ -5,7 +5,14 @@
       <div class="left h-full"></div>
       <div class="content h-full flex-1 overflow-hidden">
         <SceneCore>
-          <Source v-for="item in list" :key="item.id" :config="item" />
+          <template #default="{ selectedComponent }">
+            <Source
+              :selectedComponent="selectedComponent"
+              v-for="item in list"
+              :key="item.id"
+              :config="item"
+            />
+          </template>
         </SceneCore>
       </div>
       <div class="right h-full"></div>
@@ -21,6 +28,16 @@ const list = ref([
   { label: '源', id: 1, position: { x: 0, y: 0 } },
   { label: '源2', id: 2, position: { x: 80, y: 80 } },
 ])
+
+// function genData() {
+//   const length = 500
+//   return Array.from({ length }, (_, index) => ({
+//     label: `素材${index + 1}`,
+//     id: index + 1,
+//     position: { x: Math.random() * 700, y: Math.random() * 500 },
+//   }))
+// }
+// list.value = genData()
 </script>
 <style lang="scss" scoped>
 .left {

@@ -13,6 +13,10 @@ export default class Grid {
   }
   init() {
     this.drawGrid()
+    /**
+     * 为了点击事件
+     */
+    this.drawBg()
   }
   drawGrid() {
     const width = this.width
@@ -26,5 +30,15 @@ export default class Grid {
       this.node.lineTo(width, i)
     }
     this.node.stroke()
+  }
+  drawBg() {
+    const width = this.width
+    const height = this.height
+    this.node.rect(0, 0, width, height)
+    this.node.setFillStyle({
+      color: 0x222222,
+      alpha: 0.1,
+    })
+    this.node.fill()
   }
 }
