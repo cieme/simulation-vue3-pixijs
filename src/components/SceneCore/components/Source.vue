@@ -6,16 +6,13 @@ import { useCreateNode } from '@/components/SceneCore/hooks/createNode'
 
 import { Application, Container } from 'pixi.js'
 
-const props = defineProps({
-  config: {
-    type: Object,
-    required: true,
-    default: () => ({}),
-  },
-  selectedComponent: {
-    type: Array,
-    default: () => [],
-  },
+interface IBaseComponent {
+  config: object
+  selectedComponent: { id: string; label: string }[]
+}
+const props = withDefaults(defineProps<IBaseComponent>(), {
+  config: () => ({}),
+  selectedComponent: () => [],
 })
 
 const { app, assets, root } = useApp()
@@ -26,6 +23,7 @@ function init(app: Application, assets: any) {
     config: props.config,
     assets,
     root,
+    app,
   })
   addToScene(app)
 }

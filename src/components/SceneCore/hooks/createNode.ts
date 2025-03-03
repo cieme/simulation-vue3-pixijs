@@ -1,16 +1,27 @@
 import { watchEffect } from 'vue'
-import { Application, Container, Text, TextStyle, Sprite, Assets } from 'pixi.js'
+import {
+  Application,
+  Container,
+  Text,
+  TextStyle,
+  Sprite,
+  type FederatedPointerEvent,
+} from 'pixi.js'
 import { type IAssets } from './assets'
+import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
+
 export function useCreateNode({
   props,
   config,
   assets,
   root,
+  app,
 }: {
   props: any
   config: any
   assets: IAssets
   root: Container
+  app: Application
 }) {
   const baseWidth = 40
   /* 盒子 */
@@ -46,11 +57,30 @@ export function useCreateNode({
 
   icon.interactive = true
   icon.cursor = 'pointer'
-  icon.on('click', (event) => {
+  icon.on('mousedown', (event: FederatedPointerEvent) => {
     event.stopPropagation()
-    props.selectedComponent.push(config.id)
+    if (event.ctrlKey) {
+      pushCurrent()
+    } else {
+      props.selectedComponent.length = 0
+      pushCurrent()
+    }
   })
 
+  function pushCurrent() {
+    const hasId = props.selectedComponent.some((item: any) => item.id === config.id)
+    if (hasId) {
+      return
+    } else {
+      props.selectedComponent.push(config)
+    }
+  }
+  useDragComponentHook({
+    eventNode: icon,
+    targetNode: container,
+    rootNode: root,
+    app,
+  })
   /* 文字 */
   const _textStyle = new TextStyle({
     fontSize: 14,
@@ -65,10 +95,12 @@ export function useCreateNode({
   text.position.y = baseWidth
   text.anchor.x = 0.5
   text.anchor.y = 0.5
-
+  /**
+   * 顺序比较重要, 会影响事件
+   */
   container.addChild(sprite)
-  container.addChild(icon)
   container.addChild(select)
+  container.addChild(icon)
   container.addChild(text)
 
   watchEffect(() => {
@@ -76,8 +108,8 @@ export function useCreateNode({
     text.text = config.label
   })
   watchEffect(() => {
-    const hasSelect = props.selectedComponent.find((item: number) => {
-      return item === config.id
+    const hasSelect = props.selectedComponent.find((item: any) => {
+      return item.id === config.id
     })
     if (hasSelect) {
       select.visible = true

@@ -8,7 +8,7 @@ import {
   onMounted,
   onBeforeUnmount,
 } from 'vue'
-import { Application, Assets } from 'pixi.js'
+import { Application, Assets, Container } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
 
 import { useAssets } from '@/components/SceneCore/hooks/assets'
@@ -95,9 +95,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   const selectedComponent = ref<Array<any>>([])
   function appClick() {
     app.stage.interactive = true
-    app.stage.on('click', function () {
-      selectedComponent.value.length = 0
-      console.log('1')
+    app.stage.on('mousedown', function (event) {
+      console.log(app.stage.getChildByLabel(selectedComponent.value[0].id))
+      // selectedComponent.value.length = 0
     })
   }
 
