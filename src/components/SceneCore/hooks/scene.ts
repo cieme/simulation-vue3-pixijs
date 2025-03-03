@@ -7,8 +7,9 @@ import {
   onBeforeMount,
   onMounted,
   onBeforeUnmount,
+  shallowReactive,
 } from 'vue'
-import { Application, Assets, Container } from 'pixi.js'
+import { Application, Container } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
 
 import { useAssets } from '@/components/SceneCore/hooks/assets'
@@ -27,6 +28,11 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
 
   const { root } = useRootContainer()
   provide('root', root)
+
+  const userData = shallowReactive({
+    nodeList: new Map(),
+  })
+  provide('userData', userData)
 
   const hasAssets = ref(false)
   const hasApp = ref(false)

@@ -4,7 +4,7 @@
     <section class="flex box-container w-screen">
       <div class="left h-full"></div>
       <div class="content h-full flex-1 overflow-hidden">
-        <SceneCore>
+        <Core>
           <template #default="{ selectedComponent }">
             <Source
               :selectedComponent="selectedComponent"
@@ -13,7 +13,7 @@
               :config="item"
             />
           </template>
-        </SceneCore>
+        </Core>
       </div>
       <div class="right h-full"></div>
     </section>
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Header from '@/components/Header/index.vue'
-import SceneCore from '@/components/SceneCore/SceneCore.vue'
+import Core from '@/components/SceneCore/components/Core.vue'
 import Source from '@/components/SceneCore/components/Source.vue'
 const list = ref([
   { label: '源', id: 1, position: { x: 0, y: 0 } },

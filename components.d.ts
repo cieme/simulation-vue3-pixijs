@@ -21,13 +21,14 @@ declare module 'vue' {
     ARow: typeof import('ant-design-vue/es')['Row']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
+    Core: typeof import('./src/components/SceneCore/components/Core.vue')['default']
     HandsonTable: typeof import('./src/components/HandsonTable.vue')['default']
     Header: typeof import('./src/components/Header/index.vue')['default']
     Intersection: typeof import('./src/components/Intersection/Intersection.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Scene: typeof import('./src/components/SceneCore/Scene.vue')['default']
-    SceneCore: typeof import('./src/components/SceneCore/SceneCore.vue')['default']
+    Scene: typeof import('./sr./src/components/SceneCore/components/Core.vue
+    SceneCore: typeof import('./src/components/SceneCore/components/SceneCore.vue')['default']
     Source: typeof import('./src/components/SceneCore/components/Source.vue')['default']
     Stage: typeof import('./src/components/SceneCore/Stage.vue')['default']
   }

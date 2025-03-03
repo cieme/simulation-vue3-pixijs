@@ -7,22 +7,10 @@ import {
   Sprite,
   type FederatedPointerEvent,
 } from 'pixi.js'
-import { type IAssets } from './assets'
-import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
 
-export function useCreateNode({
-  props,
-  config,
-  assets,
-  root,
-  app,
-}: {
-  props: any
-  config: any
-  assets: IAssets
-  root: Container
-  app: Application
-}) {
+import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
+import type { IAssets, ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+export function useCreateNode({ props, config, assets, root, app, userData }: ICreateNodeParams) {
   const baseWidth = 40
   /* 盒子 */
   const container = new Container()
@@ -77,7 +65,7 @@ export function useCreateNode({
   }
   useDragComponentHook({
     eventNode: icon,
-    targetNode: container,
+    userData,
     rootNode: root,
     app,
   })
@@ -102,6 +90,8 @@ export function useCreateNode({
   container.addChild(select)
   container.addChild(icon)
   container.addChild(text)
+  /*  */
+  userData.nodeList.set(config.id, container)
 
   watchEffect(() => {
     container.label = config.label
