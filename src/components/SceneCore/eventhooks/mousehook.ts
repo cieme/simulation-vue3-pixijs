@@ -1,18 +1,22 @@
 import { Application, Container, type FederatedPointerEvent, Point } from 'pixi.js'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+import { computed } from 'vue'
 export interface IDragComponentHookParams {
   eventNode: Container
   userData: ICreateNodeParams['userData']
-  rootNode: Container
+  root: Container
   app: Application
+  props: ICreateNodeParams['props']
 }
 export function useDragComponentHook(params: IDragComponentHookParams) {
-  const { eventNode, rootNode, app, userData } = params
+  const { eventNode, app, userData, props } = params
   const { getDelta, resetMouseMove } = useMouseMoveDelta()
+
   const mouseMoveHandler = (event: FederatedPointerEvent) => {
     const currentMousePosition = event.global
     const { deltaX, deltaY } = getDelta(currentMousePosition)
-    userData.nodeList.forEach((targetNode) => {
+    /*  */
+    userData.selectedNodes.value.forEach((targetNode) => {
       const position = targetNode.position
       targetNode.position.x = position.x + deltaX
       targetNode.position.y = position.y + deltaY

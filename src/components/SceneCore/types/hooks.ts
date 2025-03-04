@@ -1,3 +1,4 @@
+import type { Ref } from 'vue'
 import { type Spritesheet, Container, Application } from 'pixi.js'
 import type { ISourceProps } from '@/components/SceneCore/types/props'
 
@@ -12,5 +13,6 @@ export interface ICreateNodeParams {
   app: Application
   userData: {
     nodeList: Map<string, Container>
+    selectedNodes: Ref<Container[]>
   }
 }

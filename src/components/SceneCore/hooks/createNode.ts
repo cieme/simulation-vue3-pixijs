@@ -66,8 +66,9 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   useDragComponentHook({
     eventNode: icon,
     userData,
-    rootNode: root,
+    root,
     app,
+    props,
   })
   /* 文字 */
   const _textStyle = new TextStyle({

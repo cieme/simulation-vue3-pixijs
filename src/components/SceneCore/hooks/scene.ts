@@ -14,7 +14,7 @@ import Grid from '@/components/SceneCore/core/Grid'
 
 import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
-
+import type { IAssets, ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   /* 1 */
   const grid = new Grid()
@@ -29,8 +29,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   const { root } = useRootContainer()
   provide('root', root)
 
-  const userData = shallowReactive({
+  const userData = shallowReactive<ICreateNodeParams['userData']>({
     nodeList: new Map(),
+    selectedNodes: ref([]),
   })
   provide('userData', userData)
 
@@ -102,10 +103,18 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   function appClick() {
     app.stage.interactive = true
     app.stage.on('mousedown', function (event) {
-      console.log(app.stage.getChildByLabel(selectedComponent.value[0].id))
-      // selectedComponent.value.length = 0
+      selectedComponent.value.length = 0
     })
   }
+  /* 5 */
+  const selectedNodes = computed(() => {
+    return selectedComponent.value
+      .map((node) => {
+        return userData.nodeList.get(node.id)
+      })
+      .filter((item) => !!item)
+  })
+  userData.selectedNodes = selectedNodes
 
   return {
     app,
@@ -114,5 +123,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     showComponent,
     initStage,
     selectedComponent,
+    selectedNodes,
   }
 }
