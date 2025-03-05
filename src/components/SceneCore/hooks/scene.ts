@@ -11,13 +11,14 @@ import {
 } from 'vue'
 import { Application, Container } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
+import SelectArea from '@/components/SceneCore/core/SelectArea'
 
 import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
 import type { IAssets, ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   /* 1 */
-  const grid = new Grid()
+
   const app = new Application()
   ;(globalThis as any).__PIXI_APP__ = app
 
@@ -28,6 +29,12 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
 
   const { root } = useRootContainer()
   provide('root', root)
+  /* 2 */
+  const grid = new Grid()
+  const selectArea = new SelectArea({
+    app,
+    root,
+  })
 
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     nodeList: new Map(),
@@ -59,6 +66,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     })
     app.stage.label = 'stage'
     root.addChild(grid.node)
+    root.addChild(selectArea.node)
     app.stage.addChild(root)
     resize()
 
