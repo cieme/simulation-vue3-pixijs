@@ -38,6 +38,9 @@ importers:
       pixi-filters:
         specifier: ^6.1.0
         version: 6.1.0(pixi.js@8.8.1)
+      pixi-viewport:
+        specifier: ^6.0.3
+        version: 6.0.3(pixi.js@8.8.1)
       pixi.js:
         specifier: ^8.8.1
         version: 8.8.1
@@ -2144,6 +2147,11 @@ packages:
     resolution: {integrity: sha512-Btjyg/WvCD/xWqZk1BAygqkTvoN7bSU7b4G/R+FpZ06f0DDwGTVnmlp8ZSITEV89osQHMe+8lKGDbuR1tndePQ==}
     peerDependencies:
       pixi.js: '>=8.0.0-0'
+
+  pixi-viewport@6.0.3:
+    resolution: {integrity: sha512-2+qPJ0/n+8hQYhWvY+795+x9y3MiUrCOWacK0DY53whowWaGdx9iDocy7z1pBwjkZhC52YvrJQuZKK0sdVLtBw==}
+    peerDependencies:
+      pixi.js: '>=8'
 
   pixi.js@8.8.1:
     resolution: {integrity: sha512-Zmox3Vy52Kl6X/uxknKlxJWPVEFiP63nsX8soqB4butTkIOK3y7c9C204wcDfAgkwO1OlwYxscWtHv+ef4gqgA==}
@@ -4565,6 +4573,10 @@ snapshots:
   pixi-filters@6.1.0(pixi.js@8.8.1):
     dependencies:
       '@types/gradient-parser': 0.1.5
+      pixi.js: 8.8.1
+
+  pixi-viewport@6.0.3(pixi.js@8.8.1):
+    dependencies:
       pixi.js: 8.8.1
 
   pixi.js@8.8.1:

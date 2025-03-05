@@ -12,6 +12,11 @@ export const baseRoutes: RouteRecordRaw[] = [
     component: () => import('../views/Scene/Scene.vue'),
   },
   {
+    path: '/about',
+    name: 'about',
+    component: () => import('../views/About/about.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login/Login.vue'),
@@ -21,7 +26,7 @@ export const afterRoutes: RouteRecordRaw[] = [
   {
     path: '/404',
     name: 'not-found',
-    component: () => import('@/views/NotFoundView.vue'),
+    component: () => import('@/views/PageErrors/NotFoundView.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
