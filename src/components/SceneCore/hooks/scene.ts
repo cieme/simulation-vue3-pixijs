@@ -4,18 +4,24 @@ import {
   computed,
   watch,
   provide,
-  onBeforeMount,
   onMounted,
   onBeforeUnmount,
   shallowReactive,
 } from 'vue'
-import { Application, Container } from 'pixi.js'
+import { Application } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
 import SelectArea from '@/components/SceneCore/core/SelectArea'
 
 import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
-import type { IAssets, ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+/**
+ * 使用场景
+ *
+ * @export
+ * @param {Ref<HTMLDivElement | undefined>} refTarget
+ * @returns {{ app: any; assets: any; root: any; showComponent: any; initStage: () => any; selectedComponent: any; selectedNodes: any; }}
+ */
 export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   /* 1 */
 

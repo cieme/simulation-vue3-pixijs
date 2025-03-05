@@ -10,6 +10,19 @@ import {
 
 import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
 import type { IAssets, ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+/**
+ * 创建通用节点
+ *
+ * @export
+ * @param {ICreateNodeParams} param0
+ * @param {ICreateNodeParams} param0.props
+ * @param {ICreateNodeParams} param0.config
+ * @param {ICreateNodeParams} param0.assets
+ * @param {ICreateNodeParams} param0.root
+ * @param {ICreateNodeParams} param0.app
+ * @param {ICreateNodeParams} param0.userData
+ * @returns {{ container: any; sprite: any; select: any; icon: any; text: any; addToScene: (app: Application) => void; }}
+ */
 export function useCreateNode({ props, config, assets, root, app, userData }: ICreateNodeParams) {
   const baseWidth = 40
   /* 盒子 */
@@ -50,16 +63,18 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     if (event.ctrlKey) {
       pushCurrent()
     } else {
-      props.selectedComponent.length = 0
-      pushCurrent()
+      pushCurrent(true)
     }
   })
 
-  function pushCurrent() {
+  function pushCurrent(clear = false) {
     const hasId = props.selectedComponent.some((item: any) => item.id === config.id)
     if (hasId) {
       return
     } else {
+      if (clear) {
+        props.selectedComponent.length = 0
+      }
       props.selectedComponent.push(config)
     }
   }
@@ -122,6 +137,12 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   }
 }
 
+/**
+ * 使用根节点容器
+ *
+ * @export
+ * @returns {{ root: any; }}
+ */
 export function useRootContainer() {
   const root = new Container()
   root.label = 'root'

@@ -7,8 +7,9 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@/assets/*": ["./src/assets/*"],
-      "@resources/*": ["./src/assets/resources/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@resources/*": ["./src/assets/resources/*"],
+      "@SceneCore/*": ["./src/components/SceneCore/*"]
     },
     "types": ["./components.d.ts", "./proxy.d.ts"]
   }

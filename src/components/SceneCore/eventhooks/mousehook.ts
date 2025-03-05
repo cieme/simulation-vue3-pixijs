@@ -1,6 +1,6 @@
 import { Application, Container, type FederatedPointerEvent, Point } from 'pixi.js'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
-import { computed } from 'vue'
+
 export interface IDragComponentHookParams {
   eventNode: Container
   userData: ICreateNodeParams['userData']
@@ -8,6 +8,14 @@ export interface IDragComponentHookParams {
   app: Application
   props: ICreateNodeParams['props']
 }
+
+/**
+ * 使用拖拽节点
+ *
+ * @export
+ * @param {IDragComponentHookParams} params
+ * @returns {{ dispose: () => void; mouseMoveHandler: (event: FederatedPointerEvent) => void; mouseDownHandler: (event: FederatedPointerEvent) => void; mouseUpHandler: (event: FederatedPointerEvent) => void; }}
+ */
 export function useDragComponentHook(params: IDragComponentHookParams) {
   const { eventNode, app, userData, props } = params
   const { getDelta, resetMouseMove } = useMouseMoveDelta()
@@ -50,6 +58,12 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
   }
 }
 
+/**
+ * 使用鼠标 距离移动
+ *
+ * @export
+ * @returns {{ resetMouseMove: () => void; getDelta: (currentMousePosition: Point) => { deltaX: number; deltaY: number; }; }}
+ */
 export function useMouseMoveDelta() {
   let MoveIndex = 0
   let lastMousePosition = { x: 0, y: 0 } // 用来存储上一次的鼠标位置

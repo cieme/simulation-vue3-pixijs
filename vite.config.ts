@@ -33,6 +33,7 @@ export default defineConfig((config) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
         '@resources': fileURLToPath(new URL('./src/assets/resources', import.meta.url)),
+        '@SceneCore': fileURLToPath(new URL('./src/components/SceneCore', import.meta.url)),
       },
     },
     server: {

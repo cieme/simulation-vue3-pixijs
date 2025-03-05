@@ -3,7 +3,7 @@
     :class="['project-item text-sm text-gray-200 text-light-primary', isActive ? 'is-active' : '']"
   >
     <div class="project-item-header flex items-center justify-between">
-      <img src="@/assets/images/icon_project-item.png" class="icon_project-item" />
+      <img src="@assets/images/icon_project-item.png" class="icon_project-item" />
       <div class="relative" ref="target">
         <SettingFilled class="btn" @click="toggleHandle" />
         <nav v-if="visible" class="absolute top-0 mr-1 h-full right-full flex">

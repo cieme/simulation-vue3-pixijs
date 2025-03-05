@@ -7,8 +7,13 @@ import type { IAssets } from '@/components/SceneCore/types/hooks'
 const assets = shallowReactive<IAssets>({
   sheet: null,
 })
+/**
+ * 使用静态资源
+ *
+ * @export
+ * @returns {{ assets: any; }}
+ */
 export function useAssets() {
-  // Assets.add({ alias: 'default', src: 'default.png' })
   Assets.load('/public_resource/alias.json').then((sheet: Spritesheet) => {
     assets.sheet = sheet
   })

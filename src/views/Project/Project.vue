@@ -93,7 +93,7 @@ const setCurrent = (id: string) => {
 const collapsed = ref(false)
 </script>
 <style lang="scss" scoped>
-@use '@/assets/styles/variable.scss' as *;
+@use '@assets/styles/variable.scss' as *;
 .slide {
   width: $project-list-width;
   background-color: $project-list-bg;
