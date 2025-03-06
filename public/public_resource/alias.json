@@ -704,18 +704,6 @@
 	"spriteSourceSize": {"x":5,"y":5,"w":30,"h":30},
 	"sourceSize": {"w":40,"h":40}
 }},
-"animations": {
-	"images/assembly_station/assembly_station": ["images/assembly_station/assembly_station_000.png","images/assembly_station/assembly_station_001.png","images/assembly_station/assembly_station_002.png","images/assembly_station/assembly_station_003.png","images/assembly_station/assembly_station_004.png"],
-	"images/drain/icon_drain": ["images/drain/icon_drain_000.png","images/drain/icon_drain_001.png","images/drain/icon_drain_002.png","images/drain/icon_drain_003.png","images/drain/icon_drain_004.png","images/drain/icon_drain_005.png"],
-	"images/frame/icon_frame": ["images/frame/icon_frame_000.png","images/frame/icon_frame_001.png","images/frame/icon_frame_002.png","images/frame/icon_frame_003.png","images/frame/icon_frame_004.png","images/frame/icon_frame_005.png"],
-	"images/gantt_chart/icon_gantt_chart": ["images/gantt_chart/icon_gantt_chart_000.png","images/gantt_chart/icon_gantt_chart_001.png","images/gantt_chart/icon_gantt_chart_002.png","images/gantt_chart/icon_gantt_chart_003.png","images/gantt_chart/icon_gantt_chart_004.png"],
-	"images/genetic_algorithm/icon_genetic_algorithm": ["images/genetic_algorithm/icon_genetic_algorithm_000.png","images/genetic_algorithm/icon_genetic_algorithm_001.png","images/genetic_algorithm/icon_genetic_algorithm_002.png","images/genetic_algorithm/icon_genetic_algorithm_003.png","images/genetic_algorithm/icon_genetic_algorithm_004.png"],
-	"images/parallel_station/icon_parallel_station": ["images/parallel_station/icon_parallel_station_000.png","images/parallel_station/icon_parallel_station_001.png","images/parallel_station/icon_parallel_station_002.png","images/parallel_station/icon_parallel_station_003.png","images/parallel_station/icon_parallel_station_004.png"],
-	"images/part/icon_part": ["images/part/icon_part_000.png","images/part/icon_part_001.png","images/part/icon_part_002.png","images/part/icon_part_003.png","images/part/icon_part_004.png","images/part/icon_part_005.png","images/part/icon_part_006.png"],
-	"images/source/icon_source": ["images/source/icon_source_000.png","images/source/icon_source_001.png","images/source/icon_source_002.png","images/source/icon_source_003.png","images/source/icon_source_004.png","images/source/icon_source_005.png"],
-	"images/station/icon_station": ["images/station/icon_station_000.png","images/station/icon_station_001.png","images/station/icon_station_002.png","images/station/icon_station_003.png","images/station/icon_station_004.png"],
-	"images/worker/icon_worker": ["images/worker/icon_worker_000.png","images/worker/icon_worker_001.png","images/worker/icon_worker_002.png","images/worker/icon_worker_003.png","images/worker/icon_worker_004.png"]
-},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.1",

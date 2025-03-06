@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --force",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -23,6 +23,7 @@
     "handsontable": "^15.0.1",
     "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
+    "mitt": "^3.0.1",
     "pinia": "^2.3.1",
     "pixi-filters": "^6.1.0",
     "pixi-viewport": "^6.0.3",

@@ -1,4 +1,4 @@
-import type { Ref } from 'vue'
+import type { Ref, Reactive } from 'vue'
 import { type Spritesheet, Container, Application } from 'pixi.js'
 import type { ISourceProps } from '@/components/SceneCore/types/props'
 
@@ -12,6 +12,16 @@ import type { ISourceProps } from '@/components/SceneCore/types/props'
 export interface IAssets {
   sheet: Spritesheet | null
 }
+export interface IBaseSceneParams {
+  assets: Reactive<IAssets>
+  root: Container
+  app: Application
+  props: unknown
+  userData: {
+    nodeList: Map<string, Container>
+    selectedNodes: Ref<Container[]>
+  }
+}
 /**
  * 通用创建节点参数
  *
@@ -19,16 +29,9 @@ export interface IAssets {
  * @interface ICreateNodeParams
  * @typedef {ICreateNodeParams}
  */
-export interface ICreateNodeParams {
+export interface ICreateNodeParams extends IBaseSceneParams {
   props: ISourceProps
   config: any
-  assets: IAssets
-  root: Container
-  app: Application
-  userData: {
-    nodeList: Map<string, Container>
-    selectedNodes: Ref<Container[]>
-  }
 }
 
 /**

@@ -7,6 +7,7 @@ import {
   onMounted,
   onBeforeUnmount,
   shallowReactive,
+  nextTick,
 } from 'vue'
 import { Application } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
@@ -37,31 +38,36 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   provide('root', root)
   /* 2 */
   const grid = new Grid()
-  const selectArea = new SelectArea({
-    app,
-    root,
-  })
 
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     nodeList: new Map(),
     selectedNodes: ref([]),
   })
+
   provide('userData', userData)
 
-  const hasAssets = ref(false)
   const hasApp = ref(false)
 
-  watch(
-    () => assets?.sheet,
-    () => {
-      hasAssets.value = true
-    },
-  )
-
-  const showComponent = computed(() => {
-    return hasAssets.value && hasApp.value
+  const selectedComponent = ref<Array<any>>([])
+  const selectedNodes = computed(() => {
+    return selectedComponent.value
+      .map((node) => {
+        return userData.nodeList.get(node.id)
+      })
+      .filter((item) => !!item)
   })
-  /* 2 */
+  /* 4 */
+  const selectArea = new SelectArea({
+    app,
+    root,
+    assets,
+    userData,
+    props: {
+      selectedComponent,
+      selectedNodes,
+    },
+  })
+  /* 5 */
   async function initStage() {
     await app.init({
       preference: 'webgpu',
@@ -74,11 +80,11 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     root.addChild(grid.node)
     root.addChild(selectArea.node)
     app.stage.addChild(root)
-    resize()
 
     refTarget.value!.appendChild(app.canvas)
     appClick()
     hasApp.value = true
+    resize()
   }
 
   const resize = () => {
@@ -96,14 +102,14 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       },
       {
         children: true,
-        texture: true,
-        textureSource: true,
+        // texture: true,
+        // textureSource: true,
         context: true,
         style: true,
       },
     )
   }
-  /* 3 */
+  /* 6 */
   onMounted(async () => {
     initStage()
     window.addEventListener('resize', resize)
@@ -112,29 +118,20 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     dispose()
     window.removeEventListener('resize', resize)
   })
-  /* 4 */
-  const selectedComponent = ref<Array<any>>([])
+
   function appClick() {
     app.stage.interactive = true
     app.stage.on('mousedown', function (event) {
       selectedComponent.value.length = 0
     })
   }
-  /* 5 */
-  const selectedNodes = computed(() => {
-    return selectedComponent.value
-      .map((node) => {
-        return userData.nodeList.get(node.id)
-      })
-      .filter((item) => !!item)
-  })
+
   userData.selectedNodes = selectedNodes
 
   return {
     app,
     assets,
     root,
-    showComponent,
     initStage,
     selectedComponent,
     selectedNodes,

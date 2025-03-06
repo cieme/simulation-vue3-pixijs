@@ -1,7 +1,10 @@
 import { Application, Graphics, Container, Point, FederatedPointerEvent } from 'pixi.js'
+import type { IBaseSceneParams } from '@SceneCore/types/hooks'
 import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
-import { MouseButton } from '@/components/SceneCore/enum/mouse'
+import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
+import emitter, { E_EVENT_SCENE } from '@SceneCore/mitt/mitt'
 export default class SelectArea {
+  props: any
   app: Application
   root: Container
   node = new Graphics()
@@ -11,10 +14,13 @@ export default class SelectArea {
   endPoint = { x: 0, y: 0 }
   isMouseDown = false
   color = 0x67c23a
-  constructor({ app, root }: { app: Application; root: Container }) {
+  gap = 10
+  constructor({ app, root, props }: IBaseSceneParams) {
     this.app = app
     this.root = root
+    this.props = props
     this.node.label = 'SelectArea'
+
     /*  */
     this.init()
     this.addEvent()
@@ -45,12 +51,7 @@ export default class SelectArea {
     this.app.stage.off('mousemove', this.onMouseMove, this)
   }
   onMouseDown(e: FederatedPointerEvent) {
-    /* 如果不是左键，不处理 */
-    console.log(e.button)
-
-    e.stopPropagation()
-    e.preventDefault()
-    if (e.button !== 0) return
+    if (e.button !== E_MOUSE_BUTTON.LEFT) return
     this.isMouseDown = true
     const { appPoint } = useGlobalToLocal({
       globalPoint: e.global,
@@ -68,7 +69,9 @@ export default class SelectArea {
         app: this.app,
       })
       this.endPoint = appPoint
-      this.drawArea()
+      const data = this.getArea()
+      if (data.width < this.gap && data.height < this.gap) return
+      this.drawArea(data)
     }
   }
   onMouseUp(e: FederatedPointerEvent) {
@@ -92,11 +95,16 @@ export default class SelectArea {
     }
     return { width, height, startPoint, endPoint }
   }
-  drawArea() {
-    const { width, height, startPoint } = this.getArea()
+  drawArea(data: ReturnType<typeof this.getArea>) {
+    const { width, height, startPoint } = data
     this.node.clear()
     this.node.rect(startPoint.x, startPoint.y, width, height)
     this.node.stroke()
     this.node.fill()
+    this.checkoutArea(data)
+    emitter.emit(E_EVENT_SCENE.BoxSelection, data)
+  }
+  checkoutArea(data: ReturnType<typeof this.getArea>) {
+    const { width, height } = data
   }
 }
