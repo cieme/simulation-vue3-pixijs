@@ -16,6 +16,7 @@ import SelectArea from '@/components/SceneCore/core/SelectArea'
 import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+
 /**
  * 使用场景
  *
@@ -64,7 +65,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     userData,
     props: {
       selectedComponent,
-      selectedNodes,
     },
   })
   /* 5 */
@@ -132,6 +132,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     app,
     assets,
     root,
+    hasApp,
     initStage,
     selectedComponent,
     selectedNodes,

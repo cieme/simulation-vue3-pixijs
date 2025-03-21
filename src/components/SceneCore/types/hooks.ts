@@ -1,6 +1,6 @@
 import type { Ref, Reactive } from 'vue'
 import { type Spritesheet, Container, Application } from 'pixi.js'
-import type { ISourceProps } from '@/components/SceneCore/types/props'
+import type { IBaseComponent, ISourceProps } from '@/components/SceneCore/types/props'
 
 /**
  * 静态资源接口
@@ -30,7 +30,7 @@ export interface IBaseSceneParams {
  * @typedef {ICreateNodeParams}
  */
 export interface ICreateNodeParams extends IBaseSceneParams {
-  props: ISourceProps
+  props: IBaseComponent
   config: any
 }
 

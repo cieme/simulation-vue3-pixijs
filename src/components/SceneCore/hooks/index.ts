@@ -40,6 +40,7 @@ export function useGlobalToLocal({ globalPoint, node, point, app }: IGlobalToLoc
   return {
     localPoint,
     appPoint,
+    globalPoint,
   }
 }
 
