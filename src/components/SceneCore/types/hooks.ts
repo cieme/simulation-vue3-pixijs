@@ -1,4 +1,4 @@
-import type { Ref, Reactive } from 'vue'
+import type { ComputedRef, Reactive } from 'vue'
 import { type Spritesheet, Container, Application } from 'pixi.js'
 import type { IBaseComponent, ISourceProps } from '@/components/SceneCore/types/props'
 
@@ -19,7 +19,7 @@ export interface IBaseSceneParams {
   props: IBaseComponent
   userData: {
     nodeList: Map<string, Container>
-    selectedNodes: Ref<Container[]>
+    selectedNodes: ComputedRef<Container[]>
   }
 }
 /**

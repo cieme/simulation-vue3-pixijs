@@ -1,5 +1,6 @@
 import {
   type Ref,
+  type ComputedRef,
   ref,
   computed,
   watch,
@@ -39,24 +40,26 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   provide('root', root)
   /* 2 */
   const grid = new Grid()
+  const nodeList = new Map()
+  const selectedComponent = ref<Array<any>>([])
+  const selectedNodes = computed(() => {
+    const list = selectedComponent.value
+      .map((node) => {
+        return nodeList.get(node.id)
+      })
+      .filter((item) => !!item)
 
+    return list
+  })
   const userData = shallowReactive<ICreateNodeParams['userData']>({
-    nodeList: new Map(),
-    selectedNodes: ref([]),
+    nodeList,
+    selectedNodes,
   })
 
   provide('userData', userData)
 
   const hasApp = ref(false)
 
-  const selectedComponent = ref<Array<any>>([])
-  const selectedNodes = computed(() => {
-    return selectedComponent.value
-      .map((node) => {
-        return userData.nodeList.get(node.id)
-      })
-      .filter((item) => !!item)
-  })
   /* 4 */
   const selectArea = new SelectArea({
     app,
@@ -135,5 +138,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     initStage,
     selectedComponent,
     selectedNodes,
+    userData,
   }
 }

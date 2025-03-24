@@ -30,15 +30,16 @@ const list = ref([
   { label: '源2', type: 'Source', id: 2, position: { x: 80, y: 80 } },
 ])
 
-// function genData() {
-//   const length = 500
-//   return Array.from({ length }, (_, index) => ({
-//     label: `素材${index + 1}`,
-//     id: index + 1,
-//     position: { x: Math.random() * 700, y: Math.random() * 500 },
-//   }))
-// }
-// list.value = genData()
+function genData() {
+  const length = 500
+  return Array.from({ length }, (_, index) => ({
+    label: `素材${index + 1}`,
+    type: 'Source',
+    id: index + 1,
+    position: { x: Math.random() * 700, y: Math.random() * 500 },
+  }))
+}
+list.value = genData()
 </script>
 <style lang="scss" scoped>
 .left {

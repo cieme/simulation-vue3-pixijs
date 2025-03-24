@@ -9,6 +9,6 @@ import { ref, computed, watch, provide, onBeforeMount, onMounted, onBeforeUnmoun
 import Tool from './Tool.vue'
 import { useScene } from '@/components/SceneCore/hooks/scene'
 const refTarget = ref<HTMLDivElement>()
-const { selectedComponent, assets, hasApp } = useScene(refTarget)
+const { selectedComponent, assets, hasApp, userData } = useScene(refTarget)
 </script>
 <style lang="scss" scoped></style>

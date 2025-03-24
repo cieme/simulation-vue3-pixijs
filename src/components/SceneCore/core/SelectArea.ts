@@ -3,7 +3,8 @@ import type { IBaseSceneParams } from '@SceneCore/types/hooks'
 import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
 import emitter, { E_EVENT_SCENE } from '@SceneCore/mitt/mitt'
-import { addSelectedComponent } from '@/components/SceneCore/utils/index'
+import { useSelectedComponent, addSelectedComponentList } from '@/components/SceneCore/utils/index'
+import { throttleForResize } from '@/utils/index'
 export default class SelectArea {
   props: IBaseSceneParams['props']
   app: IBaseSceneParams['app']
@@ -18,6 +19,7 @@ export default class SelectArea {
   isMouseDown = false
   color = 0x67c23a
   gap = 10
+  selectedComponentMapInstance = useSelectedComponent()
 
   constructor({ app, root, props, userData }: IBaseSceneParams) {
     this.app = app
@@ -132,17 +134,20 @@ export default class SelectArea {
     /* TODO */
     const nodeList = this.userData.nodeList
     const keys = Array.from(nodeList.keys())
-
+    this.selectedComponentMapInstance.clear()
     for (let index = 0; index < keys.length; index++) {
       const key = keys[index]
       const node = nodeList.get(key)
       if (this.detectIntersection(node!, data)) {
-        // addSelectedComponent(this.props, t)
-        // this.props.selectedComponent.push({ id: key, label: node!.label })
-        // this.userData.selectedNodes.value.push(node!)
+        this.selectedComponentMapInstance.add({ id: key, label: node!.label })
       }
     }
+    this.updateSelectedComponent()
   }
+
+  updateSelectedComponent = throttleForResize(() => {
+    addSelectedComponentList(this.props, this.selectedComponentMapInstance.get(), true)
+  })
 
   getNodeRect(node: Container) {
     const { x, y, width, height } = node.getBounds()
