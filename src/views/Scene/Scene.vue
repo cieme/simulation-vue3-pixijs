@@ -31,12 +31,14 @@ const list = ref([
 ])
 
 function genData() {
-  const length = 500
+  const length = 20
+  const maxX = 500
+  const maxY = 500
   return Array.from({ length }, (_, index) => ({
     label: `素材${index + 1}`,
     type: 'Source',
     id: index + 1,
-    position: { x: Math.random() * 700, y: Math.random() * 500 },
+    position: { x: Math.random() * maxX - maxX / 2, y: Math.random() * maxY - maxY / 2 },
   }))
 }
 list.value = genData()
