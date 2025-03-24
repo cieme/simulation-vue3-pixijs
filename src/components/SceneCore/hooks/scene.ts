@@ -77,7 +77,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       autoStart: false,
       sharedTicker: true,
       antialias: true,
-      resolution: window.devicePixelRatio,
+      // resolution: window.devicePixelRatio, // 不要给这个字段，放大和缩小，会导致 尺寸不正确的问题
     })
     app.stage.label = 'stage'
     root.addChild(grid.node)
