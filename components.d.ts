@@ -35,6 +35,6 @@ declare module 'vue' {
     SceneCore: typeof import('./src/components/SceneCore/components/SceneCore.vue')['default']
     Source: typeof import('./src/components/SceneCore/components/Source.vue')['default']
     Stage: typeof import('./src/components/SceneCore/Stage.vue')['default']
-    Tool: typeof import('./src/components/SceneCore/components/Tool.vue')['default']
+    Tool: typeof import('./src/components/SceneCore/tools/Tool.vue')['default']
   }
 }

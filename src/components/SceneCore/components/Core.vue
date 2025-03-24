@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
 import { ref, computed, watch, provide, onBeforeMount, onMounted, onBeforeUnmount } from 'vue'
-import Tool from './Tool.vue'
+import Tool from '../tools/Tool.vue'
 import { useScene } from '@/components/SceneCore/hooks/scene'
 const refTarget = ref<HTMLDivElement>()
 const { selectedComponent, assets, hasApp, userData } = useScene(refTarget)
