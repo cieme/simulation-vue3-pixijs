@@ -1,10 +1,12 @@
 <template>
-  <div class="pixi-wrapper w-full h-full" ref="refTarget">
+  <div class="pixi-wrapper w-full h-full relative" ref="refTarget">
+    <Tool class="absolute top-2 left-2 z-10"></Tool>
     <slot v-if="assets.sheet && hasApp" :selectedComponent="selectedComponent"></slot>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, computed, watch, provide, onBeforeMount, onMounted, onBeforeUnmount } from 'vue'
+import Tool from './Tool.vue'
 import { useScene } from '@/components/SceneCore/hooks/scene'
 const refTarget = ref<HTMLDivElement>()
 const { selectedComponent, assets, hasApp } = useScene(refTarget)

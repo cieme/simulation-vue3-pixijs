@@ -1,4 +1,4 @@
-import { E_EVENT_SCENE } from '@SceneCore/enum/mitt'
+import { E_EVENT_SCENE } from '@SceneCore/enum'
 import type { Point, PointData } from 'pixi.js'
 /**
  * 框选事件

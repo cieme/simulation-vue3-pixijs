@@ -9,7 +9,8 @@
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
       "@resources/*": ["./src/assets/resources/*"],
-      "@SceneCore/*": ["./src/components/SceneCore/*"]
+      "@SceneCore/*": ["./src/components/SceneCore/*"],
+      "@enum/*": ["./src/components/SceneCore/enum/*"]
     },
     "types": ["./components.d.ts", "./proxy.d.ts"]
   }

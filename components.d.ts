@@ -18,6 +18,8 @@ declare module 'vue' {
     AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
+    ARadioButton: typeof import('ant-design-vue/es')['RadioButton']
+    ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
     ARow: typeof import('ant-design-vue/es')['Row']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
@@ -33,5 +35,6 @@ declare module 'vue' {
     SceneCore: typeof import('./src/components/SceneCore/components/SceneCore.vue')['default']
     Source: typeof import('./src/components/SceneCore/components/Source.vue')['default']
     Stage: typeof import('./src/components/SceneCore/Stage.vue')['default']
+    Tool: typeof import('./src/components/SceneCore/components/Tool.vue')['default']
   }
 }

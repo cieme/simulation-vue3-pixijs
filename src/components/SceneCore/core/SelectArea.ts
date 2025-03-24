@@ -137,7 +137,7 @@ export default class SelectArea {
       const key = keys[index]
       const node = nodeList.get(key)
       if (this.detectIntersection(node!, data)) {
-        // addSelectedComponent(this.props,t)
+        // addSelectedComponent(this.props, t)
         // this.props.selectedComponent.push({ id: key, label: node!.label })
         // this.userData.selectedNodes.value.push(node!)
       }
