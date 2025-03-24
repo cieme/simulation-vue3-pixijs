@@ -3,6 +3,7 @@ import type { IBaseSceneParams } from '@SceneCore/types/hooks'
 import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
 import emitter, { E_EVENT_SCENE } from '@SceneCore/mitt/mitt'
+import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 export default class SelectArea {
   props: IBaseSceneParams['props']
   app: IBaseSceneParams['app']
@@ -136,8 +137,8 @@ export default class SelectArea {
       const key = keys[index]
       const node = nodeList.get(key)
       if (this.detectIntersection(node!, data)) {
-        console.log(node)
-        // this.props.selectedComponent.push(key)
+        // addSelectedComponent(this.props,t)
+        // this.props.selectedComponent.push({ id: key, label: node!.label })
         // this.userData.selectedNodes.value.push(node!)
       }
     }

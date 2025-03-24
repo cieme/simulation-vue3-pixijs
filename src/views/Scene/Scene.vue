@@ -5,9 +5,10 @@
       <div class="left h-full"></div>
       <div class="content h-full flex-1 overflow-hidden">
         <Core>
-          <template #default="{ selectedComponent }">
+          <template #default="SourceTemplate">
             <Source
-              :selectedComponent="selectedComponent"
+              :selectedComponent="SourceTemplate.selectedComponent"
+              v-model="SourceTemplate.selectedComponent"
               v-for="item in list"
               :key="item.id"
               :config="item"
@@ -25,7 +26,7 @@ import Header from '@/components/Header/index.vue'
 import Core from '@/components/SceneCore/components/Core.vue'
 import Source from '@/components/SceneCore/components/Source.vue'
 const list = ref([
-  // { label: '源', type: 'Source', id: 1, position: { x: 0, y: 0 } },
+  { label: '源', type: 'Source', id: 1, position: { x: 0, y: 0 } },
   { label: '源2', type: 'Source', id: 2, position: { x: 80, y: 80 } },
 ])
 

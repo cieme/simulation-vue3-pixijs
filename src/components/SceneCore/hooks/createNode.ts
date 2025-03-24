@@ -10,6 +10,7 @@ import {
 
 import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
 import type { IAssets, ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 /**
  * 创建通用节点
  *
@@ -61,23 +62,12 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   icon.on('mousedown', (event: FederatedPointerEvent) => {
     event.stopPropagation()
     if (event.ctrlKey) {
-      pushCurrent()
+      addSelectedComponent(props, config)
     } else {
-      pushCurrent(true)
+      addSelectedComponent(props, config, true)
     }
   })
 
-  function pushCurrent(clear = false) {
-    const hasId = props.selectedComponent.some((item: any) => item.id === config.id)
-    if (hasId) {
-      return
-    } else {
-      if (clear) {
-        props.selectedComponent.length = 0
-      }
-      props.selectedComponent.push(config)
-    }
-  }
   useDragComponentHook({
     eventNode: icon,
     userData,

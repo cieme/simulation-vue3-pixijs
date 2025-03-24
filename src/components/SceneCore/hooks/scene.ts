@@ -64,7 +64,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     assets,
     userData,
     props: {
-      selectedComponent,
+      selectedComponent: selectedComponent.value,
     },
   })
   /* 5 */
@@ -127,7 +127,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   }
 
   userData.selectedNodes = selectedNodes
-
   return {
     app,
     assets,

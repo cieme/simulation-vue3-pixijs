@@ -16,7 +16,7 @@ export interface IBaseSceneParams {
   assets: Reactive<IAssets>
   root: Container
   app: Application
-  props: unknown
+  props: IBaseComponent
   userData: {
     nodeList: Map<string, Container>
     selectedNodes: Ref<Container[]>

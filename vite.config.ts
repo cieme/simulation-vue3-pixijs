@@ -9,7 +9,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig((config) => {
-  let base = undefined
+  let base = '/'
   const env = loadEnv(config.mode, process.cwd())
   if (config.mode === 'production') {
     base = '/dist/'
