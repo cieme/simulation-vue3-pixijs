@@ -83,8 +83,8 @@ function addEvent() {
     app: props.app,
     userData: props.userData,
     moveHandler: (deltaX, deltaY, e) => {
-      props.app.stage.position.x = props.app.stage.position.x + deltaX
-      props.app.stage.position.y = props.app.stage.position.y + deltaY
+      props.root.position.x = props.root.position.x + deltaX
+      props.root.position.y = props.root.position.y + deltaY
     },
   })
   disposeDrag = dispose
