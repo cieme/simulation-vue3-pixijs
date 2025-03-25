@@ -20,7 +20,6 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
   const { getDelta, resetMouseMove } = useMouseMoveDelta()
 
   const mouseMoveHandler = (event: FederatedPointerEvent) => {
-    console.log('mousemove')
     const currentMousePosition = event.global
     const { deltaX, deltaY } = getDelta(currentMousePosition)
     /*  */

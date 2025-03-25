@@ -88,12 +88,14 @@ function addEvent() {
     },
   })
   disposeDrag = dispose
+  document.body.classList.add('cursor-pointer')
   // props.app.stage.on('mousedown', onMouseDown)
   // props.app.stage.on('mouseup', onMouseUp)
   // props.app.stage.on('mouseupoutside', onMouseUp)
 }
 
 function removeEvent() {
+  document.body.classList.remove('cursor-pointer')
   disposeDrag && disposeDrag()
   // props.app.stage.off('mousedown', onMouseDown)
   // props.app.stage.off('mouseup', onMouseUp)
