@@ -2,7 +2,7 @@ import { Rectangle, Graphics, Container, Point, FederatedPointerEvent, log2 } fr
 import type { IBaseSceneParams } from '@SceneCore/types/hooks'
 import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
-import emitter, { E_EVENT_SCENE } from '@SceneCore/mitt/mitt'
+import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@SceneCore/mitt/mitt'
 import { useSelectedComponent, addSelectedComponentList } from '@/components/SceneCore/utils/index'
 import { throttleForResize } from '@/utils/index'
 export default class SelectArea {
@@ -20,20 +20,31 @@ export default class SelectArea {
   color = 0x67c23a
   gap = 10
   selectedComponentMapInstance = useSelectedComponent()
-
+  eventNode: Container
   constructor({ app, root, props, userData }: IBaseSceneParams) {
+    this.eventNode = app.stage
     this.app = app
     this.root = root
     this.props = props
     this.userData = userData
     this.node.label = 'SelectArea'
-
-    /*  */
-    this.init()
-    this.addEvent()
   }
 
   init() {
+    this.initStyle()
+    this.addEvent()
+    this.addLifeEvent()
+  }
+  addLifeEvent() {
+    emitter.on(E_EVENT_SCENE.SCENE_OPERATION_STATUS, (status) => {
+      if (status !== ENUM_TOOL.SELECT) {
+        this.removeEvent()
+      } else {
+        this.addEvent()
+      }
+    })
+  }
+  initStyle() {
     this.node.setStrokeStyle({
       width: 1,
       color: this.color,
@@ -45,18 +56,17 @@ export default class SelectArea {
   }
 
   addEvent() {
-    this.node.interactive = true
-    this.app.stage.on('mousedown', this.onMouseDown, this)
-    this.app.stage.on('mouseup', this.onMouseUp, this)
-    this.app.stage.on('mouseupoutside', this.onMouseUp, this)
+    this.eventNode.on('mousedown', this.onMouseDown, this)
+    this.eventNode.on('mouseup', this.onMouseUp, this)
+    this.eventNode.on('mouseupoutside', this.onMouseUp, this)
   }
 
   removeEvent() {
-    this.app.stage.off('mousedown', this.onMouseDown, this)
-    this.app.stage.off('mouseup', this.onMouseUp, this)
-    this.app.stage.off('mouseupoutside', this.onMouseUp, this)
+    this.eventNode.off('mousedown', this.onMouseDown, this)
+    this.eventNode.off('mouseup', this.onMouseUp, this)
+    this.eventNode.off('mouseupoutside', this.onMouseUp, this)
     /*  */
-    this.app.stage.off('mousemove', this.onMouseMove, this)
+    this.eventNode.off('mousemove', this.onMouseMove, this)
   }
 
   onMouseDown(e: FederatedPointerEvent) {
@@ -69,7 +79,7 @@ export default class SelectArea {
     })
     this.startPoint = appPoint
     this.startGlobalPoint = e.global.clone()
-    this.app.stage.on('mousemove', this.onMouseMove, this)
+    this.eventNode.on('mousemove', this.onMouseMove, this)
   }
 
   onMouseMove(e: FederatedPointerEvent) {
@@ -89,7 +99,7 @@ export default class SelectArea {
 
   onMouseUp(e: FederatedPointerEvent) {
     this.isMouseDown = false
-    this.app.stage.off('mousemove', this.onMouseMove, this)
+    this.eventNode.off('mousemove', this.onMouseMove, this)
     this.node.clear()
   }
 

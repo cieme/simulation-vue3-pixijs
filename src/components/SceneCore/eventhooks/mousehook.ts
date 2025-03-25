@@ -4,9 +4,8 @@ import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 export interface IDragComponentHookParams {
   eventNode: Container
   userData: ICreateNodeParams['userData']
-  root: Container
   app: Application
-  props: ICreateNodeParams['props']
+  moveHandler: (x: number, y: number, event: FederatedPointerEvent) => void
 }
 
 /**
@@ -17,27 +16,22 @@ export interface IDragComponentHookParams {
  * @returns {{ dispose: () => void; mouseMoveHandler: (event: FederatedPointerEvent) => void; mouseDownHandler: (event: FederatedPointerEvent) => void; mouseUpHandler: (event: FederatedPointerEvent) => void; }}
  */
 export function useDragComponentHook(params: IDragComponentHookParams) {
-  const { eventNode, app, userData, props } = params
+  const { eventNode, app, userData, moveHandler } = params
   const { getDelta, resetMouseMove } = useMouseMoveDelta()
 
   const mouseMoveHandler = (event: FederatedPointerEvent) => {
+    console.log('mousemove')
     const currentMousePosition = event.global
     const { deltaX, deltaY } = getDelta(currentMousePosition)
     /*  */
-    userData.selectedNodes.value.forEach((targetNode) => {
-      const position = targetNode.position
-      targetNode.position.x = position.x + deltaX
-      targetNode.position.y = position.y + deltaY
-    })
+    moveHandler(deltaX, deltaY, event)
   }
 
   const mouseDownHandler = (event: FederatedPointerEvent) => {
-    event.stopPropagation()
-    app.stage.on('pointermove', mouseMoveHandler)
+    app.stage.on('mousemove', mouseMoveHandler)
   }
   const mouseUpHandler = (event: FederatedPointerEvent) => {
-    event.stopPropagation()
-    app.stage.off('pointermove', mouseMoveHandler)
+    app.stage.off('mousemove', mouseMoveHandler)
     resetMouseMove()
   }
 
@@ -45,9 +39,9 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
   app.stage.on('mouseup', mouseUpHandler)
 
   const dispose = () => {
-    app.stage.off('mousemove', mouseMoveHandler)
     eventNode.off('mousedown', mouseDownHandler)
     app.stage.off('mouseup', mouseUpHandler)
+    app.stage.off('mousemove', mouseMoveHandler)
   }
 
   return {

@@ -1,15 +1,9 @@
 import { watchEffect } from 'vue'
-import {
-  Application,
-  Container,
-  Text,
-  TextStyle,
-  Sprite,
-  type FederatedPointerEvent,
-} from 'pixi.js'
+import { Application, Container, Sprite, type FederatedPointerEvent } from 'pixi.js'
 
+import { useCreateText } from '@/components/SceneCore/hooks/createText'
 import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
-import type { IAssets, ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 /**
  * 创建通用节点
@@ -71,21 +65,17 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   useDragComponentHook({
     eventNode: icon,
     userData,
-    root,
     app,
-    props,
+    moveHandler: (deltaX, deltaY) => {
+      userData.selectedNodes.value.forEach((targetNode) => {
+        const position = targetNode.position
+        targetNode.position.x = position.x + deltaX
+        targetNode.position.y = position.y + deltaY
+      })
+    },
   })
   /* 文字 */
-  const _textStyle = new TextStyle({
-    fontSize: 14,
-    lineHeight: 16,
-    fill: 0xffffff,
-    fontFamily: 'Arial',
-    align: 'center',
-  })
-  const text = new Text({
-    style: _textStyle,
-  })
+  const text = useCreateText()
   text.position.y = baseWidth
   text.anchor.x = 0.5
   text.anchor.y = 0.5

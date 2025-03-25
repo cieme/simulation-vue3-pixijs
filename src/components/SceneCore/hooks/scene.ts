@@ -17,7 +17,7 @@ import SelectArea from '@/components/SceneCore/core/SelectArea'
 import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
-
+import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
 /**
  * 使用场景
  *
@@ -54,6 +54,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     nodeList,
     selectedNodes,
+    operationStatus: ref(ENUM_TOOL.SELECT),
   })
 
   provide('userData', userData)
@@ -70,6 +71,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       selectedComponent: selectedComponent.value,
     },
   })
+
   /* 5 */
   async function initStage() {
     await app.init({
@@ -83,7 +85,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     root.addChild(grid.node)
     root.addChild(selectArea.node)
     app.stage.addChild(root)
-
+    selectArea.init()
     refTarget.value!.appendChild(app.canvas)
     appClick()
     hasApp.value = true
@@ -111,6 +113,10 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
         style: true,
       },
     )
+    app.stage?.removeChildren()
+    app.stage?.removeListener('mousedown', appMouseDownHandler)
+    app.stage?.destroy()
+    emitter.all.clear() // 清除所有监听
   }
   /* 6 */
   onMounted(async () => {
@@ -121,15 +127,16 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     dispose()
     window.removeEventListener('resize', resize)
   })
-
+  const appMouseDownHandler = () => {
+    selectedComponent.value.length = 0
+  }
   function appClick() {
     app.stage.interactive = true
-    app.stage.on('mousedown', function (event) {
-      selectedComponent.value.length = 0
-    })
+    app.stage.on('mousedown', appMouseDownHandler)
   }
 
   userData.selectedNodes = selectedNodes
+
   return {
     app,
     assets,

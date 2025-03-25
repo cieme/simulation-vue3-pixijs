@@ -1,11 +1,19 @@
 <template>
   <div>
-    <a-radio-group v-model:value="state.value" buttonStyle="solid" size="small">
+    <a-radio-group
+      :value="userData.operationStatus"
+      buttonStyle="solid"
+      :size="state.size"
+      @change="changeToolStatus"
+    >
       <a-radio-button :value="ENUM_TOOL.SELECT" title="选择组件">
         <SelectOutlined />
       </a-radio-button>
-      <a-radio-button :value="ENUM_TOOL.RECT_SELECT" title="框选组件">
-        <GatewayOutlined />
+      <a-radio-button :value="ENUM_TOOL.MOVE_ROOT_CONTAINER" title="移动画布">
+        <ColumnWidthOutlined />
+        <div class="w-full h-full absolute top-0 right-0 flex justify-center items-center">
+          <ColumnHeightOutlined />
+        </div>
       </a-radio-button>
       <a-radio-button :value="ENUM_TOOL.LINE_LINK" title="链接组件">
         <NodeIndexOutlined />
@@ -15,14 +23,85 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, h } from 'vue'
-import type { SizeType } from 'ant-design-vue/es/config-provider'
-import { SelectOutlined, GatewayOutlined, NodeIndexOutlined } from '@ant-design/icons-vue'
+import { reactive, onBeforeUnmount } from 'vue'
+
+import type { RadioChangeEvent, RadioGroupProps } from 'ant-design-vue/es/radio'
+
+import {
+  SelectOutlined,
+  ColumnWidthOutlined,
+  ColumnHeightOutlined,
+  GatewayOutlined,
+  NodeIndexOutlined,
+} from '@ant-design/icons-vue'
+import type { Application } from 'pixi.js'
+
 import { ENUM_TOOL } from '@enum/ENUM_TOOL'
-const state = reactive<{ value: ENUM_TOOL; size: SizeType }>({
-  value: ENUM_TOOL.SELECT,
+import emitter, { E_EVENT_SCENE } from '@SceneCore/mitt/mitt'
+import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
+import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
+interface IToolProps {
+  app: Application
+  userData: ICreateNodeParams['userData']
+  root: ICreateNodeParams['root']
+}
+const props = withDefaults(defineProps<IToolProps>(), {
+  app: () => ({}) as Application,
+  userData: () => ({}) as ICreateNodeParams['userData'],
+  root: () => ({}) as ICreateNodeParams['root'],
+})
+
+const state = reactive<{ size: RadioGroupProps['size'] }>({
   size: 'small',
 })
-</script>
+const changeToolStatus = (e: RadioChangeEvent) => {
+  if (e.target.value === ENUM_TOOL.MOVE_ROOT_CONTAINER) {
+    addEvent()
+  } else {
+    removeEvent()
+  }
+  props.userData.operationStatus.value = e.target.value
+  emitter.emit(E_EVENT_SCENE.SCENE_OPERATION_STATUS, e.target.value)
+}
 
+// const isClick = ref(false)
+// function onMouseDown(e: MouseEvent) {
+//   if (e.button === E_MOUSE_BUTTON.LEFT || e.button === E_MOUSE_BUTTON.MIDDLE) {
+//     isClick.value = true
+//   }
+// }
+// function onMouseUp(e: MouseEvent) {
+//   if (e.button === E_MOUSE_BUTTON.LEFT || e.button === E_MOUSE_BUTTON.MIDDLE) {
+//     isClick.value = false
+//   }
+// }
+let disposeDrag: (() => void) | null = null
+
+function addEvent() {
+  const { dispose } = useDragComponentHook({
+    eventNode: props.app.stage,
+    app: props.app,
+    userData: props.userData,
+    moveHandler: (deltaX, deltaY, e) => {
+      props.app.stage.position.x = props.app.stage.position.x + deltaX
+      props.app.stage.position.y = props.app.stage.position.y + deltaY
+    },
+  })
+  disposeDrag = dispose
+  // props.app.stage.on('mousedown', onMouseDown)
+  // props.app.stage.on('mouseup', onMouseUp)
+  // props.app.stage.on('mouseupoutside', onMouseUp)
+}
+
+function removeEvent() {
+  disposeDrag && disposeDrag()
+  // props.app.stage.off('mousedown', onMouseDown)
+  // props.app.stage.off('mouseup', onMouseUp)
+  // props.app.stage.off('mouseupoutside', onMouseUp)
+}
+
+onBeforeUnmount(() => {
+  removeEvent()
+})
+</script>
 <style lang="scss" scoped></style>

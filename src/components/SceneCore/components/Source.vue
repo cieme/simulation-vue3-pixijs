@@ -1,6 +1,6 @@
 <template></template>
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, useAttrs, watch } from 'vue'
+import { ref, reactive, computed, onMounted, useAttrs, watch, render } from 'vue'
 import { useApp } from '@/components/SceneCore/hooks/index'
 import { useCreateNode } from '@/components/SceneCore/hooks/createNode'
 import { Application, Container } from 'pixi.js'
