@@ -5,6 +5,7 @@ import { useCreateText } from '@/components/SceneCore/hooks/createText'
 import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
+import { linkWidth, useNextLink } from '@/components/SceneCore/link/useLink'
 /**
  * 创建通用节点
  *
@@ -53,16 +54,17 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
 
   icon.interactive = true
   icon.cursor = 'pointer'
-  icon.on('mousedown', (event: FederatedPointerEvent) => {
+  const icoMouseDownHandler = (event: FederatedPointerEvent) => {
     event.stopPropagation()
     if (event.ctrlKey) {
       addSelectedComponent(props, config)
     } else {
       addSelectedComponent(props, config, true)
     }
-  })
+  }
+  icon.on('mousedown', icoMouseDownHandler)
 
-  useDragComponentHook({
+  const { dispose: dragDispose } = useDragComponentHook({
     eventNode: icon,
     userData,
     app,
@@ -86,6 +88,14 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   container.addChild(select)
   container.addChild(icon)
   container.addChild(text)
+  const { node: nextLinkNode } = useNextLink(assets)
+  nextLinkNode.position.x = 20 + linkWidth / 2
+  container.addChild(nextLinkNode)
+  /*  */
+  container.on('destroyed', () => {
+    icon.off('mousedown', icoMouseDownHandler)
+    dragDispose()
+  })
   /*  */
   userData.nodeList.set(config.id, container)
 
