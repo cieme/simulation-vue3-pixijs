@@ -32,7 +32,7 @@ export function useApp() {
  * @returns {{ localPoint: any; appPoint: { x: number; y: number; }; }}
  */
 export function useGlobalToLocal({ globalPoint, node, point, app }: IGlobalToLocalParams) {
-  const localPoint = node.toLocal(globalPoint, node, point)
+  const localPoint = node.toLocal(globalPoint, app.stage, point)
   const appPoint = {
     x: localPoint.x - app.renderer.canvas.width / 2,
     y: localPoint.y - app.renderer.canvas.height / 2,
