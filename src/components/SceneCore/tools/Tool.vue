@@ -39,7 +39,8 @@ import type { Application } from 'pixi.js'
 import { ENUM_TOOL } from '@enum/ENUM_TOOL'
 import emitter, { E_EVENT_SCENE } from '@SceneCore/mitt/mitt'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
-import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
+import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
+import { useScale } from '@SceneCore/hooks/scale'
 interface IToolProps {
   app: Application
   userData: ICreateNodeParams['userData']
@@ -56,28 +57,17 @@ const state = reactive<{ size: RadioGroupProps['size'] }>({
 })
 const changeToolStatus = (e: RadioChangeEvent) => {
   if (e.target.value === ENUM_TOOL.MOVE_ROOT_CONTAINER) {
-    addEvent()
+    addMoveEvent()
   } else {
-    removeEvent()
+    removeMoveEvent()
   }
   props.userData.operationStatus.value = e.target.value
   emitter.emit(E_EVENT_SCENE.SCENE_OPERATION_STATUS, e.target.value)
 }
 
-// const isClick = ref(false)
-// function onMouseDown(e: MouseEvent) {
-//   if (e.button === E_MOUSE_BUTTON.LEFT || e.button === E_MOUSE_BUTTON.MIDDLE) {
-//     isClick.value = true
-//   }
-// }
-// function onMouseUp(e: MouseEvent) {
-//   if (e.button === E_MOUSE_BUTTON.LEFT || e.button === E_MOUSE_BUTTON.MIDDLE) {
-//     isClick.value = false
-//   }
-// }
 let disposeDrag: (() => void) | null = null
 
-function addEvent() {
+function addMoveEvent() {
   const { dispose } = useDragComponentHook({
     eventNode: props.app.stage,
     app: props.app,
@@ -89,21 +79,15 @@ function addEvent() {
   })
   disposeDrag = dispose
   document.body.classList.add('cursor-pointer')
-  // props.app.stage.on('mousedown', onMouseDown)
-  // props.app.stage.on('mouseup', onMouseUp)
-  // props.app.stage.on('mouseupoutside', onMouseUp)
 }
 
-function removeEvent() {
+function removeMoveEvent() {
   document.body.classList.remove('cursor-pointer')
   disposeDrag && disposeDrag()
-  // props.app.stage.off('mousedown', onMouseDown)
-  // props.app.stage.off('mouseup', onMouseUp)
-  // props.app.stage.off('mouseupoutside', onMouseUp)
 }
 
 onBeforeUnmount(() => {
-  removeEvent()
+  removeMoveEvent()
 })
 </script>
 <style lang="scss" scoped></style>

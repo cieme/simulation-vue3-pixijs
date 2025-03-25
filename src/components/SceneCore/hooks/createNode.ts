@@ -2,7 +2,7 @@ import { watchEffect } from 'vue'
 import { Application, Container, Sprite, type FederatedPointerEvent } from 'pixi.js'
 
 import { useCreateText } from '@/components/SceneCore/hooks/createText'
-import { useDragComponentHook } from '@/components/SceneCore/eventhooks/mousehook'
+import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 import { linkWidth, useNextLink } from '@/components/SceneCore/link/useLink'
@@ -80,7 +80,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   const text = useCreateText()
   text.position.y = baseWidth
   text.anchor.x = 0.5
-  text.anchor.y = 0.5
+  text.anchor.y = 1
   /**
    * 顺序比较重要, 会影响事件
    */
