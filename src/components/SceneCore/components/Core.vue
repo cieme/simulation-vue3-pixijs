@@ -1,6 +1,12 @@
 <template>
   <div class="pixi-wrapper w-full h-full relative" ref="refTarget">
-    <Tool class="absolute top-2 left-2 z-10" :userData="userData" :app="app" :root="root"></Tool>
+    <Tool
+      v-if="hasApp"
+      class="absolute top-2 left-2 z-10"
+      :userData="userData"
+      :app="app"
+      :root="root"
+    ></Tool>
     <slot v-if="assets.sheet && hasApp" :selectedComponent="selectedComponent"></slot>
   </div>
 </template>

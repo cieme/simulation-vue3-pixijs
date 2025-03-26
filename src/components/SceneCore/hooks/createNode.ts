@@ -5,7 +5,7 @@ import { useCreateText } from '@/components/SceneCore/hooks/createText'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
-import { linkWidth, useNextLink } from '@/components/SceneCore/link/useLink'
+import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link/useLink'
 /**
  * 创建通用节点
  *
@@ -91,6 +91,9 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   const { node: nextLinkNode } = useNextLink(assets)
   nextLinkNode.position.x = 20 + linkWidth / 2
   container.addChild(nextLinkNode)
+  const { node: prevLinkNode } = usePrevLink(assets)
+  prevLinkNode.position.x = -20 - linkWidth / 2
+  container.addChild(prevLinkNode)
   /*  */
   container.on('destroyed', () => {
     icon.off('mousedown', icoMouseDownHandler)

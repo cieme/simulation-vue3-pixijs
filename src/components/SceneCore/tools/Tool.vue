@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onBeforeUnmount } from 'vue'
+import { reactive, onBeforeUnmount, onMounted } from 'vue'
 
 import type { RadioChangeEvent, RadioGroupProps } from 'ant-design-vue/es/radio'
 
@@ -85,9 +85,24 @@ function removeMoveEvent() {
   document.body.classList.remove('cursor-pointer')
   disposeDrag && disposeDrag()
 }
+let disposeScale: (() => void) | null = null
+function addScaleEvent() {
+  const { dispose } = useScale({
+    targetNode: props.root,
+    app: props.app,
+  })
+  disposeScale = dispose
+}
 
+function removeScaleEvent() {
+  disposeScale && disposeScale()
+}
+onMounted(() => {
+  addScaleEvent()
+})
 onBeforeUnmount(() => {
   removeMoveEvent()
+  removeScaleEvent()
 })
 </script>
 <style lang="scss" scoped></style>
