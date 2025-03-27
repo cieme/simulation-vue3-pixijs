@@ -2,7 +2,7 @@
  * 鼠标按钮枚举
  *
  * @export
- * @enum {number}
+ * @/components/SceneCore/enum {number}
  */
 export enum E_MOUSE_BUTTON {
   LEFT = 0,
@@ -13,7 +13,7 @@ export enum E_MOUSE_BUTTON {
  * 组件类型枚举
  *
  * @export
- * @enum {number}
+ * @/components/SceneCore/enum {number}
  */
 export enum E_COMPONENT_TYPE {
   SOURCE = 'Source',

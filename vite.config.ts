@@ -31,10 +31,6 @@ export default defineConfig((config) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
-        '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
-        '@resources': fileURLToPath(new URL('./src/assets/resources', import.meta.url)),
-        '@SceneCore': fileURLToPath(new URL('./src/components/SceneCore', import.meta.url)),
-        '@enum': fileURLToPath(new URL('./src/components/SceneCore/enum', import.meta.url)),
       },
     },
     server: {

@@ -45,7 +45,7 @@ const onClick: MenuProps['onClick'] = ({ key }) => {
 }
 </script>
 <style lang="scss" scoped>
-@use '@assets/styles/variable.scss' as *;
+@use '@/assets/styles/variable.scss' as *;
 .header {
   height: $header-height;
   background-color: $header-bg;

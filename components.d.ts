@@ -7,13 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AButton: typeof import('ant-design-vue/es')['Button']
-    AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
-    AForm: typeof import('ant-design-vue/es')['Form']
-    AFormItem: typeof import('ant-design-vue/es')['FormItem']
-    AInput: typeof import('ant-design-vue/es')['Input']
-    AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
-    ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     Core: typeof import('./src/components/SceneCore/components/Core.vue')['default']
     Header: typeof import('./src/components/Header/index.vue')['default']
     Intersection: typeof import('./src/components/Intersection/Intersection.vue')['default']

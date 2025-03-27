@@ -15,7 +15,7 @@
           :selectedComponent="selectedComponent"
           :assets="assets"
           :has-app="hasApp"
-          :componentList="list"
+          :componentList="configList"
         >
           <template #default>
             <div ref="refTarget"></div>
@@ -32,23 +32,20 @@ import { ref, onMounted } from 'vue'
 import Header from '@/components/Header/index.vue'
 import Core from '@/components/SceneCore/components/Core.vue'
 
-import Tool from '@SceneCore/tools/Tool.vue'
+import Tool from '@/components/SceneCore/tools/Tool.vue'
 import { useScene } from '@/components/SceneCore/hooks/scene'
 
-import type { IBaseComponent } from '@/components/SceneCore/types/props'
-
-const list = ref<IBaseComponent['selectedComponent'] & { position: { x: number; y: number } }[]>([])
+import type { TComponent } from '@/components/SceneCore/types/base'
 
 const refTarget = ref<HTMLDivElement>()
 const { selectedComponent, hasApp, userData, app, root, assets } = useScene(refTarget)
+const configList= userData.configList
 function genData() {
   const length = 20
   const maxX = 500
   const maxY = 500
   return Array.from({ length }, (_, index) => {
-    const data: IBaseComponent['selectedComponent'][number] & {
-      position: { x: number; y: number }
-    } = {
+    const data: TComponent = {
       label: `素材${index + 1}`,
       type: 'Source',
       id: `${index + 1}`,
@@ -59,7 +56,7 @@ function genData() {
 }
 onMounted(() => {
   setTimeout(() => {
-    list.value = genData()
+    configList.value = genData()
   }, 0)
 })
 </script>

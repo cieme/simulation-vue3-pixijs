@@ -1,6 +1,7 @@
 import type { ComputedRef, Reactive, Ref } from 'vue'
 import { type Spritesheet, Container, Application } from 'pixi.js'
-import type { IBaseComponent, ISourceProps } from '@/components/SceneCore/types/props'
+import type { TComponent,IBaseComponent } from '@/components/SceneCore/types/base'
+import type { IBaseProps } from '@/components/SceneCore/types/props'
 import type { ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
 /**
  * 静态资源接口
@@ -16,8 +17,9 @@ export interface IBaseSceneParams {
   assets: Reactive<IAssets>
   root: Container
   app: Application
-  props: IBaseComponent
+  props: IBaseProps
   userData: {
+    configList: Ref<TComponent[]>
     nodeList: Map<string, Container>
     selectedNodes: ComputedRef<Container[]>
     operationStatus: Ref<ENUM_TOOL>
@@ -31,8 +33,8 @@ export interface IBaseSceneParams {
  * @typedef {ICreateNodeParams}
  */
 export interface ICreateNodeParams extends IBaseSceneParams {
-  props: IBaseComponent
-  config: IBaseComponent['selectedComponent'][number]
+  props: IBaseProps
+  config: IBaseComponent
 }
 
 /**

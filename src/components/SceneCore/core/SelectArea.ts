@@ -1,8 +1,8 @@
 import { Rectangle, Graphics, Container, Point, FederatedPointerEvent, log2 } from 'pixi.js'
-import type { IBaseSceneParams } from '@SceneCore/types/hooks'
+import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
-import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@SceneCore/mitt/mitt'
+import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
 import { useSelectedComponent, addSelectedComponentList } from '@/components/SceneCore/utils/index'
 import { throttleForResize } from '@/utils/index'
 export default class SelectArea {
@@ -147,14 +147,17 @@ export default class SelectArea {
   checkoutArea(data: ReturnType<typeof this.getArea>) {
     /* TODO */
     const nodeList = this.userData.nodeList
-
+    const configList = this.userData.configList.value
     const keys = Array.from(nodeList.keys())
     this.selectedComponentMapInstance.clear()
     for (let index = 0; index < keys.length; index++) {
       const key = keys[index]
       const node = nodeList.get(key)
       if (this.detectIntersection(node!, data)) {
-        this.selectedComponentMapInstance.add({ id: key, label: node!.label })
+        const config = configList.find((item) => item.id === key)
+        if (config) {
+          this.selectedComponentMapInstance.add(config)
+        }
       }
     }
     this.updateSelectedComponent()

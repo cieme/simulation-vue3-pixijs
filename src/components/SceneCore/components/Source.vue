@@ -5,11 +5,12 @@ import { ref, reactive, computed, onMounted, useAttrs, watch, render } from 'vue
 import { useApp } from '@/components/SceneCore/hooks/index'
 import { useCreateNode } from '@/components/SceneCore/hooks/createNode'
 import { Application, Container } from 'pixi.js'
+import type { ISourceComponent } from '@/components/SceneCore/types/base'
 import type { ISourceProps } from '@/components/SceneCore/types/props'
-import type { IBaseSceneParams } from '@SceneCore/types/hooks.ts'
+import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks.ts'
 
 const props = withDefaults(defineProps<ISourceProps>(), {
-  config: () => ({}),
+  config: () => ({}) as ISourceComponent,
   selectedComponent: () => [],
 })
 

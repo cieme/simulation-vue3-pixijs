@@ -1,5 +1,5 @@
 import { Sprite } from 'pixi.js'
-import type { IBaseSceneParams } from '@SceneCore/types/hooks'
+import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '../mitt/mitt'
 export const linkWidth = 15
 export const linkHeight = 9

@@ -36,11 +36,11 @@ import {
 } from '@ant-design/icons-vue'
 import type { Application } from 'pixi.js'
 
-import { ENUM_TOOL } from '@enum/ENUM_TOOL'
-import emitter, { E_EVENT_SCENE } from '@SceneCore/mitt/mitt'
+import { ENUM_TOOL } from '@/components/SceneCore/enum/ENUM_TOOL'
+import emitter, { E_EVENT_SCENE } from '@/components/SceneCore/mitt/mitt'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
-import { useScale } from '@SceneCore/hooks/scale'
+import { useScale } from '@/components/SceneCore/hooks/scale'
 interface IToolProps {
   app: Application
   userData: ICreateNodeParams['userData']

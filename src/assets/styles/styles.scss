@@ -1,4 +1,4 @@
-@use '@assets/styles/variable.scss' as *;
+@use '@/assets/styles/variable.scss' as *;
 * {
   @include scroll-bar();
 }

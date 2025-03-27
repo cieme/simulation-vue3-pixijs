@@ -18,7 +18,8 @@ import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
-import { type IBaseComponent } from '@/components/SceneCore/types/props'
+import { type TComponent } from '@/components/SceneCore/types/base'
+import { type IBaseProps } from '@/components/SceneCore/types/props'
 /**
  * 使用场景
  *
@@ -42,7 +43,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   /* 2 */
   const grid = new Grid()
   const nodeList = new Map()
-  const selectedComponent = ref<IBaseComponent['selectedComponent']>([])
+  const selectedComponent = ref<IBaseProps['selectedComponent']>([])
   const selectedNodes = computed(() => {
     const list = selectedComponent.value
       .map((node) => {
@@ -52,7 +53,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
 
     return list
   })
+  const configList = ref<TComponent[]>([])
   const userData = shallowReactive<ICreateNodeParams['userData']>({
+    configList,
     nodeList,
     selectedNodes,
     operationStatus: ref(ENUM_TOOL.SELECT),

@@ -1,13 +1,10 @@
-import { type TComponentType } from '@SceneCore/types/components'
-export interface IBaseComponent {
-  selectedComponent: {
-    id: string
-    label: string
-    type: TComponentType
-    position: { x: number; y: number }
-  }[]
+import type { IBaseComponent, ISourceComponent } from '@/components/SceneCore/types/base'
+export interface IBaseProps {
+  selectedComponent: IBaseComponent[]
+}
+export interface ISourceProps extends IBaseProps {
+  config: ISourceComponent
 }
 
-export interface ISourceProps extends IBaseComponent {
-  config: object
-}
+
+export type AllComponentProps = ISourceProps

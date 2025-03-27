@@ -35,7 +35,7 @@ import { onClickOutside } from '@vueuse/core'
 
 import Icon, { SettingFilled, CopyFilled, EditFilled, DeleteFilled } from '@ant-design/icons-vue'
 import { User } from '@vicons/fa'
-import EmptySvg from '@assets/images/no-img.svg'
+import EmptySvg from '@/assets/images/no-img.svg'
 import type { ISceneItem } from '@/api/types/scene_types'
 
 interface IScentItemProps {
