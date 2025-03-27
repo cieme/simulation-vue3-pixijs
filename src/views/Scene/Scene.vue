@@ -3,7 +3,14 @@
     <Header class="flex-shrink-0" />
     <section class="flex box-container w-screen">
       <div class="left h-full"></div>
-      <div class="content h-full flex-1 overflow-hidden">
+      <div class="content h-full flex-1 overflow-hidden relative">
+        <Tool
+          v-if="hasApp"
+          class="absolute top-2 left-2 z-10"
+          :userData="userData"
+          :app="app"
+          :root="root"
+        ></Tool>
         <Core
           :selectedComponent="selectedComponent"
           :assets="assets"
@@ -12,13 +19,6 @@
         >
           <template #default>
             <div ref="refTarget"></div>
-            <Tool
-              v-if="hasApp"
-              class="absolute top-2 left-2 z-10"
-              :userData="userData"
-              :app="app"
-              :root="root"
-            ></Tool>
           </template>
         </Core>
       </div>
