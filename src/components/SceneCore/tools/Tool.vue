@@ -61,6 +61,7 @@ const changeToolStatus = (e: RadioChangeEvent) => {
   } else {
     removeMoveEvent()
   }
+  // eslint-disable-next-line vue/no-mutating-props
   props.userData.operationStatus.value = e.target.value
   emitter.emit(E_EVENT_SCENE.SCENE_OPERATION_STATUS, e.target.value)
 }
@@ -73,7 +74,9 @@ function addMoveEvent() {
     app: props.app,
     userData: props.userData,
     moveHandler: (deltaX, deltaY, e) => {
+      // eslint-disable-next-line vue/no-mutating-props
       props.root.position.x = props.root.position.x + deltaX
+      // eslint-disable-next-line vue/no-mutating-props
       props.root.position.y = props.root.position.y + deltaY
     },
   })
@@ -83,7 +86,9 @@ function addMoveEvent() {
 
 function removeMoveEvent() {
   document.body.classList.remove('cursor-pointer')
-  disposeDrag && disposeDrag()
+  if (disposeDrag) {
+    disposeDrag()
+  }
 }
 let disposeScale: (() => void) | null = null
 function addScaleEvent() {
@@ -95,7 +100,9 @@ function addScaleEvent() {
 }
 
 function removeScaleEvent() {
-  disposeScale && disposeScale()
+  if (disposeScale) {
+    disposeScale()
+  }
 }
 onMounted(() => {
   addScaleEvent()

@@ -107,7 +107,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     text.text = config.label
   })
   watchEffect(() => {
-    const hasSelect = props.selectedComponent.find((item: any) => {
+    const hasSelect = props.selectedComponent.find((item) => {
       return item.id === config.id
     })
     if (hasSelect) {

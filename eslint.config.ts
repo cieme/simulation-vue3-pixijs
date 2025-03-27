@@ -24,9 +24,8 @@ export default defineConfigWithVueTs(
   oxlint.configs['flat/recommended'],
   skipFormatting,
   {
-    name: 'vue/multi-word-component-names',
     rules: {
-      'vue/multi-word-component-names': ['error', { allowPascalCase: true }],
+      'vue/multi-word-component-names': 'off',
     },
   },
 )

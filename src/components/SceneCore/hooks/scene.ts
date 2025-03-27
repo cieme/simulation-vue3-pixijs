@@ -18,6 +18,7 @@ import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
+import { type IBaseComponent } from '@/components/SceneCore/types/props'
 /**
  * 使用场景
  *
@@ -29,7 +30,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   /* 1 */
 
   const app = new Application()
-  ;(globalThis as any).__PIXI_APP__ = app
+  ;(globalThis as unknown as { __PIXI_APP__: Application }).__PIXI_APP__ = app
 
   provide('app', app)
 
@@ -41,7 +42,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   /* 2 */
   const grid = new Grid()
   const nodeList = new Map()
-  const selectedComponent = ref<Array<any>>([])
+  const selectedComponent = ref<IBaseComponent['selectedComponent']>([])
   const selectedNodes = computed(() => {
     const list = selectedComponent.value
       .map((node) => {
@@ -143,8 +144,8 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     root,
     hasApp,
     initStage,
-    selectedComponent,
     selectedNodes,
     userData,
+    selectedComponent,
   }
 }

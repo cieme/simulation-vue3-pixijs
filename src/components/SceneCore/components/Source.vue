@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/valid-template-root -->
 <template></template>
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, useAttrs, watch, render } from 'vue'
@@ -5,6 +6,7 @@ import { useApp } from '@/components/SceneCore/hooks/index'
 import { useCreateNode } from '@/components/SceneCore/hooks/createNode'
 import { Application, Container } from 'pixi.js'
 import type { ISourceProps } from '@/components/SceneCore/types/props'
+import type { IBaseSceneParams } from '@SceneCore/types/hooks.ts'
 
 const props = withDefaults(defineProps<ISourceProps>(), {
   config: () => ({}),
@@ -13,7 +15,7 @@ const props = withDefaults(defineProps<ISourceProps>(), {
 
 const { app, assets, root, userData } = useApp()
 
-function init(app: Application, assets: any) {
+function init(app: Application, assets: IBaseSceneParams['assets']) {
   const { addToScene } = useCreateNode({
     props,
     config: props.config,
@@ -25,7 +27,7 @@ function init(app: Application, assets: any) {
   addToScene(app)
 }
 onMounted(() => {
-  init(app as Application, assets)
+  init(app as Application, assets as IBaseSceneParams['assets'])
 })
 </script>
 <style lang="scss" scoped></style>
