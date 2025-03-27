@@ -32,7 +32,7 @@ export interface IBaseSceneParams {
  */
 export interface ICreateNodeParams extends IBaseSceneParams {
   props: IBaseComponent
-  config: unknown
+  config: IBaseComponent['selectedComponent'][number]
 }
 
 /**

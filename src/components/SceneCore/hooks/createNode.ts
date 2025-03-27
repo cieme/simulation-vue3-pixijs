@@ -35,6 +35,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   sprite.texture = texture!
 
   const icon = new Sprite()
+  icon.label = 'icon'
   icon.width = baseWidth
   icon.height = baseWidth
   icon.anchor.x = 0.5

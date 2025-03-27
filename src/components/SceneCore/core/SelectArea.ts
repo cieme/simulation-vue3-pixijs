@@ -163,10 +163,15 @@ export default class SelectArea {
   updateSelectedComponent = throttleForResize(() => {
     addSelectedComponentList(this.props, this.selectedComponentMapInstance.get(), true)
   })
-
+  hasIcon(node: Container) {
+    return node.getChildByName('icon')
+  }
   getNodeRect(node: Container) {
-    const { x, y, width, height } = node.getBounds()
-    return { x, y, width, height }
+    const icon = this.hasIcon(node)
+    if (icon) {
+      return icon.getBounds()
+    }
+    return node.getBounds()
   }
 
   detectIntersection(node: Container, data: ReturnType<typeof this.getArea>): Boolean {
@@ -175,8 +180,8 @@ export default class SelectArea {
     const rect2 = new Rectangle(
       data.startGlobalPoint.x,
       data.startGlobalPoint.y,
-      data.width,
-      data.height,
+      data.width * this.root.scale.x,
+      data.height * this.root.scale.x,
     )
 
     if (rect1.intersects(rect2)) {
