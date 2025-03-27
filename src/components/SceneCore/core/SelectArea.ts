@@ -72,24 +72,28 @@ export default class SelectArea {
   onMouseDown(e: FederatedPointerEvent) {
     if (e.button !== E_MOUSE_BUTTON.LEFT) return
     this.isMouseDown = true
-    const { appPoint } = useGlobalToLocal({
+    useGlobalToLocal({
       globalPoint: e.global,
       node: this.node,
       app: this.app,
+      root: this.root,
+      point: this.startPoint,
     })
-    this.startPoint = appPoint
+
     this.startGlobalPoint = e.global.clone()
     this.eventNode.on('mousemove', this.onMouseMove, this)
   }
 
   onMouseMove(e: FederatedPointerEvent) {
     if (this.isMouseDown) {
-      const { appPoint } = useGlobalToLocal({
+      useGlobalToLocal({
         globalPoint: e.global,
         node: this.node,
         app: this.app,
+        root: this.root,
+        point: this.endPoint,
       })
-      this.endPoint = appPoint
+
       this.endGlobalPoint = e.global.clone()
       const data = this.getArea()
       if (data.width < this.gap && data.height < this.gap) return
@@ -143,6 +147,7 @@ export default class SelectArea {
   checkoutArea(data: ReturnType<typeof this.getArea>) {
     /* TODO */
     const nodeList = this.userData.nodeList
+
     const keys = Array.from(nodeList.keys())
     this.selectedComponentMapInstance.clear()
     for (let index = 0; index < keys.length; index++) {

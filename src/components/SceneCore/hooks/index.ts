@@ -31,15 +31,12 @@ export function useApp() {
  * @param {IGlobalToLocalParams} param0.app
  * @returns {{ localPoint: any; appPoint: { x: number; y: number; }; }}
  */
-export function useGlobalToLocal({ globalPoint, node, point, app }: IGlobalToLocalParams) {
-  const localPoint = node.toLocal(globalPoint, app.stage, point)
-  const appPoint = {
-    x: localPoint.x - app.renderer.canvas.width / 2,
-    y: localPoint.y - app.renderer.canvas.height / 2,
-  }
+export function useGlobalToLocal({ globalPoint, node, point, app, root }: IGlobalToLocalParams) {
+  node.toLocal(globalPoint, app.stage, point)
+  point.x = point.x - (app.renderer.canvas.width * (1 / root.scale.x)) / 2
+  point.y = point.y - (app.renderer.canvas.height * (1 / root.scale.x)) / 2
   return {
-    localPoint,
-    appPoint,
+    point,
     globalPoint,
   }
 }

@@ -45,6 +45,7 @@ export interface ICreateNodeParams extends IBaseSceneParams {
 export interface IGlobalToLocalParams {
   globalPoint: { x: number; y: number }
   node: Container
-  point?: { x: number; y: number }
+  root: Container
+  point: { x: number; y: number }
   app: Application
 }
