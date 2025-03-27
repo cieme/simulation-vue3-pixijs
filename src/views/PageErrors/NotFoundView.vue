@@ -1,7 +1,7 @@
 <template>
   <div class="box flex justify-center items-center overflow-hidden">
     <div ref="refWrapper" class="p-16 flex justify-center rounded wrapper">
-      <img class="block" src="../assets/images/not-found.gif" alt="" />
+      <img class="block" src="../../assets/images/not-found.gif" alt="" />
     </div>
   </div>
 </template>

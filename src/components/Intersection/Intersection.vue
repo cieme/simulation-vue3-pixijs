@@ -23,7 +23,9 @@ const visible = ref(false)
 const { stop } = useIntersectionObserver(refObserver, ([{ isIntersecting }], observerElement) => {
   visible.value = isIntersecting
   if (isIntersecting) {
-    props.callback && props.callback()
+    if (props.callback) {
+      props.callback()
+    }
   }
 })
 onUnmounted(() => stop())

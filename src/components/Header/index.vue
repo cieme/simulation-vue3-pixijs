@@ -28,7 +28,7 @@
     </div>
   </div>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { CaretDownOutlined } from '@ant-design/icons-vue'
 import type { MenuProps } from 'ant-design-vue'

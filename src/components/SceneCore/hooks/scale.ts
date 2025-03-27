@@ -8,7 +8,7 @@ export function useScale({
 }: {
   targetNode: Container
   app: Application
-  scale: number
+  scale?: number
 }) {
   if (scale) {
     targetNode.scale.set(scale, scale)
