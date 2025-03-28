@@ -18,7 +18,7 @@
           :componentList="configList"
         >
           <template #default>
-            <div ref="refTarget"></div>
+            <div class="w-full h-full" ref="refTarget"></div>
           </template>
         </Core>
       </div>
