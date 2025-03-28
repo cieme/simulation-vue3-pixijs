@@ -7,6 +7,16 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AAvatar: typeof import('ant-design-vue/es')['Avatar']
+    AButton: typeof import('ant-design-vue/es')['Button']
+    ACol: typeof import('ant-design-vue/es')['Col']
+    AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
+    ADropdown: typeof import('ant-design-vue/es')['Dropdown']
+    AMenu: typeof import('ant-design-vue/es')['Menu']
+    AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
+    ARadioButton: typeof import('ant-design-vue/es')['RadioButton']
+    ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
+    ARow: typeof import('ant-design-vue/es')['Row']
     Core: typeof import('./src/components/SceneCore/components/Core.vue')['default']
     Header: typeof import('./src/components/Header/index.vue')['default']
     Intersection: typeof import('./src/components/Intersection/Intersection.vue')['default']

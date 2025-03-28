@@ -30,7 +30,7 @@ export function useScale({
   }
   addEvent()
   function removeEvent() {
-    app.stage.off('wheel', onWheel)
+    app?.stage?.off('wheel', onWheel)
   }
   const dispose = () => {
     removeEvent()
