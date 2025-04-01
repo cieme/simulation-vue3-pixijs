@@ -23,6 +23,9 @@ importers:
       axios:
         specifier: ^1.7.9
         version: 1.7.9
+      big.js:
+        specifier: ^6.2.2
+        version: 6.2.2
       handsontable:
         specifier: ^15.0.1
         version: 15.0.1
@@ -57,6 +60,9 @@ importers:
       '@tsconfig/node22':
         specifier: ^22.0.0
         version: 22.0.0
+      '@types/big.js':
+        specifier: ^6.2.2
+        version: 6.2.2
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
@@ -868,6 +874,9 @@ packages:
   '@tsconfig/node22@22.0.0':
     resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
 
+  '@types/big.js@6.2.2':
+    resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
+
   '@types/css-font-loading-module@0.0.12':
     resolution: {integrity: sha512-x2tZZYkSxXqWvTDgveSynfjq/T2HyiZHXb00j/+gy19yp70PHCizM48XFdjBCWH7eHBD0R5i/pw9yMBP/BH5uA==}
 
@@ -1187,6 +1196,9 @@ packages:
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  big.js@6.2.2:
+    resolution: {integrity: sha512-y/ie+Faknx7sZA5MfGA2xKlu0GDv8RWrXGsmlteyJQ2lvoKv9GBK/fpRMc2qlSoBAgNxrixICFCBefIq8WCQpQ==}
 
   bignumber.js@9.1.2:
     resolution: {integrity: sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==}
@@ -3244,6 +3256,8 @@ snapshots:
 
   '@tsconfig/node22@22.0.0': {}
 
+  '@types/big.js@6.2.2': {}
+
   '@types/css-font-loading-module@0.0.12': {}
 
   '@types/earcut@2.1.4': {}
@@ -3660,6 +3674,8 @@ snapshots:
       - debug
 
   balanced-match@1.0.2: {}
+
+  big.js@6.2.2: {}
 
   bignumber.js@9.1.2: {}
 

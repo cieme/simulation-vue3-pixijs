@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { Container, Application } from 'pixi.js'
 import type { FederatedWheelEvent } from 'pixi.js'
+import Big from 'big.js'
 export function useScale({
   targetNode,
   app,
@@ -14,13 +15,18 @@ export function useScale({
     targetNode.scale.set(scale, scale)
   }
   const refScale = ref(targetNode.scale)
+  const minScale = 0.5
+  const maxScale = 5
   const onWheel = (e: FederatedWheelEvent) => {
-    if (e.deltaY > 0) {
-      refScale.value.x -= 0.1
-      refScale.value.y -= 0.1
-    } else {
-      refScale.value.x += 0.1
-      refScale.value.y += 0.1
+    const currentScale = new Big(refScale.value.x)
+    let delta = 0.1
+    if (e.deltaY < 0) {
+      delta = -delta
+    }
+    const newScale = currentScale.plus( delta)
+    if (newScale.gte(minScale) && newScale.lte(maxScale)) {
+      refScale.value.x = newScale.toNumber()
+      refScale.value.y = newScale.toNumber()
     }
     targetNode.scale = refScale.value
   }
@@ -28,7 +34,6 @@ export function useScale({
   function addEvent() {
     app.stage.on('wheel', onWheel)
   }
-  addEvent()
   function removeEvent() {
     app?.stage?.off('wheel', onWheel)
   }
@@ -37,6 +42,9 @@ export function useScale({
   }
 
   return {
+    refScale,
+    minScale,
+    maxScale,
     addEvent,
     removeEvent,
     dispose,

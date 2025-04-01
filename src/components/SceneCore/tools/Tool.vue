@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-space>
     <a-radio-group
       :value="userData.operationStatus"
       buttonStyle="solid"
@@ -19,13 +19,24 @@
         <NodeIndexOutlined />
       </a-radio-button>
     </a-radio-group>
-  </div>
+    <a-input-number
+      :value="refScale.x"
+      style="width: 80px"
+      :min="minScale"
+      :max="maxScale"
+      :precision="1"
+      :step="0.1"
+      string-mode
+      @change="changeScale"
+    />
+  </a-space>
 </template>
 
 <script setup lang="ts">
-import { reactive, onBeforeUnmount, onMounted } from 'vue'
+import { reactive, onBeforeUnmount, onMounted, watchEffect } from 'vue'
 
 import type { RadioChangeEvent, RadioGroupProps } from 'ant-design-vue/es/radio'
+import type { InputNumberProps } from 'ant-design-vue/es/input-number'
 
 import {
   SelectOutlined,
@@ -91,13 +102,22 @@ function removeMoveEvent() {
   }
 }
 let disposeScale: (() => void) | null = null
-function addScaleEvent() {
-  const { dispose } = useScale({
-    targetNode: props.root,
-    app: props.app,
-  })
-  disposeScale = dispose
+const { dispose, refScale, minScale, maxScale, addEvent } = useScale({
+  targetNode: props.root,
+  app: props.app,
+})
+
+const changeScale: InputNumberProps['onChange'] = (value) => {
+  if (value === null) {
+    refScale.value.x = minScale
+    refScale.value.y = minScale
+  } else {
+    const number = Number(value)
+    refScale.value.x = number
+    refScale.value.y = number
+  }
 }
+disposeScale = dispose
 
 function removeScaleEvent() {
   if (disposeScale) {
@@ -105,7 +125,7 @@ function removeScaleEvent() {
   }
 }
 onMounted(() => {
-  addScaleEvent()
+  addEvent()
 })
 onBeforeUnmount(() => {
   removeMoveEvent()

@@ -59,7 +59,7 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
  */
 export function useMouseMoveDelta() {
   let MoveIndex = 0
-  let lastMousePosition = { x: 0, y: 0 } // 用来存储上一次的鼠标位置
+  const lastMousePosition = { x: 0, y: 0 } // 用来存储上一次的鼠标位置
   const getDelta = (currentMousePosition: Point) => {
     if (MoveIndex === 0) {
       lastMousePosition.x = currentMousePosition.x
