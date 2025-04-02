@@ -23,7 +23,10 @@
         </Intersection>
       </div>
       <div class="content flex flex-col relative" :class="collapsed && 'collapsed'">
-        <div class="collapsed-btn" @click="collapsed = !collapsed"><LeftOutlined /></div>
+        <div class="collapsed-btn" @click="collapsed = !collapsed">
+          <LeftOutlined v-if="!collapsed" />
+          <RightOutlined v-else />
+        </div>
         <div class="flex justify-between items-center p-4">
           <span class="text-gray-900">场景管理</span>
           <a-button type="primary" class="ml-2">
@@ -38,7 +41,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive, toRaw, computed } from 'vue'
-import { PlusOutlined, LeftOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, LeftOutlined,RightOutlined } from '@ant-design/icons-vue'
 import Header from '@/components/Header/index.vue'
 import Intersection from '@/components/Intersection/Intersection.vue'
 import ProjectItem from './components/ProjectItem.vue'
@@ -122,6 +125,6 @@ const collapsed = ref(false)
   left: 0;
   transform: translateY(-50%);
   transition: all 0.2s;
-  @apply w-6 h-10 flex justify-center items-center z-10 text-xs absolute rounded-full bg-white shadow-lg cursor-pointer hover:h-12;
+  @apply w-6 h-10 flex justify-center items-center z-10 text-xs absolute rounded-full bg-white shadow-lg cursor-pointer border-blue-700 hover:h-12;
 }
 </style>

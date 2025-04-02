@@ -4,7 +4,12 @@
     @click="clickHandle"
   >
     <div class="poster bg-gradient-to-r from-gray-100 to-gray-300">
-      <img class="block w-full h-full object-cover" :src="mode.imgUrl || EmptySvg" alt="" />
+      <img
+        class="block w-full h-full object-cover"
+        :src="mode.imgUrl || EmptySvg"
+        alt=""
+        :onerror="errorHandler"
+      />
     </div>
     <div class="p-4">
       <div class="flex justify-between">
@@ -60,6 +65,10 @@ const toggleHandle = () => {
   visible.value = !visible.value
 }
 onClickOutside(target, () => (visible.value = false))
+
+const errorHandler = (e: Event) => {
+  ;(e.target as HTMLImageElement).src = EmptySvg
+}
 </script>
 <style lang="scss" scoped>
 .poster {
