@@ -13,18 +13,10 @@
         <NodeIndexOutlined />
       </a-radio-button>
     </a-radio-group>
-    <a-input-number
-      size="small"
-      :value="refScale.x"
-      style="width: 80px"
-      :min="minScale"
-      :max="maxScale"
-      :precision="1"
-      :step="0.1"
-      string-mode
-      @change="changeScale"
-    />
-    <a-button size="small" type="primary" @click="shotScreen">截图</a-button>
+    <a-button title="缩放" size="small" class="w-10 text-center">{{ refScale.x }}</a-button>
+    <a-button title="截图" size="small" type="primary" @click="shotScreen"
+      ><VideoCameraOutlined
+    /></a-button>
   </a-space>
 </template>
 
@@ -34,13 +26,7 @@ import { reactive, onBeforeUnmount, onMounted, watchEffect } from 'vue'
 import type { RadioChangeEvent, RadioGroupProps } from 'ant-design-vue/es/radio'
 import type { InputNumberProps } from 'ant-design-vue/es/input-number'
 
-import {
-  SelectOutlined,
-  ColumnWidthOutlined,
-  ColumnHeightOutlined,
-  GatewayOutlined,
-  NodeIndexOutlined,
-} from '@ant-design/icons-vue'
+import { SelectOutlined, NodeIndexOutlined, VideoCameraOutlined } from '@ant-design/icons-vue'
 import type { Application } from 'pixi.js'
 
 import { ENUM_TOOL } from '@/components/SceneCore/enum/ENUM_TOOL'

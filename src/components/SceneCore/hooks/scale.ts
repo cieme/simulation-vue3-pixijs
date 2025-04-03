@@ -25,7 +25,7 @@ export function useScale({
     let afterNodeScaleX = beforeNodeScaleX
     /* 需要计算变化之后位置 */
     let delta = 0.1
-    if (e.deltaY < 0) {
+    if (e.deltaY > 0) {
       delta = -delta
     }
     const newScale = currentScale.plus(delta)

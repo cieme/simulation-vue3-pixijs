@@ -1,7 +1,7 @@
 <template>
   <main class="flex flex-col h-screen">
     <Header class="flex-shrink-0" />
-    <section class="flex box-container w-screen">
+    <section class="flex box-container w-screen relative">
       <div class="left h-full"></div>
       <div class="content h-full flex-1 overflow-hidden relative">
         <Tool
@@ -39,7 +39,7 @@ import type { TComponent } from '@/components/SceneCore/types/base'
 
 const refTarget = ref<HTMLDivElement>()
 const { selectedComponent, hasApp, userData, app, root, assets } = useScene(refTarget)
-const configList= userData.configList
+const configList = userData.configList
 function genData() {
   const length = 20
   const maxX = 500
@@ -63,14 +63,22 @@ onMounted(() => {
 <style lang="scss" scoped>
 .left {
   width: 342px;
+  @apply left-0;
 }
 .right {
   width: 312px;
+  @apply right-0;
+}
+.left,
+.right {
+  @apply absolute h-full bottom-0 z-10;
+  background-color: #20252e;
 }
 .box-container {
   height: calc(100vh - 42px);
 }
 .content {
-  width: calc(100vw - 342px - 312px);
+  // width: calc(100vw - 342px - 312px);
+  @apply w-full;
 }
 </style>
