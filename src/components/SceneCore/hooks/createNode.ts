@@ -6,6 +6,7 @@ import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHoo
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link/useLink'
+import { E_MOUSE_BUTTON } from '../enum/mouse'
 /**
  * 创建通用节点
  *
@@ -69,6 +70,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     eventNode: icon,
     userData,
     app,
+    buttons:[E_MOUSE_BUTTON.LEFT],
     moveHandler: (deltaX, deltaY) => {
       userData.selectedNodes.value.forEach((targetNode) => {
         const position = targetNode.position

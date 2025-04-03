@@ -9,12 +9,6 @@
       <a-radio-button :value="ENUM_TOOL.SELECT" title="选择组件">
         <SelectOutlined />
       </a-radio-button>
-      <a-radio-button :value="ENUM_TOOL.MOVE_ROOT_CONTAINER" title="移动画布">
-        <ColumnWidthOutlined />
-        <div class="w-full h-full absolute top-0 right-0 flex justify-center items-center">
-          <ColumnHeightOutlined />
-        </div>
-      </a-radio-button>
       <a-radio-button :value="ENUM_TOOL.LINE_LINK" title="链接组件">
         <NodeIndexOutlined />
       </a-radio-button>
@@ -52,6 +46,7 @@ import emitter, { E_EVENT_SCENE } from '@/components/SceneCore/mitt/mitt'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
 import { useScale } from '@/components/SceneCore/hooks/scale'
+import { E_MOUSE_BUTTON } from '../enum/mouse'
 interface IToolProps {
   app: Application
   userData: ICreateNodeParams['userData']
@@ -66,12 +61,8 @@ const props = withDefaults(defineProps<IToolProps>(), {
 const state = reactive<{ size: RadioGroupProps['size'] }>({
   size: 'small',
 })
+setTimeout(() => {}, 0)
 const changeToolStatus = (e: RadioChangeEvent) => {
-  if (e.target.value === ENUM_TOOL.MOVE_ROOT_CONTAINER) {
-    addMoveEvent()
-  } else {
-    removeMoveEvent()
-  }
   // eslint-disable-next-line vue/no-mutating-props
   props.userData.operationStatus.value = e.target.value
   emitter.emit(E_EVENT_SCENE.SCENE_OPERATION_STATUS, e.target.value)
@@ -84,6 +75,7 @@ function addMoveEvent() {
     eventNode: props.app.stage,
     app: props.app,
     userData: props.userData,
+    buttons: [E_MOUSE_BUTTON.MIDDLE],
     moveHandler: (deltaX, deltaY, e) => {
       // eslint-disable-next-line vue/no-mutating-props
       props.root.position.x = props.root.position.x + deltaX
@@ -126,6 +118,7 @@ function removeScaleEvent() {
 }
 onMounted(() => {
   addEvent()
+  addMoveEvent()
 })
 onBeforeUnmount(() => {
   removeMoveEvent()
