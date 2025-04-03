@@ -1,12 +1,12 @@
 import { Application, Container, type FederatedPointerEvent, Point } from 'pixi.js'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
-import  { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
+import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
 export interface IDragComponentHookParams {
   eventNode: Container
   userData: ICreateNodeParams['userData']
   app: Application
   moveHandler: (x: number, y: number, event: FederatedPointerEvent) => void
-  buttons:Array<E_MOUSE_BUTTON>
+  buttons: Array<E_MOUSE_BUTTON>
 }
 
 /**
@@ -28,7 +28,7 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
   }
 
   const mouseDownHandler = (event: FederatedPointerEvent) => {
-    if(!params.buttons.includes(event.data.button)) return
+    if (!params.buttons.includes(event.data.button)) return
     app.stage.on('mousemove', mouseMoveHandler)
   }
   const mouseUpHandler = (event: FederatedPointerEvent) => {
@@ -38,11 +38,13 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
 
   eventNode.on('mousedown', mouseDownHandler)
   app.stage.on('mouseup', mouseUpHandler)
+  app.stage.on('mouseupoutside', mouseUpHandler)
 
   const dispose = () => {
     eventNode.off('mousedown', mouseDownHandler)
     app.stage.off('mouseup', mouseUpHandler)
     app.stage.off('mousemove', mouseMoveHandler)
+    app.stage.off('mouseupoutside', mouseUpHandler)
   }
 
   return {
