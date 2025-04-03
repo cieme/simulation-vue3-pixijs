@@ -14,6 +14,7 @@
       </a-radio-button>
     </a-radio-group>
     <a-input-number
+      size="small"
       :value="refScale.x"
       style="width: 80px"
       :min="minScale"
@@ -23,6 +24,7 @@
       string-mode
       @change="changeScale"
     />
+    <a-button size="small" type="primary" @click="shotScreen">截图</a-button>
   </a-space>
 </template>
 
@@ -124,5 +126,20 @@ onBeforeUnmount(() => {
   removeMoveEvent()
   removeScaleEvent()
 })
+const shotScreen = () => {
+  props.app.canvas.toBlob(
+    (blob) => {
+      if (!blob) return
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(blob)
+      a.download = 'canvas.png'
+      a.click()
+      URL.revokeObjectURL(a.href)
+      a.remove()
+    },
+    'image/png',
+    1,
+  )
+}
 </script>
 <style lang="scss" scoped></style>
