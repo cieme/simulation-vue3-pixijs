@@ -57,6 +57,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   icon.interactive = true
   icon.cursor = 'pointer'
   const icoMouseDownHandler = (event: FederatedPointerEvent) => {
+    if (event.button !== E_MOUSE_BUTTON.LEFT) return
     event.stopPropagation()
     if (event.ctrlKey) {
       addSelectedComponent(props, config)
@@ -70,7 +71,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     eventNode: icon,
     userData,
     app,
-    buttons:[E_MOUSE_BUTTON.LEFT],
+    buttons: [E_MOUSE_BUTTON.LEFT],
     moveHandler: (deltaX, deltaY) => {
       userData.selectedNodes.value.forEach((targetNode) => {
         const position = targetNode.position
