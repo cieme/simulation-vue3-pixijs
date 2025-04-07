@@ -13,6 +13,7 @@ import {
 import { Application } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
 import SelectArea from '@/components/SceneCore/core/SelectArea'
+import Link from '@/components/SceneCore/core/Link'
 
 import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
@@ -75,6 +76,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       selectedComponent: selectedComponent.value,
     },
   })
+  const LinkInstance = new Link()
 
   /* 5 */
   async function initStage() {
@@ -88,8 +90,10 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     app.stage.label = 'stage'
     root.addChild(grid.node)
     root.addChild(selectArea.node)
+    root.addChild(LinkInstance.node)
     app.stage.addChild(root)
     selectArea.init()
+    LinkInstance.init()
     refTarget.value!.appendChild(app.canvas)
     appClick()
     hasApp.value = true
