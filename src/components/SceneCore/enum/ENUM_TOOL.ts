@@ -10,3 +10,13 @@ export enum ENUM_TOOL {
   /* 连接线 */
   LINE_LINK = 'LINE_LINK',
 }
+export enum ENUM_LINK_TYPE {
+  /* 进入链接 */
+  LINK_IN = 'LINK_IN',
+  /* 退出链接 */
+  LINK_OUT = 'LINK_OUT',
+  /* 取消链接 */
+  LINK_CANCEL = 'LINK_CANCEL',
+  /* 连接成功 */
+  LINK_SUCCESS = 'LINK_SUCCESS',
+}

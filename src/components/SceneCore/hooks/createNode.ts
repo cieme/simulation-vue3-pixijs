@@ -92,10 +92,15 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   container.addChild(select)
   container.addChild(icon)
   container.addChild(text)
-  const { node: nextLinkNode } = useNextLink(assets)
+
+  const linkParams = {
+    assets,
+    startComponentConfig: config,
+  }
+  const { node: nextLinkNode } = useNextLink(linkParams)
   nextLinkNode.position.x = 20 + linkWidth / 2
   container.addChild(nextLinkNode)
-  const { node: prevLinkNode } = usePrevLink(assets)
+  const { node: prevLinkNode } = usePrevLink(linkParams)
   prevLinkNode.position.x = -20 - linkWidth / 2
   container.addChild(prevLinkNode)
   /*  */

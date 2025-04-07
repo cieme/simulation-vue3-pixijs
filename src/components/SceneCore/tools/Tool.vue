@@ -78,11 +78,11 @@ function addMoveEvent() {
     },
   })
   disposeDrag = dispose
-  document.body.classList.add('cursor-pointer')
+  // document.body.classList.add('cursor-pointer')
 }
 
 function removeMoveEvent() {
-  document.body.classList.remove('cursor-pointer')
+  // document.body.classList.remove('cursor-pointer')
   if (disposeDrag) {
     disposeDrag()
   }

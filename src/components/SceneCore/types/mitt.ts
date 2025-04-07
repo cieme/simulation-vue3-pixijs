@@ -1,4 +1,4 @@
-import { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/enum'
+import { E_EVENT_SCENE, ENUM_TOOL, ENUM_LINK_TYPE } from '@/components/SceneCore/enum'
 import type { Point, PointData } from 'pixi.js'
 /**
  * 框选事件
@@ -15,6 +15,7 @@ interface IBoxSelectionEvent {
   height: number
 }
 export type MittEvents = {
-  [E_EVENT_SCENE.BoxSelection]: IBoxSelectionEvent
+  [E_EVENT_SCENE.BOX_SELECTION]: IBoxSelectionEvent
   [E_EVENT_SCENE.SCENE_OPERATION_STATUS]: ENUM_TOOL
+  [E_EVENT_SCENE.LINK_STATUS]: ENUM_LINK_TYPE
 }

@@ -141,7 +141,7 @@ export default class SelectArea {
     this.node.stroke()
     this.node.fill()
     this.checkoutArea(data)
-    emitter.emit(E_EVENT_SCENE.BoxSelection, data)
+    emitter.emit(E_EVENT_SCENE.BOX_SELECTION, data)
   }
 
   checkoutArea(data: ReturnType<typeof this.getArea>) {
