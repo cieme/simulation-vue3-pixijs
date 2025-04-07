@@ -1,3 +1,4 @@
+import '@/assets/styles/css-var.scss'
 import '@/assets/styles/base.css'
 import '@/assets/styles/styles.scss'
 

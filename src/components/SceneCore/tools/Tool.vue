@@ -14,6 +14,7 @@
       </a-radio-button>
     </a-radio-group>
     <a-button title="缩放" size="small" class="w-10 text-center">{{ refScale.x }}</a-button>
+    <a-button title="缩放" size="small" @click="resetScale"><ReloadOutlined /></a-button>
     <a-button title="截图" size="small" type="primary" @click="shotScreen"
       ><VideoCameraOutlined
     /></a-button>
@@ -26,7 +27,12 @@ import { reactive, onBeforeUnmount, onMounted, watchEffect } from 'vue'
 import type { RadioChangeEvent, RadioGroupProps } from 'ant-design-vue/es/radio'
 import type { InputNumberProps } from 'ant-design-vue/es/input-number'
 
-import { SelectOutlined, NodeIndexOutlined, VideoCameraOutlined } from '@ant-design/icons-vue'
+import {
+  SelectOutlined,
+  NodeIndexOutlined,
+  VideoCameraOutlined,
+  ReloadOutlined,
+} from '@ant-design/icons-vue'
 import type { Application } from 'pixi.js'
 
 import { ENUM_TOOL } from '@/components/SceneCore/enum/ENUM_TOOL'
@@ -82,7 +88,7 @@ function removeMoveEvent() {
   }
 }
 let disposeScale: (() => void) | null = null
-const { dispose, refScale, minScale, maxScale, addEvent } = useScale({
+const { dispose, refScale, minScale, maxScale, addEvent, resetScale } = useScale({
   targetNode: props.root,
   app: props.app,
 })

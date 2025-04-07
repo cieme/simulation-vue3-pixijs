@@ -6,7 +6,7 @@
       <div class="content h-full flex-1 overflow-hidden relative">
         <Tool
           v-if="hasApp"
-          class="absolute top-2 left-2 z-10"
+          class="tool-bar absolute top-2 left-2 z-10"
           :userData="userData"
           :app="app"
           :root="root"
@@ -62,11 +62,11 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .left {
-  width: 342px;
+  width: var(--slide-width);
   @apply left-0;
 }
 .right {
-  width: 312px;
+  width: var(--panel-width);
   @apply right-0;
 }
 .left,
@@ -80,5 +80,8 @@ onMounted(() => {
 .content {
   // width: calc(100vw - 342px - 312px);
   @apply w-full;
+}
+.tool-bar {
+  margin-left: var(--slide-width);
 }
 </style>

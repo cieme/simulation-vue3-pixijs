@@ -49,7 +49,11 @@ export function useScale({
   const dispose = () => {
     removeEvent()
   }
-
+  const resetScale = () => {
+    refScale.value.set(1, 1)
+    targetNode.scale.set(1, 1)
+    targetNode.position.set(0, 0)
+  }
   return {
     refScale,
     minScale,
@@ -57,6 +61,7 @@ export function useScale({
     addEvent,
     removeEvent,
     dispose,
+    resetScale,
   }
 }
 function calcPosition(
@@ -76,7 +81,7 @@ function calcPosition(
 
   const divPosX = uiTouchPos.x / beforeNodeScaleX
   const divPoxY = uiTouchPos.y / beforeNodeScaleX
-   /* 2 */
+  /* 2 */
   const mulX = divPosX * afterNodeScaleX
   const mulY = divPoxY * afterNodeScaleX
 
