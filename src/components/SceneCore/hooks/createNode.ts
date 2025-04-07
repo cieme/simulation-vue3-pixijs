@@ -75,7 +75,6 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     buttons: [E_MOUSE_BUTTON.LEFT],
     moveHandler: (deltaX, deltaY) => {
       userData.selectedNodes.value.forEach((targetNode) => {
-
         const position = targetNode.base.position
         targetNode.base.position.x = position.x + deltaX
         targetNode.base.position.y = position.y + deltaY

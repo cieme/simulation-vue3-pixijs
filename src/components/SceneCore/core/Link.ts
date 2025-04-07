@@ -36,25 +36,29 @@ export default class LinkManager {
   unEmit() {
     emitter.off(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
   }
-  init() {}
+  init() {
+    this.node.position.set(this.app.screen.width / 2, this.app.screen.height / 2)
+  }
   convert() {
     this.PolygonList = []
     this.userData.linkReactive.LinkData.forEach((item) => {
       const points: PointData[] = []
 
       const startNode = this.userData.nodeList.get(item.start)?.nextLinkNode
-      const startLocalPosition = startNode?.toGlobal(startNode.position)
+      const startLocalPosition = startNode?.getGlobalPosition()
       if (startLocalPosition) {
-        const startPosition = startNode?.toLocal(startLocalPosition)
+        const startPosition = this.node?.toLocal(startLocalPosition).clone()
+
         if (startPosition) {
           points.push(startPosition)
         }
       }
       if (item.end) {
-        const endNode = this.userData.nodeList.get(item.end)?.nextLinkNode
-        const endLocalPosition = endNode?.toGlobal(endNode.position)
+        const endNode = this.userData.nodeList.get(item.end)?.prevLinkNode
+        const endLocalPosition = endNode?.getGlobalPosition()
         if (endLocalPosition) {
-          const endPosition = endNode?.toLocal(endLocalPosition)
+          const endPosition = this.node?.toLocal(endLocalPosition).clone()
+
           if (endPosition) {
             points.push(endPosition)
           }
@@ -68,7 +72,6 @@ export default class LinkManager {
   draw() {
     this.graphics.clear()
     this.PolygonList.forEach((item) => {
-      console.log(item.polygon.points)
       this.graphics.poly(item.polygon.points, false)
     })
     this.graphics.stroke({

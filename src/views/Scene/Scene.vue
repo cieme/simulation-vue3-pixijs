@@ -41,7 +41,7 @@ const refTarget = ref<HTMLDivElement>()
 const { selectedComponent, hasApp, userData, app, root, assets } = useScene(refTarget)
 const configList = userData.configList
 function genData() {
-  const length = 20
+  const length = 6
   const maxX = 500
   const maxY = 500
   return Array.from({ length }, (_, index) => {

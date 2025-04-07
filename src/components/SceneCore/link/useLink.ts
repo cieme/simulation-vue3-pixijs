@@ -127,9 +127,9 @@ export function usePrevLink({ assets, startComponentConfig, userData }: IUseLink
       } else {
         const link = new Link({
           uniqueId: uuid(),
-          start: startComponentConfig!.id,
+          start: userData.linkReactive.startComponentConfig!.id,
         })
-        link.end = userData.linkReactive.startComponentConfig!.id
+        link.end = startComponentConfig!.id
         userData.linkReactive.LinkData.push(link)
         emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_SUCCESS)
 
