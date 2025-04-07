@@ -96,6 +96,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   const linkParams = {
     assets,
     startComponentConfig: config,
+    userData
   }
   const { node: nextLinkNode } = useNextLink(linkParams)
   nextLinkNode.position.x = 20 + linkWidth / 2

@@ -1,6 +1,7 @@
 import type { ComputedRef, Reactive, Ref } from 'vue'
 import { type Spritesheet, Container, Application } from 'pixi.js'
 import type { TComponent,IBaseComponent } from '@/components/SceneCore/types/base'
+import type { ILinkParams } from '@/components/SceneCore/types/link'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
 import type { ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
 /**
@@ -23,6 +24,7 @@ export interface IBaseSceneParams {
     nodeList: Map<string, Container>
     selectedNodes: ComputedRef<Container[]>
     operationStatus: Ref<ENUM_TOOL>
+    linkReactive:ILinkParams
   }
 }
 /**

@@ -1,30 +1,32 @@
-import { reactive } from 'vue'
-import { Container, Sprite } from 'pixi.js'
-import type { IBaseComponent } from '@/components/SceneCore/types/base'
+import { Sprite } from 'pixi.js'
+
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
+import type { ILinkParams } from '@/components/SceneCore/types/link'
+import { Link } from '@/components/SceneCore/link/Link'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL, ENUM_LINK_TYPE } from '../mitt/mitt'
+
+import { uuid } from '@/utils'
 export const linkWidth = 15
 export const linkHeight = 9
-interface ILinkParams {
-  status: ENUM_LINK_TYPE | null
-  startComponentConfig: IBaseComponent | null
-  reset: () => void
-}
-export const linkReactive = reactive<ILinkParams>({
-  status: null,
-  startComponentConfig: null,
-  reset: () => {
-    linkReactive.status = null
-    linkReactive.startComponentConfig = null
-  },
-})
+
+// export const linkReactive = reactive<ILinkParams>({
+//   status: null,
+//   startComponentConfig: null,
+//   link: null,
+//   reset: () => {
+//     linkReactive.status = null
+//     linkReactive.startComponentConfig = null
+//     linkReactive.link = null
+//   },
+// })
 
 export interface IUseLinkParams {
   assets: IBaseSceneParams['assets']
   /* 判断当前链接组件的 */
   startComponentConfig: ILinkParams['startComponentConfig'] | null
+  userData: IBaseSceneParams['userData']
 }
-export function useNextLink({ assets, startComponentConfig }: IUseLinkParams) {
+export function useNextLink({ assets, startComponentConfig, userData }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.anchor.set(0.5, 0.5)
@@ -48,9 +50,9 @@ export function useNextLink({ assets, startComponentConfig }: IUseLinkParams) {
     })
     nextLink.on('click', (e) => {
       /* 如果是第一次进入连线状态 */
-      if (linkReactive.status === null) {
-        linkReactive.status = ENUM_LINK_TYPE.LINK_IN
-        linkReactive.startComponentConfig = startComponentConfig
+      if (userData.linkReactive.status === null) {
+        userData.linkReactive.status = ENUM_LINK_TYPE.LINK_IN
+        userData.linkReactive.startComponentConfig = startComponentConfig
         emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_IN)
       }
     })
@@ -83,7 +85,7 @@ export function useNextLink({ assets, startComponentConfig }: IUseLinkParams) {
     unEmit,
   }
 }
-export function usePrevLink({ assets, startComponentConfig }: IUseLinkParams) {
+export function usePrevLink({ assets, startComponentConfig, userData }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.anchor.set(0.5, 0.5)
@@ -118,14 +120,23 @@ export function usePrevLink({ assets, startComponentConfig }: IUseLinkParams) {
       /* 不能链接自己 */
       if (
         startComponentConfig &&
-        linkReactive.startComponentConfig &&
-        startComponentConfig.id === linkReactive.startComponentConfig.id
+        userData.linkReactive.startComponentConfig &&
+        startComponentConfig.id === userData.linkReactive.startComponentConfig.id
       ) {
         console.log('不能链接自己')
       } else {
+        const link = new Link({
+          uniqueId: uuid(),
+          start: startComponentConfig!.id,
+        })
+        link.end = userData.linkReactive.startComponentConfig!.id
+        userData.linkReactive.LinkData.push(link)
+        emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_SUCCESS)
+
         console.log(
-          `终点：${startComponentConfig?.id}，起点：${linkReactive.startComponentConfig?.id}`,
+          `终点：${startComponentConfig?.id}，起点：${userData.linkReactive.startComponentConfig?.id}`,
         )
+        userData.linkReactive.reset()
       }
     })
   }

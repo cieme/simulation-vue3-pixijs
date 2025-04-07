@@ -13,7 +13,7 @@ import {
 import { Application } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
 import SelectArea from '@/components/SceneCore/core/SelectArea'
-import Link from '@/components/SceneCore/core/Link'
+import LinkManager from '@/components/SceneCore/core/Link'
 
 import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
@@ -60,14 +60,24 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     nodeList,
     selectedNodes,
     operationStatus: ref(ENUM_TOOL.SELECT),
+    linkReactive: {
+      status: null,
+      startComponentConfig: null,
+      linking: null,
+      LinkData: [],
+      reset: () => {
+        userData.linkReactive.status = null
+        userData.linkReactive.startComponentConfig = null
+        userData.linkReactive.linking = null
+      },
+    },
   })
 
   provide('userData', userData)
 
   const hasApp = ref(false)
-
-  /* 4 */
-  const selectArea = new SelectArea({
+  /*  */
+  const shallowParams = {
     app,
     root,
     assets,
@@ -75,8 +85,10 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     props: {
       selectedComponent: selectedComponent.value,
     },
-  })
-  const LinkInstance = new Link()
+  }
+  /* 4 */
+  const selectArea = new SelectArea(shallowParams)
+  const LinkInstance = new LinkManager(shallowParams)
 
   /* 5 */
   async function initStage() {

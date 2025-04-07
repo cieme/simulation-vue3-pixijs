@@ -1,5 +1,5 @@
 import { debounce, throttle } from 'lodash-es'
-
+import { v4 as uuidv4 } from 'uuid';
 export const debounceForSubmit = (fn: (...args: unknown[]) => void, wait: number = 300) => {
   return debounce(fn, wait, {
     leading: true,
@@ -12,4 +12,7 @@ export const throttleForResize = (fn: (...args: unknown[]) => void, wait: number
     leading: false,
     trailing: true,
   })
+}
+export const uuid = () => {
+  return uuidv4()
 }
