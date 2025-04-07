@@ -152,7 +152,7 @@ export default class SelectArea {
     this.selectedComponentMapInstance.clear()
     for (let index = 0; index < keys.length; index++) {
       const key = keys[index]
-      const node = nodeList.get(key)
+      const node = nodeList.get(key)?.iconNode
       if (this.detectIntersection(node!, data)) {
         const config = configList.find((item) => item.id === key)
         if (config) {

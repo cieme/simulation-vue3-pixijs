@@ -1,8 +1,9 @@
 import type { ComputedRef, Reactive, Ref } from 'vue'
 import { type Spritesheet, Container, Application } from 'pixi.js'
-import type { TComponent,IBaseComponent } from '@/components/SceneCore/types/base'
+import type { TComponent, IBaseComponent } from '@/components/SceneCore/types/base'
 import type { ILinkParams } from '@/components/SceneCore/types/link'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
+import NodeItem from '@/components/SceneCore/core/NodeItem'
 import type { ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
 /**
  * 静态资源接口
@@ -21,10 +22,10 @@ export interface IBaseSceneParams {
   props: IBaseProps
   userData: {
     configList: Ref<TComponent[]>
-    nodeList: Map<string, Container>
-    selectedNodes: ComputedRef<Container[]>
+    nodeList: Map<string, NodeItem>
+    selectedNodes: ComputedRef<NodeItem[]>
     operationStatus: Ref<ENUM_TOOL>
-    linkReactive:ILinkParams
+    linkReactive: ILinkParams
   }
 }
 /**
@@ -52,4 +53,12 @@ export interface IGlobalToLocalParams {
   root: Container
   point: { x: number; y: number }
   app: Application
+}
+
+export interface INodeItem {
+  base: Container
+  nextLinkNode: Container | null
+  prevLinkNode: Container | null
+  iconNode: Container | null
+  selectNode: Container | null
 }

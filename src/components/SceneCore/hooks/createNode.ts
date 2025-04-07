@@ -7,6 +7,7 @@ import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link/useLink'
 import { E_MOUSE_BUTTON } from '../enum/mouse'
+import NodeItem from '../core/NodeItem'
 /**
  * 创建通用节点
  *
@@ -74,9 +75,10 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     buttons: [E_MOUSE_BUTTON.LEFT],
     moveHandler: (deltaX, deltaY) => {
       userData.selectedNodes.value.forEach((targetNode) => {
-        const position = targetNode.position
-        targetNode.position.x = position.x + deltaX
-        targetNode.position.y = position.y + deltaY
+
+        const position = targetNode.base.position
+        targetNode.base.position.x = position.x + deltaX
+        targetNode.base.position.y = position.y + deltaY
       })
     },
   })
@@ -96,7 +98,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   const linkParams = {
     assets,
     startComponentConfig: config,
-    userData
+    userData,
   }
   const { node: nextLinkNode } = useNextLink(linkParams)
   nextLinkNode.position.x = 20 + linkWidth / 2
@@ -110,7 +112,16 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     dragDispose()
   })
   /*  */
-  userData.nodeList.set(config.id, container)
+  userData.nodeList.set(
+    config.id,
+    new NodeItem({
+      base: container,
+      nextLinkNode,
+      prevLinkNode,
+      iconNode: icon,
+      selectNode: select,
+    }),
+  )
 
   watchEffect(() => {
     container.label = config.label

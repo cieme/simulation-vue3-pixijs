@@ -41,14 +41,23 @@ export default class LinkManager {
     this.PolygonList = []
     this.userData.linkReactive.LinkData.forEach((item) => {
       const points: PointData[] = []
-      const startPosition = this.userData.nodeList.get(item.start)?.position
-      if (startPosition) {
-        points.push(startPosition)
+
+      const startNode = this.userData.nodeList.get(item.start)?.nextLinkNode
+      const startLocalPosition = startNode?.toGlobal(startNode.position)
+      if (startLocalPosition) {
+        const startPosition = startNode?.toLocal(startLocalPosition)
+        if (startPosition) {
+          points.push(startPosition)
+        }
       }
       if (item.end) {
-        const endPosition = this.userData.nodeList.get(item.end)?.position
-        if (endPosition) {
-          points.push(endPosition)
+        const endNode = this.userData.nodeList.get(item.end)?.nextLinkNode
+        const endLocalPosition = endNode?.toGlobal(endNode.position)
+        if (endLocalPosition) {
+          const endPosition = endNode?.toLocal(endLocalPosition)
+          if (endPosition) {
+            points.push(endPosition)
+          }
         }
       }
 

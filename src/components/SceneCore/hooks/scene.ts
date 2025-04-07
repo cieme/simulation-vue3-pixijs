@@ -43,7 +43,8 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   provide('root', root)
   /* 2 */
   const grid = new Grid()
-  const nodeList = new Map()
+
+  const nodeList: ICreateNodeParams['userData']['nodeList'] = new Map()
   const selectedComponent = ref<IBaseProps['selectedComponent']>([])
   const selectedNodes = computed(() => {
     const list = selectedComponent.value
