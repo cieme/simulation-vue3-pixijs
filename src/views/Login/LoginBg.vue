@@ -12,7 +12,7 @@ const sprite = ref<Sprite>()
 const texture = ref<Texture>()
 const assets = {
   images: {
-    LOGINBG: '/technology-8280863_1920.jpg',
+    LOGINBG: '/technology-8576321_1920.jpg',
   },
 }
 const filter = new BulgePinchFilter()

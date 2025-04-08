@@ -54,21 +54,26 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { theme } from 'ant-design-vue'
+import { theme, type FormProps } from 'ant-design-vue'
 import LoginBg from './LoginBg.vue'
 import { useUserStore } from '@/stores/user'
 import { APLogin } from '@/api/user/user'
 
 const userStore = useUserStore()
 
-const formState = reactive({
+interface IFormState {
+  username: string
+  password: string
+}
+
+const formState = reactive<IFormState>({
   username: '',
   password: '',
 })
 const router = useRouter()
-const onFinish = (values: any) => {
+const onFinish: FormProps['onFinish'] = (values) => {
   APLogin({ userName: formState.username, passWord: formState.password }).then((res) => {
     const { dbId, roleLevel, realName } = res.data
     userStore.setUserInfo({
@@ -80,19 +85,38 @@ const onFinish = (values: any) => {
   })
 }
 
-const onFinishFailed = (errorInfo: any) => {
+const onFinishFailed: FormProps['onFinishFailed'] = (errorInfo) => {
   console.log('Failed:', errorInfo)
 }
+
+// const mousePoint = ref<{ x: number; y: number }>({
+//   x: 0,
+//   y: 0,
+// })
+// const transformComputed = computed(() => {
+//   return `transform: rotate3d(0, 1, 0, ${(mousePoint.value.x / window.innerWidth) * 10 - 5}deg)`
+// })
+// const onMouseMove = (e: MouseEvent) => {
+//   mousePoint.value = { x: e.clientX, y: e.clientY }
+// }
+// onMounted(() => {
+//   document.addEventListener('mousemove', onMouseMove)
+// })
+// onBeforeUnmount(() => {
+//   document.removeEventListener('mousemove', onMouseMove)
+// })
 </script>
+
 <style lang="scss" scoped>
 .login-container {
   min-width: 100vw;
   min-height: 100vh;
+  /* 景深 */
+  // perspective: 500px;
 }
 .login-wrapper {
   background-color: rgba(#fff, 0.4);
   backdrop-filter: blur(8px);
   width: 400px;
-  width: 1rpx;
 }
 </style>

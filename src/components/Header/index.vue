@@ -16,10 +16,10 @@
         </a>
         <template #overlay>
           <a-menu @click="onClick">
-            <a-menu-item :key="1">
+            <a-menu-item key="1">
               <a href="javascript:;">控制台</a>
             </a-menu-item>
-            <a-menu-item :key="2">
+            <a-menu-item key="logout">
               <a href="javascript:;">登出</a>
             </a-menu-item>
           </a-menu>
@@ -29,9 +29,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { CaretDownOutlined } from '@ant-design/icons-vue'
 import type { MenuProps } from 'ant-design-vue'
+import { useUserStore } from '@/stores/user'
 
 interface IHeader {
   title?: string
@@ -39,9 +40,13 @@ interface IHeader {
 const props = withDefaults(defineProps<IHeader>(), {
   title: '离散仿真工具',
 })
-
+const router = useRouter()
+const userStore = useUserStore()
 const onClick: MenuProps['onClick'] = ({ key }) => {
-  console.log(`Click on item ${key}`)
+  if (key === 'logout') {
+    userStore.logout();
+    router.replace('/login')
+  }
 }
 </script>
 <style lang="scss" scoped>
