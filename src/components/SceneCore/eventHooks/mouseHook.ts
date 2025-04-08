@@ -32,13 +32,13 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
     app.stage.on('mousemove', mouseMoveHandler)
   }
   const mouseUpHandler = (event: FederatedPointerEvent) => {
-    app.stage.off('mousemove', mouseMoveHandler)
+    app.stage?.off('mousemove', mouseMoveHandler)
     resetMouseMove()
   }
 
   eventNode.on('mousedown', mouseDownHandler)
-  app.stage.on('mouseup', mouseUpHandler)
-  app.stage.on('mouseupoutside', mouseUpHandler)
+  app.stage?.on('mouseup', mouseUpHandler)
+  app.stage?.on('mouseupoutside', mouseUpHandler)
 
   const dispose = () => {
     eventNode?.off('mousedown', mouseDownHandler)

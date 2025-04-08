@@ -1,4 +1,4 @@
-import { Graphics, Container, Polygon, type PointData } from 'pixi.js'
+import { Graphics, Container, Polygon, type PointData, Assets, Texture } from 'pixi.js'
 import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/mitt/mitt'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 export default class LinkManager {
@@ -87,12 +87,13 @@ export default class LinkManager {
     this.graphics.clear()
     this.PolygonList.forEach((item) => {
       this.graphics.poly(item.polygon.points, false)
+      this.fillArrows(item.polygon.points)
     })
     this.stroke()
   }
-  stroke() {
+  async stroke() {
     this.graphics.stroke({
-      width: 4,
+      width: 3,
       color: 0x356ff4,
       join: 'round',
       cap: 'round',
@@ -122,6 +123,7 @@ export default class LinkManager {
     const numberPoints = this.PointDataToNumber(points)
 
     this.graphics.poly(numberPoints, false)
+    this.fillArrows(numberPoints)
     this.stroke()
   }
   PointDataToNumber(point: PointData[]): number[] {
@@ -130,5 +132,55 @@ export default class LinkManager {
         return [item.x, item.y]
       })
       .flat(1)
+  }
+
+  fillArrows(point: number[]) {
+    if (point.length > 3) {
+      for (let index = 0; index < point.length - 2; index += 2) {
+        const item: PointData = { x: point[index], y: point[index + 1] }
+        const nextPoint: PointData = { x: point[index + 2], y: point[index + 3] }
+        const [left, tip, right] = this.getArrowTrianglePoints(item, nextPoint)
+        this.graphics.moveTo(left.x, left.y)
+        this.graphics.lineTo(tip.x, tip.y)
+        this.graphics.lineTo(right.x, right.y)
+      }
+    }
+  }
+  getDistance(startPoint: PointData, endPoint: PointData) {
+    const dx = endPoint.x - startPoint.x
+    const dy = endPoint.y - startPoint.y
+    return Math.sqrt(dx * dx + dy * dy)
+  }
+  getArrowTrianglePoints(p1: PointData, p2: PointData, width = 10, height = 10) {
+    // 中点坐标
+    const midX = (p1.x + p2.x) / 2
+    const midY = (p1.y + p2.y) / 2
+
+    // 方向向量 (dx, dy)
+    const dx = p2.x - p1.x
+    const dy = p2.y - p1.y
+    const len = Math.sqrt(dx * dx + dy * dy)
+    const nx = dx / len
+    const ny = dy / len
+
+    // 垂直方向向量（左法向）
+    const perpX = -ny
+    const perpY = nx
+
+    // 箭头三个点
+    const tip = {
+      x: midX + nx * (height / 2),
+      y: midY + ny * (height / 2),
+    }
+    const left = {
+      x: midX + perpX * (width / 2),
+      y: midY + perpY * (width / 2),
+    }
+    const right = {
+      x: midX - perpX * (width / 2),
+      y: midY - perpY * (width / 2),
+    }
+
+    return [left, tip, right]
   }
 }

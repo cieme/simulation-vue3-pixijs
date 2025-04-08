@@ -22,7 +22,7 @@ export function useNextLink({ assets, startComponentConfig, userData, app }: IUs
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.anchor.set(0.5, 0.5)
-  const tint = nextLink.tint
+
   const operationHandler = (status: ENUM_TOOL) => {
     if (status === ENUM_TOOL.LINE_LINK) {
       addLinkEvent()
@@ -36,12 +36,7 @@ export function useNextLink({ assets, startComponentConfig, userData, app }: IUs
   function addLinkEvent() {
     nextLink.interactive = true
     nextLink.cursor = 'pointer'
-    nextLink.on('mouseenter', () => {
-      nextLink.tint = 0x407cf4
-    })
-    nextLink.on('mouseleave', () => {
-      nextLink.tint = tint
-    })
+
     nextLink.on('mousedown', (e) => {
       if (e.button !== E_MOUSE_BUTTON.LEFT) return
       e.stopPropagation()
@@ -80,8 +75,6 @@ export function useNextLink({ assets, startComponentConfig, userData, app }: IUs
     nextLink.interactive = false
 
     nextLink.cursor = 'default'
-    nextLink.removeAllListeners('mouseenter')
-    nextLink.removeAllListeners('mouseleave')
     nextLink.removeAllListeners('mousedown')
   }
   function onEmit() {
@@ -109,7 +102,6 @@ export function usePrevLink({ assets, startComponentConfig, userData, app }: IUs
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.anchor.set(0.5, 0.5)
-  const tint = nextLink.tint
 
   function onLinkIn(type: ENUM_LINK_TYPE) {
     if (type === ENUM_LINK_TYPE.LINK_IN) {
@@ -130,12 +122,6 @@ export function usePrevLink({ assets, startComponentConfig, userData, app }: IUs
   function addLinkEvent() {
     nextLink.interactive = true
     nextLink.cursor = 'pointer'
-    nextLink.on('mouseenter', () => {
-      nextLink.tint = 0x407cf4
-    })
-    nextLink.on('mouseleave', () => {
-      nextLink.tint = tint
-    })
 
     nextLink.on('mousedown', (e) => {
       if (e.button !== E_MOUSE_BUTTON.LEFT) return
@@ -161,8 +147,6 @@ export function usePrevLink({ assets, startComponentConfig, userData, app }: IUs
   function removeLinkEvent() {
     nextLink.interactive = false
     nextLink.cursor = 'default'
-    nextLink.removeAllListeners('mouseenter')
-    nextLink.removeAllListeners('mouseleave')
     nextLink.removeAllListeners('mousedown')
   }
 
