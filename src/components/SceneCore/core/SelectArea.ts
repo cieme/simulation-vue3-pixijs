@@ -163,7 +163,7 @@ export default class SelectArea {
     this.updateSelectedComponent()
   }
 
-  updateSelectedComponent = throttleForResize(() => {
+  updateSelectedComponent = throttleForResize<void>(() => {
     addSelectedComponentList(this.props, this.selectedComponentMapInstance.get(), true)
   })
   hasIcon(node: Container) {

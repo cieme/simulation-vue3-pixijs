@@ -41,10 +41,10 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
   app.stage.on('mouseupoutside', mouseUpHandler)
 
   const dispose = () => {
-    eventNode.off('mousedown', mouseDownHandler)
-    app.stage.off('mouseup', mouseUpHandler)
-    app.stage.off('mousemove', mouseMoveHandler)
-    app.stage.off('mouseupoutside', mouseUpHandler)
+    eventNode?.off('mousedown', mouseDownHandler)
+    app.stage?.off('mouseup', mouseUpHandler)
+    app.stage?.off('mousemove', mouseMoveHandler)
+    app.stage?.off('mouseupoutside', mouseUpHandler)
   }
 
   return {

@@ -1,32 +1,24 @@
-import { Sprite } from 'pixi.js'
+import { Application, Sprite, type FederatedPointerEvent } from 'pixi.js'
 
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import type { ILinkParams } from '@/components/SceneCore/types/link'
 import { Link } from '@/components/SceneCore/link/Link'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL, ENUM_LINK_TYPE } from '../mitt/mitt'
 
-import { uuid } from '@/utils'
+import { throttleForResize, uuid } from '@/utils'
+import { E_MOUSE_BUTTON } from '../enum/mouse'
 export const linkWidth = 15
 export const linkHeight = 9
-
-// export const linkReactive = reactive<ILinkParams>({
-//   status: null,
-//   startComponentConfig: null,
-//   link: null,
-//   reset: () => {
-//     linkReactive.status = null
-//     linkReactive.startComponentConfig = null
-//     linkReactive.link = null
-//   },
-// })
 
 export interface IUseLinkParams {
   assets: IBaseSceneParams['assets']
   /* 判断当前链接组件的 */
   startComponentConfig: ILinkParams['startComponentConfig'] | null
   userData: IBaseSceneParams['userData']
+  app: Application
 }
-export function useNextLink({ assets, startComponentConfig, userData }: IUseLinkParams) {
+const cancelArray = [ENUM_LINK_TYPE.LINK_CANCEL, ENUM_LINK_TYPE.LINK_SUCCESS]
+export function useNextLink({ assets, startComponentConfig, userData, app }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.anchor.set(0.5, 0.5)
@@ -39,6 +31,8 @@ export function useNextLink({ assets, startComponentConfig, userData }: IUseLink
     }
   }
 
+  let AppDisposeHandler: () => void | undefined
+
   function addLinkEvent() {
     nextLink.interactive = true
     nextLink.cursor = 'pointer'
@@ -48,14 +42,39 @@ export function useNextLink({ assets, startComponentConfig, userData }: IUseLink
     nextLink.on('mouseleave', () => {
       nextLink.tint = tint
     })
-    nextLink.on('click', (e) => {
+    nextLink.on('mousedown', (e) => {
+      if (e.button !== E_MOUSE_BUTTON.LEFT) return
+      e.stopPropagation()
       /* 如果是第一次进入连线状态 */
       if (userData.linkReactive.status === null) {
         userData.linkReactive.status = ENUM_LINK_TYPE.LINK_IN
         userData.linkReactive.startComponentConfig = startComponentConfig
+
+        const link = new Link({ uniqueId: uuid(), start: startComponentConfig!.id })
+        userData.linkReactive.linking = link
+        const { dispose: AppDispose } = appLink({
+          link,
+          userData,
+          app,
+        })
+        AppDisposeHandler = AppDispose
+        onEmitLinkSuccessOrCancel()
         emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_IN)
       }
     })
+  }
+  function onEmitLinkSuccessOrCancel() {
+    emitter.on(E_EVENT_SCENE.LINK_STATUS, onLinkOut)
+  }
+  function offEmitLinkSuccessOrCancel() {
+    emitter.off(E_EVENT_SCENE.LINK_STATUS, onLinkOut)
+  }
+  function onLinkOut(status: ENUM_LINK_TYPE) {
+    if (cancelArray.includes(status)) {
+      if (AppDisposeHandler) {
+        AppDisposeHandler()
+      }
+    }
   }
   function removeLinkEvent() {
     nextLink.interactive = false
@@ -63,7 +82,7 @@ export function useNextLink({ assets, startComponentConfig, userData }: IUseLink
     nextLink.cursor = 'default'
     nextLink.removeAllListeners('mouseenter')
     nextLink.removeAllListeners('mouseleave')
-    nextLink.removeAllListeners('click')
+    nextLink.removeAllListeners('mousedown')
   }
   function onEmit() {
     emitter.on(E_EVENT_SCENE.SCENE_OPERATION_STATUS, operationHandler)
@@ -75,6 +94,7 @@ export function useNextLink({ assets, startComponentConfig, userData }: IUseLink
   function dispose() {
     unEmit()
     removeLinkEvent()
+    offEmitLinkSuccessOrCancel()
   }
   nextLink.on('destroyed', dispose)
   return {
@@ -85,7 +105,7 @@ export function useNextLink({ assets, startComponentConfig, userData }: IUseLink
     unEmit,
   }
 }
-export function usePrevLink({ assets, startComponentConfig, userData }: IUseLinkParams) {
+export function usePrevLink({ assets, startComponentConfig, userData, app }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.anchor.set(0.5, 0.5)
@@ -94,7 +114,7 @@ export function usePrevLink({ assets, startComponentConfig, userData }: IUseLink
   function onLinkIn(type: ENUM_LINK_TYPE) {
     if (type === ENUM_LINK_TYPE.LINK_IN) {
       addLinkEvent()
-    } else {
+    } else if (cancelArray.includes(type)) {
       removeLinkEvent()
     }
   }
@@ -116,7 +136,10 @@ export function usePrevLink({ assets, startComponentConfig, userData }: IUseLink
     nextLink.on('mouseleave', () => {
       nextLink.tint = tint
     })
-    nextLink.on('click', (e) => {
+
+    nextLink.on('mousedown', (e) => {
+      if (e.button !== E_MOUSE_BUTTON.LEFT) return
+      e.stopPropagation()
       /* 不能链接自己 */
       if (
         startComponentConfig &&
@@ -125,18 +148,13 @@ export function usePrevLink({ assets, startComponentConfig, userData }: IUseLink
       ) {
         console.log('不能链接自己')
       } else {
-        const link = new Link({
-          uniqueId: uuid(),
-          start: userData.linkReactive.startComponentConfig!.id,
-        })
-        link.end = startComponentConfig!.id
-        userData.linkReactive.LinkData.push(link)
-        emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_SUCCESS)
-
-        console.log(
-          `终点：${startComponentConfig?.id}，起点：${userData.linkReactive.startComponentConfig?.id}`,
-        )
-        userData.linkReactive.reset()
+        const link = userData.linkReactive.linking
+        if (link) {
+          link.end = startComponentConfig!.id
+          userData.linkReactive.LinkData.push(link)
+          emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_SUCCESS)
+          userData.linkReactive.reset()
+        }
       }
     })
   }
@@ -145,7 +163,7 @@ export function usePrevLink({ assets, startComponentConfig, userData }: IUseLink
     nextLink.cursor = 'default'
     nextLink.removeAllListeners('mouseenter')
     nextLink.removeAllListeners('mouseleave')
-    nextLink.removeAllListeners('click')
+    nextLink.removeAllListeners('mousedown')
   }
 
   /*  */
@@ -161,5 +179,48 @@ export function usePrevLink({ assets, startComponentConfig, userData }: IUseLink
     removeLinkEvent,
     dispose,
     unEmit,
+  }
+}
+
+export function appLink({
+  link,
+  userData,
+  app,
+}: {
+  link: Link
+  userData: IBaseSceneParams['userData']
+  app: Application
+}) {
+  const onMouseDown = (e: FederatedPointerEvent) => {
+    if (e.button === E_MOUSE_BUTTON.LEFT) {
+      const mouseX = e.global.x
+      const mouseY = e.global.y
+      link.point.push({ x: mouseX, y: mouseY })
+      emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_ING)
+    }
+  }
+  const onRightDown = (e: FederatedPointerEvent) => {
+    emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_CANCEL)
+    userData.linkReactive.reset()
+    dispose()
+  }
+  const pointerMove = throttleForResize<FederatedPointerEvent>((e) => {
+    const mouseX = e.global.x
+    const mouseY = e.global.y
+    link.linking = { x: mouseX, y: mouseY }
+    emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_ING)
+  }, 30)
+
+  app.stage.on('mousedown', onMouseDown)
+  app.stage.on('rightdown', onRightDown)
+  app.stage.on('mousemove', pointerMove)
+
+  const dispose = () => {
+    app.stage.off('mousedown', onMouseDown)
+    app.stage.off('rightdown', onRightDown)
+    app.stage.off('mousemove', pointerMove)
+  }
+  return {
+    dispose,
   }
 }

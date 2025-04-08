@@ -19,4 +19,6 @@ export enum ENUM_LINK_TYPE {
   LINK_CANCEL = 'LINK_CANCEL',
   /* 连接成功 */
   LINK_SUCCESS = 'LINK_SUCCESS',
+  /* 连接中 */
+  LINK_ING = 'LINK_ING',
 }

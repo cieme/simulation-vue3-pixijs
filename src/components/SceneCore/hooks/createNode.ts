@@ -8,6 +8,7 @@ import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link/useLink'
 import { E_MOUSE_BUTTON } from '../enum/mouse'
 import NodeItem from '../core/NodeItem'
+import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 /**
  * 创建通用节点
  *
@@ -79,6 +80,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
         targetNode.base.position.x = position.x + deltaX
         targetNode.base.position.y = position.y + deltaY
       })
+      emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, [])
     },
   })
   /* 文字 */
@@ -98,6 +100,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     assets,
     startComponentConfig: config,
     userData,
+    app
   }
   const { node: nextLinkNode } = useNextLink(linkParams)
   nextLinkNode.position.x = 20 + linkWidth / 2

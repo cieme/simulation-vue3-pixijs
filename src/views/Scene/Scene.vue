@@ -27,7 +27,7 @@
   </main>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 import Header from '@/components/Header/index.vue'
 import Core from '@/components/SceneCore/components/Core.vue'
@@ -54,10 +54,20 @@ function genData() {
     return data
   })
 }
+
+function documentRightClick(e: MouseEvent) {
+  e.preventDefault()
+  e.stopPropagation()
+}
+
 onMounted(() => {
   setTimeout(() => {
     configList.value = genData()
   }, 0)
+  document.addEventListener('contextmenu', documentRightClick)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('contextmenu', documentRightClick)
 })
 </script>
 <style lang="scss" scoped>
