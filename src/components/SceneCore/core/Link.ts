@@ -10,6 +10,8 @@ import {
 import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/mitt/mitt'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { E_MOUSE_BUTTON } from '../enum/mouse'
+import LinkPoint from './LinkPoint'
+import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
 export default class LinkManager {
   props: IBaseSceneParams['props']
   app: IBaseSceneParams['app']
@@ -20,6 +22,7 @@ export default class LinkManager {
   graphics = new Graphics()
   PolygonList: Array<{ id: string; polygon: Polygon }> = []
   drawSuccessLink = [ENUM_LINK_TYPE.LINK_SUCCESS, ENUM_LINK_TYPE.LINK_CANCEL]
+  pointList: LinkPoint[] = []
   constructor({ app, root, props, userData }: IBaseSceneParams) {
     this.app = app
     this.root = root
@@ -47,19 +50,22 @@ export default class LinkManager {
     this.convert()
     this.draw()
   }
+  onSceneMouseDown = () => {}
   onEmit() {
     emitter.on(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
     emitter.on(E_EVENT_SCENE.MOVE_COMPONENT, this.onMoveComponent)
+    emitter.on(E_EVENT_SCENE.MOUSE_DOWN_SCENE, this.onSceneMouseDown)
   }
   unEmit() {
     emitter.off(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
     emitter.off(E_EVENT_SCENE.MOVE_COMPONENT, this.onMoveComponent)
+    emitter.off(E_EVENT_SCENE.MOUSE_DOWN_SCENE, this.onSceneMouseDown)
   }
   selectLink = (e: FederatedPointerEvent) => {
     if (e.button !== E_MOUSE_BUTTON.LEFT) return
     if (this.userData.linkReactive.linking) return
     // e.stopPropagation() // 不加这行会自动 清除选择的组件,如果增加，因为面板互斥,需要手动清除，暂时自动清除
-    const point = this.node.toLocal(e.global.clone())
+    const point = this.toLocal(e.global.clone())
     const polygonOne = this.PolygonList.find((item) => {
       const hit = item.polygon.strokeContains(point.x, point.y, 3)
       return hit
@@ -67,7 +73,8 @@ export default class LinkManager {
     if (!polygonOne || !this.userData?.linkReactive) return
     const link = this.userData.linkReactive.LinkData.find((item) => item.uniqueId === polygonOne.id)
 
-    console.log(polygonOne, link)
+    if (link) {
+    }
   }
   addEvent() {
     this.graphics.interactive = true
@@ -90,21 +97,21 @@ export default class LinkManager {
       const startNode = this.userData.nodeList.get(item.start)?.nextLinkNode
       const startLocalPosition = startNode?.getGlobalPosition()
       if (startLocalPosition) {
-        const startPosition = this.node?.toLocal(startLocalPosition).clone()
+        const startPosition = this.toLocal(startLocalPosition)
 
         if (startPosition) {
           points.push(startPosition)
         }
       }
       const linkingPoints = item.point.map((item) => {
-        return this.node?.toLocal(item)
+        return item
       })
       points.push(...linkingPoints)
       if (item.end) {
         const endNode = this.userData.nodeList.get(item.end)?.prevLinkNode
         const endLocalPosition = endNode?.getGlobalPosition()
         if (endLocalPosition) {
-          const endPosition = this.node?.toLocal(endLocalPosition).clone()
+          const endPosition = this.toLocal(endLocalPosition)
 
           if (endPosition) {
             points.push(endPosition)
@@ -115,6 +122,9 @@ export default class LinkManager {
       const polygon = new Polygon(points)
       this.PolygonList.push({ id: item.uniqueId, polygon })
     })
+  }
+  toLocal(position: PointData) {
+    return this.node.toLocal(position)
   }
   draw() {
     this.graphics.clear()
@@ -140,17 +150,17 @@ export default class LinkManager {
       )?.nextLinkNode
       const startLocalPosition = startNode?.getGlobalPosition()
       if (startLocalPosition) {
-        const startPosition = this.node?.toLocal(startLocalPosition).clone()
+        const startPosition = this.toLocal(startLocalPosition)
         if (startPosition) {
           points.push(startPosition)
         }
       }
       const linkingPoints = this.userData.linkReactive.linking.point.map((item) => {
-        return this.node?.toLocal(item)
+        return item
       })
       points.push(...linkingPoints)
       if (this.userData.linkReactive.linking.linking) {
-        points.push(this.node?.toLocal(this.userData.linkReactive.linking.linking))
+        points.push(this.toLocal(this.userData.linkReactive.linking.linking))
       }
     }
     const numberPoints = this.PointDataToNumber(points)

@@ -10,6 +10,7 @@
           :userData="userData"
           :app="app"
           :root="root"
+          :refScale="refScale"
         ></Tool>
         <Core
           :selectedComponent="selectedComponent"
@@ -38,7 +39,8 @@ import { useScene } from '@/components/SceneCore/hooks/scene'
 import type { TComponent } from '@/components/SceneCore/types/base'
 
 const refTarget = ref<HTMLDivElement>()
-const { selectedComponent, hasApp, userData, app, root, assets } = useScene(refTarget)
+
+const { selectedComponent, hasApp, userData, app, root, assets,refScale } = useScene(refTarget)
 const configList = userData.configList
 
 function genData() {

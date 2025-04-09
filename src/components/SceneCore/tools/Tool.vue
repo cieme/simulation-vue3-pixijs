@@ -25,7 +25,6 @@
 import { reactive, onBeforeUnmount, onMounted, watchEffect } from 'vue'
 
 import type { RadioChangeEvent, RadioGroupProps } from 'ant-design-vue/es/radio'
-import type { InputNumberProps } from 'ant-design-vue/es/input-number'
 
 import {
   SelectOutlined,
@@ -33,7 +32,7 @@ import {
   VideoCameraOutlined,
   ReloadOutlined,
 } from '@ant-design/icons-vue'
-import type { Application } from 'pixi.js'
+import type { Application, PointData } from 'pixi.js'
 
 import { ENUM_TOOL } from '@/components/SceneCore/enum/ENUM_TOOL'
 import emitter, { E_EVENT_SCENE } from '@/components/SceneCore/mitt/mitt'
@@ -45,11 +44,13 @@ interface IToolProps {
   app: Application
   userData: ICreateNodeParams['userData']
   root: ICreateNodeParams['root']
+  refScale: PointData
 }
 const props = withDefaults(defineProps<IToolProps>(), {
   app: () => ({}) as Application,
   userData: () => ({}) as ICreateNodeParams['userData'],
   root: () => ({}) as ICreateNodeParams['root'],
+  refScale: () => ({ x: 1, y: 1 }) as PointData,
 })
 
 const state = reactive<{ size: RadioGroupProps['size'] }>({
@@ -88,21 +89,12 @@ function removeMoveEvent() {
   }
 }
 let disposeScale: (() => void) | null = null
-const { dispose, refScale, minScale, maxScale, addEvent, resetScale } = useScale({
+const { dispose, minScale, maxScale, addEvent, resetScale } = useScale({
   targetNode: props.root,
   app: props.app,
+  refScale: props.refScale,
 })
 
-const changeScale: InputNumberProps['onChange'] = (value) => {
-  if (value === null) {
-    refScale.value.x = minScale
-    refScale.value.y = minScale
-  } else {
-    const number = Number(value)
-    refScale.value.x = number
-    refScale.value.y = number
-  }
-}
 disposeScale = dispose
 
 function removeScaleEvent() {

@@ -1,5 +1,5 @@
 import { E_EVENT_SCENE, ENUM_TOOL, ENUM_LINK_TYPE } from '@/components/SceneCore/enum'
-import type { Point, PointData } from 'pixi.js'
+import type { FederatedPointerEvent, PointData } from 'pixi.js'
 /**
  * 框选事件
  *
@@ -19,4 +19,5 @@ export type MittEvents = {
   [E_EVENT_SCENE.SCENE_OPERATION_STATUS]: ENUM_TOOL
   [E_EVENT_SCENE.LINK_STATUS]: ENUM_LINK_TYPE
   [E_EVENT_SCENE.MOVE_COMPONENT]: string[]
+  [E_EVENT_SCENE.MOUSE_DOWN_SCENE]: FederatedPointerEvent
 }

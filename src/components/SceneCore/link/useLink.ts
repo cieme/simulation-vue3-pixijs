@@ -16,9 +16,10 @@ export interface IUseLinkParams {
   startComponentConfig: ILinkParams['startComponentConfig'] | null
   userData: IBaseSceneParams['userData']
   app: Application
+  root: IBaseSceneParams['root']
 }
 const cancelArray = [ENUM_LINK_TYPE.LINK_CANCEL, ENUM_LINK_TYPE.LINK_SUCCESS]
-export function useNextLink({ assets, startComponentConfig, userData, app }: IUseLinkParams) {
+export function useNextLink({ assets, startComponentConfig, userData, app, root }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.anchor.set(0.5, 0.5)
@@ -51,6 +52,7 @@ export function useNextLink({ assets, startComponentConfig, userData, app }: IUs
           link,
           userData,
           app,
+          root,
         })
         AppDisposeHandler = AppDispose
         onEmitLinkSuccessOrCancel()
@@ -170,16 +172,24 @@ export function appLink({
   link,
   userData,
   app,
+  root,
 }: {
   link: Link
   userData: IBaseSceneParams['userData']
   app: Application
+  root: IBaseSceneParams['root']
 }) {
   const onMouseDown = (e: FederatedPointerEvent) => {
     if (e.button === E_MOUSE_BUTTON.LEFT) {
       const mouseX = e.global.x
       const mouseY = e.global.y
-      link.point.push({ x: mouseX, y: mouseY })
+      const point = { x: mouseX, y: mouseY }
+      /*  */
+      const LinkManager = root.getChildByLabel('LinkManager')
+
+      const localPoint = LinkManager!.toLocal(point)
+      link.point.push(localPoint)
+      /*  */
       emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_ING)
     }
   }

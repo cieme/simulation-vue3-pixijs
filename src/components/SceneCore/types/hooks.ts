@@ -1,5 +1,5 @@
 import type { ComputedRef, Reactive, Ref } from 'vue'
-import { type Spritesheet, Container, Application } from 'pixi.js'
+import { type Spritesheet, Container, Application,type PointData } from 'pixi.js'
 import type { TComponent, IBaseComponent } from '@/components/SceneCore/types/base'
 import type { ILinkParams } from '@/components/SceneCore/types/link'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
@@ -48,10 +48,10 @@ export interface ICreateNodeParams extends IBaseSceneParams {
  * @typedef {IGlobalToLocalParams}
  */
 export interface IGlobalToLocalParams {
-  globalPoint: { x: number; y: number }
+  globalPoint: PointData
   node: Container
   root: Container
-  point: { x: number; y: number }
+  point: PointData
   app: Application
 }
 

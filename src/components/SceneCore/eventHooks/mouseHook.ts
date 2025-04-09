@@ -28,7 +28,7 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
   }
 
   const mouseDownHandler = (event: FederatedPointerEvent) => {
-    if (!params.buttons.includes(event.data.button)) return
+    if (!params.buttons.includes(event.button)) return
     app.stage.on('mousemove', mouseMoveHandler)
   }
   const mouseUpHandler = (event: FederatedPointerEvent) => {

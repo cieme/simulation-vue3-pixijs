@@ -1,27 +1,28 @@
-import { ref } from 'vue'
-import { Container, Application, Point } from 'pixi.js'
+import { Container, Application, type PointData } from 'pixi.js'
 import type { FederatedWheelEvent } from 'pixi.js'
 import Big from 'big.js'
 export function useScale({
   targetNode,
   app,
   scale,
+  refScale,
 }: {
   targetNode: Container
   app: Application
   scale?: number
+  refScale: PointData
 }) {
   if (scale) {
     targetNode.scale.set(scale, scale)
   }
-  const refScale = ref(targetNode.scale)
+  refScale = targetNode.scale
   const minScale = 0.5
   const maxScale = 5
   // 根据鼠标位置,缩放
   const onWheel = (e: FederatedWheelEvent) => {
-    const currentScale = new Big(refScale.value.x)
+    const currentScale = new Big(refScale.x)
 
-    const beforeNodeScaleX = refScale.value.x
+    const beforeNodeScaleX = refScale.x
     let afterNodeScaleX = beforeNodeScaleX
     /* 需要计算变化之后位置 */
     let delta = 0.1
@@ -33,9 +34,9 @@ export function useScale({
       afterNodeScaleX = newScale.toNumber()
       /*  */
       calcPosition(e, beforeNodeScaleX, afterNodeScaleX, targetNode)
-      refScale.value.x = afterNodeScaleX
-      refScale.value.y = afterNodeScaleX
-      // targetNode.scale = refScale.value
+      refScale.x = afterNodeScaleX
+      refScale.y = afterNodeScaleX
+      // targetNode.scale = refScale
     }
   }
 
@@ -50,7 +51,8 @@ export function useScale({
     removeEvent()
   }
   const resetScale = () => {
-    refScale.value.set(1, 1)
+    refScale.x = 1
+    refScale.y = 1
     targetNode.scale.set(1, 1)
     targetNode.position.set(0, 0)
   }

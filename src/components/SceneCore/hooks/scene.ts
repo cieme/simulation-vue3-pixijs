@@ -10,7 +10,7 @@ import {
   shallowReactive,
   nextTick,
 } from 'vue'
-import { Application } from 'pixi.js'
+import { Application, FederatedPointerEvent, type PointData } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
 import SelectArea from '@/components/SceneCore/core/SelectArea'
 import LinkManager from '@/components/SceneCore/core/Link'
@@ -56,6 +56,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     return list
   })
   const configList = ref<TComponent[]>([])
+  const refScale = ref<PointData>(root.scale)
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     configList,
     nodeList,
@@ -148,9 +149,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     dispose()
     window.removeEventListener('resize', resize)
   })
-  const appMouseDownHandler = () => {
-    console.log('画布清除选中组件')
+  const appMouseDownHandler = (e: FederatedPointerEvent) => {
     selectedComponent.value.length = 0
+    emitter.emit(E_EVENT_SCENE.MOUSE_DOWN_SCENE, e)
   }
   function appClick() {
     app.stage.interactive = true
@@ -158,7 +159,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   }
 
   userData.selectedNodes = selectedNodes
-
   return {
     app,
     assets,
@@ -168,5 +168,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     selectedNodes,
     userData,
     selectedComponent,
+    refScale,
   }
 }

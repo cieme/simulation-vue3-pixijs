@@ -100,7 +100,8 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     assets,
     startComponentConfig: config,
     userData,
-    app
+    app,
+    root
   }
   const { node: nextLinkNode } = useNextLink(linkParams)
   nextLinkNode.position.x = 20 + linkWidth / 2
