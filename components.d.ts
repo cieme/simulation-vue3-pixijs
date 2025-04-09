@@ -24,6 +24,7 @@ declare module 'vue' {
     ARow: typeof import('ant-design-vue/es')['Row']
     ASpace: typeof import('ant-design-vue/es')['Space']
     ATag: typeof import('ant-design-vue/es')['Tag']
+    ATree: typeof import('ant-design-vue/es')['Tree']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     Core: typeof import('./src/components/SceneCore/components/Core.vue')['default']
     Header: typeof import('./src/components/Header/index.vue')['default']

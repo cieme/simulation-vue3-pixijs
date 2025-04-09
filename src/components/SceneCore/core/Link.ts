@@ -1,6 +1,15 @@
-import { Graphics, Container, Polygon, type PointData, Assets, Texture } from 'pixi.js'
+import {
+  Graphics,
+  Container,
+  Polygon,
+  type PointData,
+  Assets,
+  Texture,
+  FederatedPointerEvent,
+} from 'pixi.js'
 import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/mitt/mitt'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
+import { E_MOUSE_BUTTON } from '../enum/mouse'
 export default class LinkManager {
   props: IBaseSceneParams['props']
   app: IBaseSceneParams['app']
@@ -46,8 +55,29 @@ export default class LinkManager {
     emitter.off(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
     emitter.off(E_EVENT_SCENE.MOVE_COMPONENT, this.onMoveComponent)
   }
+  selectLink = (e: FederatedPointerEvent) => {
+    if (e.button !== E_MOUSE_BUTTON.LEFT) return
+    if (this.userData.linkReactive.linking) return
+    // e.stopPropagation() // 不加这行会自动 清除选择的组件,如果增加，因为面板互斥,需要手动清除，暂时自动清除
+    const point = this.node.toLocal(e.global.clone())
+    const polygonOne = this.PolygonList.find((item) => {
+      const hit = item.polygon.strokeContains(point.x, point.y, 3)
+      return hit
+    })
+    console.log(polygonOne)
+  }
+  addEvent() {
+    this.graphics.interactive = true
+    this.graphics.cursor = 'pointer'
+    this.graphics.on('mousedown', this.selectLink)
+  }
+  removeEvent() {
+    this.graphics.interactive = false
+    this.graphics.cursor = 'default'
+    this.graphics.off('mousedown', this.selectLink)
+  }
   init() {
-    this.node.position.set(this.app.screen.width / 2, this.app.screen.height / 2)
+    this.addEvent()
   }
   convert() {
     this.PolygonList = []

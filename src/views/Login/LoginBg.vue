@@ -2,17 +2,28 @@
   <div ref="refDom"></div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { Application, Assets, Sprite, Texture, DEPRECATED_WRAP_MODES } from 'pixi.js'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import {
+  Application,
+  Assets,
+  Sprite,
+  Texture,
+  DEPRECATED_WRAP_MODES,
+  DisplacementFilter,
+  Container,
+} from 'pixi.js'
 import { BulgePinchFilter } from 'pixi-filters'
 
 const refDom = ref<HTMLDivElement>()
 const app = ref<Application | null>(null)
 const sprite = ref<Sprite>()
 const texture = ref<Texture>()
+const overlaySprite = ref<Sprite>()
+const overlayTexture = ref<Texture>()
 const assets = {
   images: {
-    LOGINBG: '/technology-8576321_1920.jpg',
+    LOGINBG: '/login/technology-8576321_1920.jpg',
+    overlay: '/login/displacement_map.png',
   },
 }
 const filter = new BulgePinchFilter()
@@ -81,6 +92,7 @@ const resize = () => {
 
 async function initApplication() {
   app.value = new Application()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ;(globalThis as any).__PIXI_APP__ = app.value
   await app.value.init({
     antialias: true, // default:false 开启抗锯齿
@@ -91,25 +103,47 @@ async function initApplication() {
 
   window.addEventListener('resize', resize)
 
-  addBgTexture()
+  await addBgTexture()
   resize()
 }
 
 async function addBgTexture() {
+  const container = new Container()
+  app.value!.stage.addChild(container)
   texture.value = await Assets.load(assets.images.LOGINBG)
   texture.value!.source.addressMode = DEPRECATED_WRAP_MODES.REPEAT
+
+  overlayTexture.value = await Assets.load(assets.images.overlay)
+  overlayTexture.value!.source.wrapMode = DEPRECATED_WRAP_MODES.REPEAT
   // 图像尺寸
   sprite.value = new Sprite(texture.value)
   sprite.value.anchor.set(0.5, 0.5)
 
   sprite.value.width = window.innerWidth
   sprite.value.height = window.innerHeight
+
+  overlaySprite.value = new Sprite(overlayTexture.value)
+  overlaySprite.value.anchor.set(0.5, 0.5)
+  overlaySprite.value.width = window.innerWidth
+  overlaySprite.value.height = window.innerHeight
+  /*  */
   const filter = new BulgePinchFilter({
     strength: 1,
     radius: 80,
   })
-  sprite.value.filters = [filter]
-  app.value!.stage.addChild(sprite.value)
+  const displacementFilter = new DisplacementFilter({
+    scale: 40,
+    sprite: overlaySprite.value,
+  })
+  /*  */
+  container.addChild(overlaySprite.value)
+
+  container.filters = [filter, displacementFilter]
+  container.addChild(sprite.value)
+  app.value!.ticker.add(() => {
+    overlaySprite.value!.x += 1
+    overlaySprite.value!.y += 1
+  })
 }
 </script>
 <style lang="scss" scoped></style>

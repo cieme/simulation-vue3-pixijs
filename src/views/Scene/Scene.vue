@@ -2,7 +2,13 @@
   <main class="flex flex-col h-screen">
     <Header class="flex-shrink-0" />
     <section class="flex box-container w-screen relative">
-      <div class="left h-full"></div>
+      <div class="left h-full">
+        <a-tree
+          show-line
+          :tree-data="treeData"
+          :fieldNames="{ title: 'label', key: 'id' }"
+        ></a-tree>
+      </div>
       <div class="content h-full flex-1 overflow-hidden relative">
         <Tool
           v-if="hasApp"
@@ -27,7 +33,7 @@
   </main>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, type Ref } from 'vue'
 
 import Header from '@/components/Header/index.vue'
 import Core from '@/components/SceneCore/components/Core.vue'
@@ -40,6 +46,8 @@ import type { TComponent } from '@/components/SceneCore/types/base'
 const refTarget = ref<HTMLDivElement>()
 const { selectedComponent, hasApp, userData, app, root, assets } = useScene(refTarget)
 const configList = userData.configList
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const treeData: any = configList
 function genData() {
   const length = 6
   const maxX = 500

@@ -13,8 +13,6 @@ export enum ENUM_TOOL {
 export enum ENUM_LINK_TYPE {
   /* 进入链接 */
   LINK_IN = 'LINK_IN',
-  /* 退出链接 */
-  LINK_OUT = 'LINK_OUT',
   /* 取消链接 */
   LINK_CANCEL = 'LINK_CANCEL',
   /* 连接成功 */

@@ -149,6 +149,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     window.removeEventListener('resize', resize)
   })
   const appMouseDownHandler = () => {
+    console.log('画布清除选中组件')
     selectedComponent.value.length = 0
   }
   function appClick() {
