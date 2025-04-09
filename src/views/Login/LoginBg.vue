@@ -16,10 +16,10 @@ import { BulgePinchFilter } from 'pixi-filters'
 
 const refDom = ref<HTMLDivElement>()
 const app = ref<Application | null>(null)
-const sprite = ref<Sprite>()
-const texture = ref<Texture>()
-const overlaySprite = ref<Sprite>()
-const overlayTexture = ref<Texture>()
+const sprite = ref<Sprite | null>()
+const texture = ref<Texture | null>()
+const overlaySprite = ref<Sprite | null>()
+const overlayTexture = ref<Texture | null>()
 const assets = {
   images: {
     LOGINBG: '/login/technology-8576321_1920.jpg',
@@ -41,6 +41,7 @@ onUnmounted(() => {
 function destroyAll() {
   Assets.unload(assets.images.LOGINBG)
   if (app.value) {
+    app.value.ticker.remove(onTicker)
     // 销毁 Application
     app.value.destroy(true, {
       children: true,
@@ -50,6 +51,10 @@ function destroyAll() {
       style: true,
     })
     app.value = null
+    sprite.value = null
+    texture.value = null
+    overlaySprite.value = null
+    overlayTexture.value = null
   }
 }
 const onMouseMove = (e: MouseEvent) => {
@@ -106,7 +111,10 @@ async function initApplication() {
   await addBgTexture()
   resize()
 }
-
+function onTicker() {
+  overlaySprite.value!.x += 1
+  overlaySprite.value!.y += 1
+}
 async function addBgTexture() {
   const container = new Container()
   app.value!.stage.addChild(container)
@@ -116,13 +124,13 @@ async function addBgTexture() {
   overlayTexture.value = await Assets.load(assets.images.overlay)
   overlayTexture.value!.source.wrapMode = DEPRECATED_WRAP_MODES.REPEAT
   // 图像尺寸
-  sprite.value = new Sprite(texture.value)
+  sprite.value = new Sprite(texture.value!)
   sprite.value.anchor.set(0.5, 0.5)
 
   sprite.value.width = window.innerWidth
   sprite.value.height = window.innerHeight
 
-  overlaySprite.value = new Sprite(overlayTexture.value)
+  overlaySprite.value = new Sprite(overlayTexture.value!)
   overlaySprite.value.anchor.set(0.5, 0.5)
   overlaySprite.value.width = window.innerWidth
   overlaySprite.value.height = window.innerHeight
@@ -140,10 +148,7 @@ async function addBgTexture() {
 
   container.filters = [filter, displacementFilter]
   container.addChild(sprite.value)
-  app.value!.ticker.add(() => {
-    overlaySprite.value!.x += 1
-    overlaySprite.value!.y += 1
-  })
+  app.value!.ticker.add(onTicker)
 }
 </script>
 <style lang="scss" scoped></style>
