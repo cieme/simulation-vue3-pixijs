@@ -56,12 +56,13 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     return list
   })
   const configList = ref<TComponent[]>([])
-  const refScale = ref<PointData>(root.scale)
+
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     configList,
     nodeList,
     selectedNodes,
     operationStatus: ref(ENUM_TOOL.SELECT),
+    refScale: ref<PointData>(root.scale),
     linkReactive: {
       status: null,
       startComponentConfig: null,
@@ -168,6 +169,5 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     selectedNodes,
     userData,
     selectedComponent,
-    refScale,
   }
 }

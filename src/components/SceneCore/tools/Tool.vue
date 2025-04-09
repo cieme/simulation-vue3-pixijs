@@ -71,7 +71,7 @@ function addMoveEvent() {
     app: props.app,
     userData: props.userData,
     buttons: [E_MOUSE_BUTTON.MIDDLE],
-    moveHandler: (deltaX, deltaY, e) => {
+    moveHandler: ({ deltaX, deltaY }) => {
       // eslint-disable-next-line vue/no-mutating-props
       props.root.position.x = props.root.position.x + deltaX
       // eslint-disable-next-line vue/no-mutating-props

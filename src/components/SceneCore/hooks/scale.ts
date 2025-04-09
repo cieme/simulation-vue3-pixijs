@@ -15,7 +15,6 @@ export function useScale({
   if (scale) {
     targetNode.scale.set(scale, scale)
   }
-  refScale = targetNode.scale
   const minScale = 0.5
   const maxScale = 5
   // 根据鼠标位置,缩放

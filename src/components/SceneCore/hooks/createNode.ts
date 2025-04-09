@@ -74,11 +74,11 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     userData,
     app,
     buttons: [E_MOUSE_BUTTON.LEFT],
-    moveHandler: (deltaX, deltaY) => {
+    moveHandler: ({ scaleX, scaleY }) => {
       userData.selectedNodes.value.forEach((targetNode) => {
-        const position = targetNode.base.position
-        targetNode.base.position.x = position.x + deltaX
-        targetNode.base.position.y = position.y + deltaY
+        const position = targetNode.node.position
+        targetNode.node.position.x = position.x + scaleX
+        targetNode.node.position.y = position.y + scaleY
       })
       emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, [])
     },
@@ -101,7 +101,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     startComponentConfig: config,
     userData,
     app,
-    root
+    root,
   }
   const { node: nextLinkNode } = useNextLink(linkParams)
   nextLinkNode.position.x = 20 + linkWidth / 2
@@ -118,7 +118,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   userData.nodeList.set(
     config.id,
     new NodeItem({
-      base: container,
+      node: container,
       nextLinkNode,
       prevLinkNode,
       iconNode: icon,

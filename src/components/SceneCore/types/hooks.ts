@@ -1,5 +1,5 @@
 import type { ComputedRef, Reactive, Ref } from 'vue'
-import { type Spritesheet, Container, Application,type PointData } from 'pixi.js'
+import { type Spritesheet, Container, Application, type PointData } from 'pixi.js'
 import type { TComponent, IBaseComponent } from '@/components/SceneCore/types/base'
 import type { ILinkParams } from '@/components/SceneCore/types/link'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
@@ -26,6 +26,7 @@ export interface IBaseSceneParams {
     selectedNodes: ComputedRef<NodeItem[]>
     operationStatus: Ref<ENUM_TOOL>
     linkReactive: ILinkParams
+    refScale: Ref<PointData>
   }
 }
 /**
@@ -56,7 +57,7 @@ export interface IGlobalToLocalParams {
 }
 
 export interface INodeItem {
-  base: Container
+  node: Container
   nextLinkNode: Container | null
   prevLinkNode: Container | null
   iconNode: Container | null

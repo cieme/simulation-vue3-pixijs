@@ -5,7 +5,13 @@ export interface IDragComponentHookParams {
   eventNode: Container
   userData: ICreateNodeParams['userData']
   app: Application
-  moveHandler: (x: number, y: number, event: FederatedPointerEvent) => void
+  moveHandler: (params: {
+    deltaX: number
+    deltaY: number
+    event: FederatedPointerEvent
+    scaleX: number
+    scaleY: number
+  }) => void
   buttons: Array<E_MOUSE_BUTTON>
 }
 
@@ -24,7 +30,15 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
     const currentMousePosition = event.global
     const { deltaX, deltaY } = getDelta(currentMousePosition)
     /*  */
-    moveHandler(deltaX, deltaY, event)
+    const scaleX = deltaX / userData.refScale.value.x
+    const scaleY = deltaY / userData.refScale.value.y
+    moveHandler({
+      deltaX,
+      deltaY,
+      event,
+      scaleX,
+      scaleY,
+    })
   }
 
   const mouseDownHandler = (event: FederatedPointerEvent) => {
