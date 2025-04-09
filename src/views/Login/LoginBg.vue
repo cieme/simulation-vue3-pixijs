@@ -122,7 +122,7 @@ async function addBgTexture() {
   texture.value!.source.addressMode = DEPRECATED_WRAP_MODES.REPEAT
 
   overlayTexture.value = await Assets.load(assets.images.overlay)
-  overlayTexture.value!.source.wrapMode = DEPRECATED_WRAP_MODES.REPEAT
+  overlayTexture.value!.source.addressMode = DEPRECATED_WRAP_MODES.REPEAT
   // 图像尺寸
   sprite.value = new Sprite(texture.value!)
   sprite.value.anchor.set(0.5, 0.5)

@@ -64,7 +64,10 @@ export default class LinkManager {
       const hit = item.polygon.strokeContains(point.x, point.y, 3)
       return hit
     })
-    console.log(polygonOne)
+    if (!polygonOne || !this.userData?.linkReactive) return
+    const link = this.userData.linkReactive.LinkData.find((item) => item.uniqueId === polygonOne.id)
+
+    console.log(polygonOne, link)
   }
   addEvent() {
     this.graphics.interactive = true
