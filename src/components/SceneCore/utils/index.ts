@@ -21,7 +21,7 @@ export function useSelectedComponent() {
     clear: () => {
       selectedComponentMap.clear()
     },
-    get: () => {
+    getValues: () => {
       return Array.from(selectedComponentMap.values())
     },
   }
@@ -50,4 +50,7 @@ export function addSelectedComponentList(
     props.selectedComponent.length = 0
   }
   props.selectedComponent.push(...itemList)
+}
+export function replaceSelectedComponentList(props: IBaseProps, itemList: TComponent[]) {
+  props.selectedComponent = itemList
 }

@@ -1,9 +1,13 @@
-import { Rectangle, Graphics, Container, Point, FederatedPointerEvent, log2 } from 'pixi.js'
+import { computed } from 'vue'
+import { Rectangle, Graphics, Container, Point, FederatedPointerEvent } from 'pixi.js'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
-import { useSelectedComponent, addSelectedComponentList } from '@/components/SceneCore/utils/index'
+import {
+  useSelectedComponent,
+  replaceSelectedComponentList,
+} from '@/components/SceneCore/utils/index'
 import { throttleForResize } from '@/utils/index'
 export default class SelectArea {
   props: IBaseSceneParams['props']
@@ -21,6 +25,15 @@ export default class SelectArea {
   gap = 10
   selectedComponentMapInstance = useSelectedComponent()
   eventNode: Container
+  alignConfigMap: Map<string, (typeof this.userData.configList.value)[number]> = new Map()
+  computedUserConfigObject = computed(() => {
+    this.alignConfigMap.clear()
+    for (let i = 0; i < this.userData.configList.value.length; i++) {
+      const item = this.userData.configList.value[i]
+      this.alignConfigMap.set(item.id, item)
+    }
+    return this.alignConfigMap
+  })
   constructor({ app, root, props, userData }: IBaseSceneParams) {
     this.eventNode = app.stage
     this.app = app
@@ -84,7 +97,7 @@ export default class SelectArea {
     this.eventNode.on('mousemove', this.onMouseMove, this)
   }
 
-  onMouseMove(e: FederatedPointerEvent) {
+  onMouseMove = throttleForResize<FederatedPointerEvent>((e: FederatedPointerEvent) => {
     if (this.isMouseDown) {
       useGlobalToLocal({
         globalPoint: e.global,
@@ -99,7 +112,7 @@ export default class SelectArea {
       if (data.width < this.gap && data.height < this.gap) return
       this.drawArea(data)
     }
-  }
+  })
 
   onMouseUp(e: FederatedPointerEvent) {
     this.isMouseDown = false
@@ -146,22 +159,18 @@ export default class SelectArea {
 
   checkoutArea(data: ReturnType<typeof this.getArea>) {
     /* TODO */
-    const nodeList = this.userData.nodeList
+    const nodeMap = this.userData.nodeList
     const configList = this.userData.configList.value
-    const keys = Array.from(nodeList.keys())
+    // const keys = Array.from(nodeList.keys())
     this.selectedComponentMapInstance.clear()
-    for (let index = 0; index < keys.length; index++) {
-      const key = keys[index]
-      const node = nodeList.get(key)?.iconNode
-      if (this.detectIntersection(node!, data)) {
-        let config: (typeof configList)[0] | null = null
-        for (let i = 0; i < configList.length; i++) {
-          const item = configList[i]
-          if (item.id === key) {
-            config = item
-            break
-          }
-        }
+
+    for (const item of nodeMap) {
+      const node = item[1].iconNode
+      if (!node) continue
+      if (this.detectIntersection(node, data)) {
+        const config: (typeof configList)[number] | undefined =
+          this.computedUserConfigObject.value.get(item[0])
+
         if (config) {
           this.selectedComponentMapInstance.add(config)
         }
@@ -171,7 +180,7 @@ export default class SelectArea {
   }
 
   updateSelectedComponent = throttleForResize<void>(() => {
-    addSelectedComponentList(this.props, this.selectedComponentMapInstance.get(), true)
+    replaceSelectedComponentList(this.props, this.selectedComponentMapInstance.getValues())
   })
   hasIcon(node: Container) {
     return node.getChildByName('icon')
