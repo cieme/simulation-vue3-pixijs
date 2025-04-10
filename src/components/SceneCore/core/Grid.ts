@@ -6,7 +6,7 @@ export default class Grid {
   height = 100000
   constructor() {
     this.node.label = 'Grid'
-    this.node.setStrokeStyle({ width: 2, color: 0x888888, alpha: 0.15 })
+    this.node.setStrokeStyle({ width: 1, color: 0x222222 })
     this.node.position.x = -this.width / 2
     this.node.position.y = -this.height / 2
     this.init()
