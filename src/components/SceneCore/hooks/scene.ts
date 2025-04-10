@@ -128,6 +128,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   }
 
   function dispose() {
+    removeAppEvent()
     app?.destroy?.(
       {
         removeView: true,
@@ -141,7 +142,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       },
     )
     app.stage?.removeChildren()
-    removeAppEvent()
     app.stage?.destroy()
     emitter.all.clear() // 清除所有监听
   }
