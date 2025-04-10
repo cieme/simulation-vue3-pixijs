@@ -64,6 +64,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     configList,
     nodeList,
     selectedNodes,
+    selectedComponent,
     operationStatus: ref(ENUM_TOOL.SELECT),
     refScale: ref<PointData>(root.scale),
     linkReactive: {
@@ -89,7 +90,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     assets,
     userData,
     props: {
-      selectedComponent: selectedComponent.value,
+      selectedComponent,
     },
   }
   /* 4 */

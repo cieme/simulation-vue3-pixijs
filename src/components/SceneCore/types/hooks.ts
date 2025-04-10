@@ -19,8 +19,8 @@ export interface IBaseSceneParams {
   assets: Reactive<IAssets>
   root: Container
   app: Application
-  props: IBaseProps
   userData: {
+    selectedComponent: Ref<IBaseComponent[]>
     configList: Ref<TComponent[]>
     nodeList: Map<string, NodeItem>
     selectedNodes: ComputedRef<NodeItem[]>

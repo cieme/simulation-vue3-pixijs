@@ -9,8 +9,8 @@ import {
   replaceSelectedComponentList,
 } from '@/components/SceneCore/utils/index'
 import { throttleForResize } from '@/utils/index'
+
 export default class SelectArea {
-  props: IBaseSceneParams['props']
   app: IBaseSceneParams['app']
   root: IBaseSceneParams['root']
   userData: IBaseSceneParams['userData']
@@ -34,11 +34,10 @@ export default class SelectArea {
     }
     return this.alignConfigMap
   })
-  constructor({ app, root, props, userData }: IBaseSceneParams) {
+  constructor({ app, root, userData }: IBaseSceneParams) {
     this.eventNode = app.stage
     this.app = app
     this.root = root
-    this.props = props
     this.userData = userData
     this.node.label = 'SelectArea'
   }
@@ -180,7 +179,10 @@ export default class SelectArea {
   }
 
   updateSelectedComponent = throttleForResize<void>(() => {
-    replaceSelectedComponentList(this.props, this.selectedComponentMapInstance.getValues())
+    replaceSelectedComponentList(
+      this.userData.selectedComponent,
+      this.selectedComponentMapInstance.getValues(),
+    )
   })
   hasIcon(node: Container) {
     return node.getChildByName('icon')

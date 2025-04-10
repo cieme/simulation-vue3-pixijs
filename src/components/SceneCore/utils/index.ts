@@ -1,5 +1,6 @@
 import type { TComponent } from '@/components/SceneCore/types/base'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
+import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 export function hasSelectedComponent(props: IBaseProps, item: TComponent) {
   return props.selectedComponent.some((componentItem) => componentItem.id === item.id)
 }
@@ -51,6 +52,9 @@ export function addSelectedComponentList(
   }
   props.selectedComponent.push(...itemList)
 }
-export function replaceSelectedComponentList(props: IBaseProps, itemList: TComponent[]) {
-  props.selectedComponent = itemList
+export function replaceSelectedComponentList(
+  selectedComponent: IBaseSceneParams['userData']['selectedComponent'],
+  itemList: TComponent[],
+) {
+  selectedComponent.value = itemList
 }

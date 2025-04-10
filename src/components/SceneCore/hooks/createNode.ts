@@ -1,4 +1,4 @@
-import { watchEffect } from 'vue'
+import { watchEffect, watch, computed } from 'vue'
 import { Application, Container, Sprite, type FederatedPointerEvent } from 'pixi.js'
 
 import { useCreateText } from '@/components/SceneCore/hooks/createText'
@@ -130,7 +130,10 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     container.label = config.label
     text.text = config.label
   })
-  watchEffect(() => {
+  const selectLength = computed(() => {
+    return props.selectedComponent.length
+  })
+  watch(selectLength, () => {
     let hasSelect = false
     for (const item of props.selectedComponent) {
       if (item.id === config.id) {

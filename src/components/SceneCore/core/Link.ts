@@ -12,7 +12,7 @@ import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { E_MOUSE_BUTTON } from '../enum/mouse'
 import LinkPoint from './LinkPoint'
 export default class LinkManager {
-  props: IBaseSceneParams['props']
+
   app: IBaseSceneParams['app']
   root: IBaseSceneParams['root']
   userData: IBaseSceneParams['userData']
@@ -22,10 +22,9 @@ export default class LinkManager {
   PolygonList: Array<{ id: string; polygon: Polygon }> = []
   drawSuccessLink = [ENUM_LINK_TYPE.LINK_SUCCESS, ENUM_LINK_TYPE.LINK_CANCEL]
   pointList: LinkPoint[] = []
-  constructor({ app, root, props, userData }: IBaseSceneParams) {
+  constructor({ app, root, userData }: IBaseSceneParams) {
     this.app = app
     this.root = root
-    this.props = props
     this.userData = userData
     this.node.label = 'LinkManager'
     this.node.addChild(this.graphics)
