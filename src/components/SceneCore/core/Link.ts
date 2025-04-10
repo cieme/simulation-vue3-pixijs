@@ -9,7 +9,7 @@ import {
 } from 'pixi.js'
 import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/mitt/mitt'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
-import { E_MOUSE_BUTTON } from '../enum/mouse'
+import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 import LinkPoint from './LinkPoint'
 export default class LinkManager {
 

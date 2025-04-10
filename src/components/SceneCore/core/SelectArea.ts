@@ -2,7 +2,7 @@ import { computed } from 'vue'
 import { Rectangle, Graphics, Container, Point, FederatedPointerEvent } from 'pixi.js'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
-import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
+import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/ENUM_MOUSE'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
 import {
   useSelectedComponent,

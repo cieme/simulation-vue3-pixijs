@@ -1,6 +1,6 @@
 import { Container, Graphics, type PointData } from 'pixi.js'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
-import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
+import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/ENUM_MOUSE'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 export default class LinkPoint {

@@ -19,10 +19,10 @@ import { useAssets } from '@/components/SceneCore/hooks/assets'
 import { useRootContainer } from '@/components/SceneCore/hooks/createNode'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
+import { ENUM_BOARD_CODE } from '@/components/SceneCore/enum'
 import { type TComponent } from '@/components/SceneCore/types/base'
 import { type IBaseProps } from '@/components/SceneCore/types/props'
 import Stats from 'stats.js'
-
 /**
  * 使用场景
  *
@@ -114,7 +114,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     selectArea.init()
     LinkInstance.init()
     refTarget.value!.appendChild(app.canvas)
-    appClick()
+    addAppEvent()
     hasApp.value = true
     resize()
   }
@@ -141,7 +141,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       },
     )
     app.stage?.removeChildren()
-    app.stage?.removeListener('mousedown', appMouseDownHandler)
+    removeAppEvent()
     app.stage?.destroy()
     emitter.all.clear() // 清除所有监听
   }
@@ -158,12 +158,63 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     selectedComponent.value.length = 0
     emitter.emit(E_EVENT_SCENE.MOUSE_DOWN_SCENE, e)
   }
-  function appClick() {
+
+  function addAppEvent() {
     app.stage.interactive = true
     app.stage.on('mousedown', appMouseDownHandler)
+    /* 添加键盘事件 */
+    app.canvas.setAttribute('tabindex', '0')
+    app.canvas.addEventListener('keydown', onkeyDown)
+    app.canvas.addEventListener('keyup', onkeyUp)
   }
 
-  userData.selectedNodes = selectedNodes
+  function removeAppEvent() {
+    app.stage?.removeListener('mousedown', appMouseDownHandler)
+    app.canvas.removeEventListener('keydown', onkeyDown)
+    app.canvas.removeEventListener('keyup', onkeyUp)
+  }
+
+  const keyDownMap = new Map()
+  const onkeyDown = (e: KeyboardEvent) => {
+    if (e.defaultPrevented) {
+      return // 如果事件已经在进行中，则不做任何事。
+    }
+    if (keyDownMap.has(e.code)) {
+      return
+    }
+    console.log(e)
+    keyDownMap.set(e.code, true)
+    switch (e.code) {
+      case ENUM_BOARD_CODE.Delete:
+      case ENUM_BOARD_CODE.Backspace:
+        boardDelete(e)
+        break
+
+      default:
+        break
+    }
+    // 取消默认动作，从而避免处理两次。
+    // e.preventDefault()
+  }
+  const onkeyUp = (e: KeyboardEvent) => {
+    keyDownMap.delete(e.code)
+  }
+  const boardDelete = (e: KeyboardEvent) => {
+    /* 如果有组件选中，删除组件，如果有连接线选中，删除连接线 */
+    if (selectedComponent.value.length > 0) {
+      selectedComponent.value.forEach((item) => {
+        /* 删除节点缓存 */
+        nodeList.delete(item.id)
+        /* 删除组件 */
+        const index = userData.configList.value.findIndex((component) => component.id === item.id)
+        userData.configList.value.splice(index, 1)
+        /* 删除连接线 */
+      })
+      /* 清掉选中的 */
+      selectedComponent.value.length = 0
+    }
+  }
+
   return {
     app,
     assets,

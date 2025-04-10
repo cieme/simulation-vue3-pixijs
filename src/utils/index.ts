@@ -19,6 +19,7 @@ export const throttleForResize: <T>(args: (args: T) => void, wait?: number) => (
     trailing: true,
   })
 }
+
 export const uuid = () => {
   return uuidv4()
 }

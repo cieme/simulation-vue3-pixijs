@@ -1,6 +1,6 @@
 import { Application, Container, type FederatedPointerEvent, Point } from 'pixi.js'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
-import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
+import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/ENUM_MOUSE'
 export interface IDragComponentHookParams {
   eventNode: Container
   userData: ICreateNodeParams['userData']

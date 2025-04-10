@@ -39,7 +39,7 @@ import emitter, { E_EVENT_SCENE } from '@/components/SceneCore/mitt/mitt'
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
 import { useScale } from '@/components/SceneCore/hooks/scale'
-import { E_MOUSE_BUTTON } from '../enum/mouse'
+import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 interface IToolProps {
   app: Application
   userData: ICreateNodeParams['userData']

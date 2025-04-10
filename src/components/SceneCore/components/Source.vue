@@ -32,7 +32,9 @@ onMounted(() => {
   init(app as Application, assets as IBaseSceneParams['assets'])
 })
 onUnmounted(() => {
-  disposeNode()
+  if (disposeNode) {
+    disposeNode()
+  }
 })
 </script>
 <style lang="scss" scoped></style>

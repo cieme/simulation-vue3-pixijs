@@ -6,7 +6,7 @@ import { Link } from '@/components/SceneCore/link/Link'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL, ENUM_LINK_TYPE } from '../mitt/mitt'
 
 import { throttleForResize, uuid } from '@/utils'
-import { E_MOUSE_BUTTON } from '../enum/mouse'
+import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 export const linkWidth = 15
 export const linkHeight = 9
 
