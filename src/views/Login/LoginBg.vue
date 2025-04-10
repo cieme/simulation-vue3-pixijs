@@ -45,7 +45,7 @@ function destroyAll() {
     // 销毁 Application
     app.value.destroy(true, {
       children: true,
-      // texture: true,
+      texture: true,
       // textureSource: true,
       context: true,
       style: true,

@@ -133,6 +133,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   const selectLength = computed(() => {
     return props.selectedComponent.length
   })
+  /* 经过检验，销毁时，这里会销毁，不必担心内存泄漏 */
   watch(selectLength, () => {
     let hasSelect = false
     for (const item of props.selectedComponent) {
@@ -157,6 +158,15 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     text,
     addToScene: (app: Application) => {
       root.addChild(container)
+    },
+    dispose: () => {
+      container.destroy({
+        children: true,
+        texture: true,
+        context: true,
+        // textureSource: true, // 其他组件可能会用，不在这删
+        style: true,
+      })
     },
   }
 }

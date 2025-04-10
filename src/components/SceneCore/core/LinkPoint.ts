@@ -61,6 +61,12 @@ export default class LinkPoint {
   }
   dispose() {
     this.disposeMove()
-    this.node.destroy()
+    this.node.destroy({
+      children: true,
+      texture: true,
+      // textureSource: true,
+      context: true,
+      style: true,
+    })
   }
 }

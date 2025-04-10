@@ -10,7 +10,7 @@ import {
   shallowReactive,
   nextTick,
 } from 'vue'
-import { Application, FederatedPointerEvent, type PointData } from 'pixi.js'
+import { Application, Assets, FederatedPointerEvent, type PointData } from 'pixi.js'
 import Grid from '@/components/SceneCore/core/Grid'
 import SelectArea from '@/components/SceneCore/core/SelectArea'
 import LinkManager from '@/components/SceneCore/core/Link'
@@ -134,7 +134,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       },
       {
         children: true,
-        // texture: true,
+        texture: true,
         // textureSource: true,
         context: true,
         style: true,

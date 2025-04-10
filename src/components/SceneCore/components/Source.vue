@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/valid-template-root -->
 <template></template>
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, useAttrs, watch, render } from 'vue'
+import { ref, reactive, computed, onMounted, useAttrs, watch, render, onUnmounted } from 'vue'
 import { useApp } from '@/components/SceneCore/hooks/index'
 import { useCreateNode } from '@/components/SceneCore/hooks/createNode'
 import { Application, Container } from 'pixi.js'
@@ -15,9 +15,9 @@ const props = withDefaults(defineProps<ISourceProps>(), {
 })
 
 const { app, assets, root, userData } = useApp()
-
+let disposeNode: () => void
 function init(app: Application, assets: IBaseSceneParams['assets']) {
-  const { addToScene } = useCreateNode({
+  const { addToScene, dispose } = useCreateNode({
     props,
     config: props.config,
     app,
@@ -26,9 +26,13 @@ function init(app: Application, assets: IBaseSceneParams['assets']) {
     userData,
   })
   addToScene(app)
+  disposeNode = dispose
 }
 onMounted(() => {
   init(app as Application, assets as IBaseSceneParams['assets'])
+})
+onUnmounted(() => {
+  disposeNode()
 })
 </script>
 <style lang="scss" scoped></style>

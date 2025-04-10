@@ -29,7 +29,9 @@ export function useAssets() {
     }
   }
   onBeforeUnmount(() => {
-    clearAssets()
+    if (import.meta.env.PROD) {
+      clearAssets()
+    }
   })
   return {
     assets,
