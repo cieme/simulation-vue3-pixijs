@@ -21,6 +21,8 @@ import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import emitter, { E_EVENT_SCENE, ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
 import { type TComponent } from '@/components/SceneCore/types/base'
 import { type IBaseProps } from '@/components/SceneCore/types/props'
+import Stats from 'stats.js'
+
 /**
  * 使用场景
  *
@@ -29,6 +31,7 @@ import { type IBaseProps } from '@/components/SceneCore/types/props'
  * @returns {{ app: any; assets: any; root: any; showComponent: any; initStage: () => any; selectedComponent: any; selectedNodes: any; }}
  */
 export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
+  useStats()
   /* 1 */
 
   const app = new Application()
@@ -170,4 +173,15 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     userData,
     selectedComponent,
   }
+}
+export function useStats() {
+  const stats = new Stats()
+  stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+  document.body.appendChild(stats.dom)
+  const update = () => {
+    stats.update()
+    requestAnimationFrame(update)
+  }
+  update()
+  return stats
 }

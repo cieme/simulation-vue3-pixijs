@@ -154,7 +154,14 @@ export default class SelectArea {
       const key = keys[index]
       const node = nodeList.get(key)?.iconNode
       if (this.detectIntersection(node!, data)) {
-        const config = configList.find((item) => item.id === key)
+        let config: (typeof configList)[0] | null = null
+        for (let i = 0; i < configList.length; i++) {
+          const item = configList[i]
+          if (item.id === key) {
+            config = item
+            break
+          }
+        }
         if (config) {
           this.selectedComponentMapInstance.add(config)
         }

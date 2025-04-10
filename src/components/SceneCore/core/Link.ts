@@ -11,7 +11,6 @@ import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/m
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { E_MOUSE_BUTTON } from '../enum/mouse'
 import LinkPoint from './LinkPoint'
-import { useGlobalToLocal } from '@/components/SceneCore/hooks/index'
 export default class LinkManager {
   props: IBaseSceneParams['props']
   app: IBaseSceneParams['app']
@@ -50,7 +49,10 @@ export default class LinkManager {
     this.convert()
     this.draw()
   }
-  onSceneMouseDown = () => {}
+  onSceneMouseDown = (e: FederatedPointerEvent) => {
+    /* 如果之前有选中线 */
+    this.clearPoint()
+  }
   onEmit() {
     emitter.on(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
     emitter.on(E_EVENT_SCENE.MOVE_COMPONENT, this.onMoveComponent)
@@ -62,8 +64,9 @@ export default class LinkManager {
     emitter.off(E_EVENT_SCENE.MOUSE_DOWN_SCENE, this.onSceneMouseDown)
   }
   selectLink = (e: FederatedPointerEvent) => {
-    if (e.button !== E_MOUSE_BUTTON.LEFT) return
     if (this.userData.linkReactive.linking) return
+    if (e.button !== E_MOUSE_BUTTON.LEFT) return
+    e.stopPropagation()
     // e.stopPropagation() // 不加这行会自动 清除选择的组件,如果增加，因为面板互斥,需要手动清除，暂时自动清除
     const point = this.toLocal(e.global.clone())
     const polygonOne = this.PolygonList.find((item) => {
@@ -74,6 +77,24 @@ export default class LinkManager {
     const link = this.userData.linkReactive.LinkData.find((item) => item.uniqueId === polygonOne.id)
 
     if (link) {
+      this.clearPoint()
+      link.point.forEach((item) => {
+        const point = new LinkPoint({
+          parentNode: this.node,
+          app: this.app,
+          userData: this.userData,
+          position: item,
+        })
+        this.pointList.push(point)
+      })
+    }
+  }
+  clearPoint() {
+    for (let index = 0; index < this.pointList.length; index++) {
+      const point = this.pointList[index]
+      point.dispose()
+      this.pointList.splice(index, 1)
+      index--
     }
   }
   addEvent() {

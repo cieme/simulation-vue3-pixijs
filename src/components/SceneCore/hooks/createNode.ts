@@ -6,7 +6,7 @@ import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHoo
 import type { ICreateNodeParams } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link/useLink'
-import { E_MOUSE_BUTTON } from '../enum/mouse'
+import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/mouse'
 import NodeItem from '../core/NodeItem'
 import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 /**
@@ -131,9 +131,13 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     text.text = config.label
   })
   watchEffect(() => {
-    const hasSelect = props.selectedComponent.find((item) => {
-      return item.id === config.id
-    })
+    let hasSelect = false
+    for (const item of props.selectedComponent) {
+      if (item.id === config.id) {
+        hasSelect = true
+        break
+      }
+    }
     if (hasSelect) {
       select.visible = true
     } else {

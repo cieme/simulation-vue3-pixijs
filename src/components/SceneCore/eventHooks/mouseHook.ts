@@ -12,6 +12,7 @@ export interface IDragComponentHookParams {
     scaleX: number
     scaleY: number
   }) => void
+  downHandler?: (event: FederatedPointerEvent) => void
   buttons: Array<E_MOUSE_BUTTON>
 }
 
@@ -23,7 +24,7 @@ export interface IDragComponentHookParams {
  * @returns {{ dispose: () => void; mouseMoveHandler: (event: FederatedPointerEvent) => void; mouseDownHandler: (event: FederatedPointerEvent) => void; mouseUpHandler: (event: FederatedPointerEvent) => void; }}
  */
 export function useDragComponentHook(params: IDragComponentHookParams) {
-  const { eventNode, app, userData, moveHandler } = params
+  const { eventNode, app, userData, moveHandler,downHandler } = params
   const { getDelta, resetMouseMove } = useMouseMoveDelta()
 
   const mouseMoveHandler = (event: FederatedPointerEvent) => {
@@ -43,6 +44,9 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
 
   const mouseDownHandler = (event: FederatedPointerEvent) => {
     if (!params.buttons.includes(event.button)) return
+    if(downHandler){
+      downHandler(event)
+    }
     app.stage.on('mousemove', mouseMoveHandler)
   }
   const mouseUpHandler = (event: FederatedPointerEvent) => {

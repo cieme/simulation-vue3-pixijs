@@ -17,6 +17,7 @@
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
     "@easytable/vue": "^0.0.6",
+    "@types/stats.js": "^0.17.3",
     "@vueuse/core": "^12.7.0",
     "ant-design-vue": "4.2.6",
     "axios": "^1.7.9",
@@ -29,6 +30,7 @@
     "pixi-filters": "^6.1.0",
     "pixi-viewport": "^6.0.3",
     "pixi.js": "^8.8.1",
+    "stats.js": "^0.17.0",
     "uuid": "^11.1.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"

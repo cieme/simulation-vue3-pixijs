@@ -44,7 +44,7 @@ const { selectedComponent, hasApp, userData, app, root, assets } = useScene(refT
 const configList = userData.configList
 
 function genData() {
-  const length = 6
+  const length = 500
   const maxX = 500
   const maxY = 500
   return Array.from({ length }, (_, index) => {
