@@ -59,14 +59,18 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     return list
   })
   const configList = ref<TComponent[]>([])
-
+  const selectComponentLength = computed(() => {
+    return selectedComponent.value.length
+  })
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     configList,
     nodeList,
     selectedNodes,
     selectedComponent,
+    selectComponentLength,
     operationStatus: ref(ENUM_TOOL.SELECT),
     refScale: ref<PointData>(root.scale),
+    currentLink: null,
     linkReactive: {
       status: null,
       startComponentConfig: null,
@@ -95,7 +99,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   }
   /* 4 */
   const selectArea = new SelectArea(shallowParams)
-  const LinkInstance = new LinkManager(shallowParams)
+  const linkInstance = new LinkManager(shallowParams)
 
   /* 5 */
   async function initStage() {
@@ -109,10 +113,10 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     app.stage.label = 'stage'
     root.addChild(grid.node)
     root.addChild(selectArea.node)
-    root.addChild(LinkInstance.node)
+    root.addChild(linkInstance.node)
     app.stage.addChild(root)
     selectArea.init()
-    LinkInstance.init()
+    linkInstance.init()
     refTarget.value!.appendChild(app.canvas)
     addAppEvent()
     hasApp.value = true
@@ -154,10 +158,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     dispose()
     window.removeEventListener('resize', resize)
   })
-  const appMouseDownHandler = (e: FederatedPointerEvent) => {
-    selectedComponent.value.length = 0
-    emitter.emit(E_EVENT_SCENE.MOUSE_DOWN_SCENE, e)
-  }
 
   function addAppEvent() {
     app.stage.interactive = true
@@ -172,6 +172,12 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     app.stage?.removeListener('mousedown', appMouseDownHandler)
     app.canvas.removeEventListener('keydown', onkeyDown)
     app.canvas.removeEventListener('keyup', onkeyUp)
+  }
+  const appMouseDownHandler = (e: FederatedPointerEvent) => {
+    console.log('scene mousedown')
+    selectedComponent.value.length = 0
+    linkInstance.clearPointAndClearCurrentLink()
+    emitter.emit(E_EVENT_SCENE.MOUSE_DOWN_SCENE, e)
   }
 
   const keyDownMap = new Map()
@@ -213,8 +219,24 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       /* 清掉选中的 */
       selectedComponent.value.length = 0
     }
+    /* 删除连接线 */
+    if (userData.currentLink) {
+      const id = userData.currentLink.uniqueId
+      userData.linkReactive.LinkData.find((item) => {
+        if (item.uniqueId === id) {
+          userData.linkReactive.LinkData.splice(userData.linkReactive.LinkData.indexOf(item), 1)
+          return true
+        }
+        return false
+      })
+      linkInstance.clearPointAndClearCurrentLink()
+      linkInstance.render()
+    }
   }
-
+  watch(userData.selectComponentLength, (val) => {
+    userData.currentLink = null
+    linkInstance.clearPointAndClearCurrentLink()
+  })
   return {
     app,
     assets,
@@ -224,6 +246,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     selectedNodes,
     userData,
     selectedComponent,
+    linkInstance,
   }
 }
 export function useStats() {

@@ -67,7 +67,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
       addSelectedComponent(props, config, true)
     }
   }
-  icon.on('mousedown', icoMouseDownHandler)
+  icon.on("mousedown", icoMouseDownHandler)
 
   const { dispose: dragDispose } = useDragComponentHook({
     eventNode: icon,
@@ -130,11 +130,9 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
     container.label = config.label
     text.text = config.label
   })
-  const selectLength = computed(() => {
-    return props.selectedComponent.length
-  })
+
   /* 经过检验，销毁时，这里会销毁，不必担心内存泄漏 */
-  watch(selectLength, () => {
+  watch(userData.selectComponentLength, () => {
     let hasSelect = false
     for (const item of props.selectedComponent) {
       if (item.id === config.id) {

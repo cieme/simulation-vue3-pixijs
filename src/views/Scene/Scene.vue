@@ -37,12 +37,26 @@ import Tool from '@/components/SceneCore/tools/Tool.vue'
 import { useScene } from '@/components/SceneCore/hooks/scene'
 
 import type { TComponent } from '@/components/SceneCore/types/base'
+import { Link } from '@/components/SceneCore/link/Link'
 
 const refTarget = ref<HTMLDivElement>()
 
-const { selectedComponent, hasApp, userData, app, root, assets } = useScene(refTarget)
+const { selectedComponent, hasApp, userData, app, root, assets, linkInstance } = useScene(refTarget)
 const configList = userData.configList
-
+setTimeout(() => {
+  const link = new Link({
+    uniqueId: '1',
+    start: '1',
+    end: '2',
+    point: [
+      { x: 100, y: 100 },
+      { x: 200, y: 200 },
+    ],
+  })
+  // link.end = '2'
+  userData.linkReactive.LinkData.push(link)
+  linkInstance.render()
+}, 1e3)
 function genData() {
   const length = 6
   const maxX = 500

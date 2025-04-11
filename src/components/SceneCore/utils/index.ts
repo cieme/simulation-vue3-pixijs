@@ -1,6 +1,7 @@
 import type { TComponent } from '@/components/SceneCore/types/base'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
+import { nextTick } from 'vue'
 export function hasSelectedComponent(props: IBaseProps, item: TComponent) {
   return props.selectedComponent.some((componentItem) => componentItem.id === item.id)
 }
@@ -39,7 +40,9 @@ export function addSelectedComponent(
   if (needClear) {
     props.selectedComponent.length = 0
   }
-  props.selectedComponent.push(item)
+  nextTick(() => {
+    props.selectedComponent.push(item)
+  })
 }
 
 export function addSelectedComponentList(

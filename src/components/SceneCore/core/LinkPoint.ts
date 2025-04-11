@@ -56,7 +56,7 @@ export default class LinkPoint {
     /* 绘制一个 8*8 的红色矩形 */
     this.node.rect(0, 0, 10, 10)
     this.node.fill({
-      color: 0x69a794,
+      color: 0x356ff4,
     })
   }
   dispose() {

@@ -11,8 +11,8 @@ import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/m
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 import LinkPoint from './LinkPoint'
-export default class LinkManager {
 
+export default class LinkManager {
   app: IBaseSceneParams['app']
   root: IBaseSceneParams['root']
   userData: IBaseSceneParams['userData']
@@ -21,6 +21,7 @@ export default class LinkManager {
   graphics = new Graphics()
   PolygonList: Array<{ id: string; polygon: Polygon }> = []
   drawSuccessLink = [ENUM_LINK_TYPE.LINK_SUCCESS, ENUM_LINK_TYPE.LINK_CANCEL]
+
   pointList: LinkPoint[] = []
   constructor({ app, root, userData }: IBaseSceneParams) {
     this.app = app
@@ -36,13 +37,15 @@ export default class LinkManager {
   }
   onLinkSuccess = (status: ENUM_LINK_TYPE) => {
     if (this.drawSuccessLink.includes(status)) {
-      this.convert()
-      this.draw()
+      this.render()
     } else if (status === ENUM_LINK_TYPE.LINK_ING) {
-      this.convert()
-      this.draw()
+      this.render()
       this.drawing()
     }
+  }
+  render() {
+    this.convert()
+    this.draw()
   }
   onMoveComponent = () => {
     this.convert()
@@ -50,7 +53,7 @@ export default class LinkManager {
   }
   onSceneMouseDown = (e: FederatedPointerEvent) => {
     /* 如果之前有选中线 */
-    this.clearPoint()
+    this.clearPointAndClearCurrentLink()
   }
   onEmit() {
     emitter.on(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
@@ -72,23 +75,29 @@ export default class LinkManager {
       const hit = item.polygon.strokeContains(point.x, point.y, 3)
       return hit
     })
+
     if (!polygonOne || !this.userData?.linkReactive) return
     const link = this.userData.linkReactive.LinkData.find((item) => item.uniqueId === polygonOne.id)
 
     if (link) {
-      this.clearPoint()
-      link.point.forEach((item) => {
-        const point = new LinkPoint({
-          parentNode: this.node,
-          app: this.app,
-          userData: this.userData,
-          position: item,
+      this.userData.selectedComponent.value.length = 0
+      /* 这微任务是因为 scene watch 了 组件数量 */
+      Promise.resolve().then(() => {
+        this.userData.currentLink = link
+        link.point.forEach((item) => {
+          const point = new LinkPoint({
+            parentNode: this.node,
+            app: this.app,
+            userData: this.userData,
+            position: item,
+          })
+          this.pointList.push(point)
         })
-        this.pointList.push(point)
       })
     }
   }
-  clearPoint() {
+  clearPointAndClearCurrentLink() {
+    this.userData.currentLink = null
     for (let index = 0; index < this.pointList.length; index++) {
       const point = this.pointList[index]
       point.dispose()

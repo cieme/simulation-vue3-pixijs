@@ -5,6 +5,7 @@ import type { ILinkParams } from '@/components/SceneCore/types/link'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
 import NodeItem from '@/components/SceneCore/core/NodeItem'
 import type { ENUM_TOOL } from '@/components/SceneCore/mitt/mitt'
+import { Link } from '@/components/SceneCore/link/Link'
 /**
  * 静态资源接口
  *
@@ -20,7 +21,9 @@ export interface IBaseSceneParams {
   root: Container
   app: Application
   userData: {
+    currentLink: Link | null
     selectedComponent: Ref<IBaseComponent[]>
+    selectComponentLength: ComputedRef<number>
     configList: Ref<TComponent[]>
     nodeList: Map<string, NodeItem>
     selectedNodes: ComputedRef<NodeItem[]>
