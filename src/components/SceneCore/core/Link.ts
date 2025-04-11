@@ -81,18 +81,20 @@ export default class LinkManager {
 
     if (link) {
       this.userData.selectedComponent.value.length = 0
+      /* 这行有用，如果没选组件，也要清除一次 */
+      this.clearPointAndClearCurrentLink()
       /* 这微任务是因为 scene watch 了 组件数量 */
       Promise.resolve().then(() => {
         this.userData.currentLink = link
-        link.point.forEach((item) => {
+        for (let index = 0; index < link.point.length; index++) {
           const point = new LinkPoint({
             parentNode: this.node,
             app: this.app,
             userData: this.userData,
-            position: item,
+            position: link.point[index],
           })
           this.pointList.push(point)
-        })
+        }
       })
     }
   }
