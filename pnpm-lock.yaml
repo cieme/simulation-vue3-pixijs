@@ -44,6 +44,9 @@ importers:
       pinia:
         specifier: ^2.3.1
         version: 2.3.1(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
+      pixi-cull:
+        specifier: ^2.1.1
+        version: 2.1.1(pixi.js@8.8.1)
       pixi-filters:
         specifier: ^6.1.0
         version: 6.1.0(pixi.js@8.8.1)
@@ -2169,6 +2172,11 @@ packages:
   pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
+
+  pixi-cull@2.1.1:
+    resolution: {integrity: sha512-pMxWm8RD2X/b6dK+QdfM5EjJSUZ4QdZINZ6w+csdt7JmhrnNh1xobfeI46cyFpZSSoISG93EtyEQyrXhvS/itA==}
+    peerDependencies:
+      pixi.js: ^6.0.0 || ^7.0.0
 
   pixi-filters@6.1.0:
     resolution: {integrity: sha512-Btjyg/WvCD/xWqZk1BAygqkTvoN7bSU7b4G/R+FpZ06f0DDwGTVnmlp8ZSITEV89osQHMe+8lKGDbuR1tndePQ==}
@@ -4609,6 +4617,10 @@ snapshots:
       - '@vue/composition-api'
 
   pirates@4.0.6: {}
+
+  pixi-cull@2.1.1(pixi.js@8.8.1):
+    dependencies:
+      pixi.js: 8.8.1
 
   pixi-filters@6.1.0(pixi.js@8.8.1):
     dependencies:
