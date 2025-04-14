@@ -22,6 +22,7 @@ const cancelArray = [ENUM_LINK_TYPE.LINK_CANCEL, ENUM_LINK_TYPE.LINK_SUCCESS]
 export function useNextLink({ assets, startComponentConfig, userData, app, root }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
+  nextLink.tint = 0x76efff
   nextLink.anchor.set(0.5, 0.5)
 
   const operationHandler = (status: ENUM_TOOL) => {
@@ -103,6 +104,7 @@ export function useNextLink({ assets, startComponentConfig, userData, app, root 
 export function usePrevLink({ assets, startComponentConfig, userData, app }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
+  nextLink.tint = 0xea5480
   nextLink.anchor.set(0.5, 0.5)
 
   function onLinkIn(type: ENUM_LINK_TYPE) {
