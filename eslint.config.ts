@@ -26,6 +26,7 @@ export default defineConfigWithVueTs(
   {
     rules: {
       'vue/multi-word-component-names': 'off',
+      // "quotes": ["error", "double"]
     },
   },
 )

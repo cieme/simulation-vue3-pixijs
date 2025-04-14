@@ -98,6 +98,10 @@ export default class LinkManager {
       })
     }
   }
+  /**
+   * 清空当前选择线
+   * 销毁拐点
+   */
   clearPointAndClearCurrentLink() {
     this.userData.currentLink = null
     for (let index = 0; index < this.pointList.length; index++) {
