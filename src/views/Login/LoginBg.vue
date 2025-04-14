@@ -2,8 +2,9 @@
   <div ref="refDom"></div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, toRaw } from 'vue'
 import {
+  type Renderer,
   Application,
   Assets,
   Sprite,
@@ -13,7 +14,7 @@ import {
   Container,
 } from 'pixi.js'
 import { BulgePinchFilter } from 'pixi-filters'
-
+import { initDevtools } from '@pixi/devtools'
 const refDom = ref<HTMLDivElement>()
 const app = ref<Application | null>(null)
 const sprite = ref<Sprite | null>()
@@ -96,14 +97,16 @@ const resize = () => {
 }
 
 async function initApplication() {
-  app.value = new Application()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ;(globalThis as any).__PIXI_APP__ = app.value
+  const app2 = (app.value = new Application())
   await app.value.init({
     antialias: true, // default:false 开启抗锯齿
     backgroundColor: 0x00000,
     preference: 'webgl',
   })
+  if (app.value) {
+    initDevtools({ app: app2 })
+  }
+
   refDom.value!.appendChild(app.value.canvas)
 
   window.addEventListener('resize', resize)

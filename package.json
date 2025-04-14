@@ -17,6 +17,7 @@
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
     "@easytable/vue": "^0.0.6",
+    "@pixi/devtools": "^2.0.1",
     "@types/stats.js": "^0.17.3",
     "@vueuse/core": "^12.7.0",
     "ant-design-vue": "4.2.6",

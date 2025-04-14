@@ -23,6 +23,8 @@ import { ENUM_BOARD_CODE } from '@/components/SceneCore/enum'
 import { type TComponent } from '@/components/SceneCore/types/base'
 import { type IBaseProps } from '@/components/SceneCore/types/props'
 import Stats from 'stats.js'
+import { initDevtools } from '@pixi/devtools';
+import '@/components/SceneCore/core/MU/MU'
 /**
  * 使用场景
  *
@@ -31,11 +33,11 @@ import Stats from 'stats.js'
  * @returns {{ app: any; assets: any; root: any; showComponent: any; initStage: () => any; selectedComponent: any; selectedNodes: any; }}
  */
 export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
-  useStats()
+  // useStats()
   /* 1 */
 
   const app = new Application()
-  ;(globalThis as unknown as { __PIXI_APP__: Application }).__PIXI_APP__ = app
+  initDevtools({ app });
 
   provide('app', app)
 
