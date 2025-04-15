@@ -47,7 +47,8 @@ const refTarget = ref<HTMLDivElement>()
 
 const { selectedComponent, hasApp, userData, app, root, assets, linkInstance } = useScene(refTarget)
 const configList = userData.configList
-setTimeout(() => {
+let timer: number | null = null
+timer = setTimeout(() => {
   const link = new Link({
     uniqueId: '1',
     start: '1',
@@ -99,6 +100,9 @@ onMounted(() => {
   document.addEventListener('contextmenu', documentRightClick)
 })
 onBeforeUnmount(() => {
+  if (timer) {
+    clearTimeout(timer)
+  }
   document.removeEventListener('contextmenu', documentRightClick)
 })
 </script>
