@@ -67,7 +67,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
       addSelectedComponent(props, config, true)
     }
   }
-  icon.on("mousedown", icoMouseDownHandler)
+  icon.on('mousedown', icoMouseDownHandler)
 
   const { dispose: dragDispose } = useDragComponentHook({
     eventNode: icon,
@@ -80,7 +80,8 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
         targetNode.node.position.x = position.x + scaleX
         targetNode.node.position.y = position.y + scaleY
       })
-      emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, [])
+      const idArray = userData.selectedComponent.value.map((item) => item.id)
+      emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, idArray)
     },
   })
   /* 文字 */
@@ -118,6 +119,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   userData.nodeList.set(
     config.id,
     new NodeItem({
+      id: config.id,
       node: container,
       nextLinkNode,
       prevLinkNode,

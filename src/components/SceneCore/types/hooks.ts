@@ -60,6 +60,7 @@ export interface IGlobalToLocalParams {
 }
 
 export interface INodeItem {
+  id: string
   node: Container
   nextLinkNode: Container | null
   prevLinkNode: Container | null

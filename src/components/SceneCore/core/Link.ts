@@ -12,7 +12,7 @@ import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/m
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 import LinkPoint from './LinkPoint'
-import { useCreateLabelNode } from '@/components/SceneCore/hooks/createText'
+import { useCreateLabelNode, useCreateLabelText } from '@/components/SceneCore/hooks/createText'
 export default class LinkManager {
   app: IBaseSceneParams['app']
   root: IBaseSceneParams['root']
@@ -28,7 +28,7 @@ export default class LinkManager {
   labelLength = 32
 
   pointList: LinkPoint[] = []
-  constructor({ app, root, userData,assets }: IBaseSceneParams) {
+  constructor({ app, root, userData, assets }: IBaseSceneParams) {
     this.app = app
     this.root = root
     this.userData = userData
@@ -70,6 +70,10 @@ export default class LinkManager {
   }
   onMoveComponent = (componentIdArray: string[]) => {
     this.render()
+    const linkArray = this.getLinkArrayByComponentIdArray(componentIdArray)
+    linkArray.forEach((item) => {
+      this.updateLinkPositionById(item.uniqueId)
+    })
   }
   onMoveLink = (linkId: string) => {
     this.render()
@@ -303,6 +307,14 @@ export default class LinkManager {
       })
       this.node.addChild(startTextNode)
       this.node.addChild(endTextNode)
+      const startTexture = useCreateLabelText('1', this.assets)
+      const endTexture = useCreateLabelText('2', this.assets)
+      if (startTexture) {
+        startTextNode.texture = startTexture
+      }
+      if (endTexture) {
+        endTextNode.texture = endTexture
+      }
     }
   }
   genNewLabelNode() {
@@ -383,5 +395,14 @@ export default class LinkManager {
       }
     }
     return linkLabelNode
+  }
+  getLinkArrayByComponentIdArray(componentIdArray: string[]) {
+    const linkArray = this.userData.linkReactive.LinkData.filter((item) => {
+      if (!item.end) {
+        return componentIdArray.includes(item.start)
+      }
+      return componentIdArray.includes(item.start) || componentIdArray.includes(item.end)
+    })
+    return linkArray
   }
 }
