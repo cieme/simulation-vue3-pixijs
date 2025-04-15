@@ -39,6 +39,16 @@ export default class LinkManager {
     this.node.on('destroyed', this.dispose, this)
   }
   dispose() {
+    // this.graphics.destroy()
+    // this.labelNodeList.forEach((item) => {
+    //   item.start.destroy()
+    //   item.end.destroy()
+    // })
+    this.pointList.forEach((item) => {
+      item.dispose()
+    })
+    this.unEmit()
+    /*  */
     this.node.destroy({
       children: true,
       texture: true,
@@ -46,15 +56,6 @@ export default class LinkManager {
       context: true,
       style: true,
     })
-    this.graphics.destroy()
-    this.labelNodeList.forEach((item) => {
-      item.start.destroy()
-      item.end.destroy()
-    })
-    this.pointList.forEach((item) => {
-      item.dispose()
-    })
-    this.unEmit()
   }
   onLinkSuccess = (status: ENUM_LINK_TYPE) => {
     if (this.drawSuccessLink.includes(status)) {

@@ -2,7 +2,11 @@
   <main class="flex flex-col h-screen">
     <Header class="flex-shrink-0" />
     <section class="flex box-container w-screen relative">
-      <div class="left h-full"></div>
+      <div class="left h-full">
+        <router-link to="/login" class="flex items-center justify-center h-full">
+          <a-button type="primary">login</a-button>
+        </router-link>
+      </div>
       <div class="content h-full flex-1 overflow-hidden relative">
         <Tool
           v-if="hasApp"
@@ -53,8 +57,18 @@ setTimeout(() => {
       { x: 200, y: 200 },
     ],
   })
+  const link2 = new Link({
+    uniqueId: '2',
+    start: '2',
+    end: '3',
+    point: [
+      { x: 30, y: 30 },
+      { x: 80, y: 90 },
+    ],
+  })
   // link.end = '2'
   userData.linkReactive.LinkData.push(link)
+  userData.linkReactive.LinkData.push(link2)
   linkInstance.render()
   linkInstance.genAllLabelNodes()
 }, 1e3)
