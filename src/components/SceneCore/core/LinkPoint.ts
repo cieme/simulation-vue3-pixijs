@@ -9,17 +9,20 @@ export default class LinkPoint {
   node: Graphics = new Graphics()
   parentNode: Container
   position: PointData
+  linkID: string
   disposeMove: ReturnType<typeof useDragComponentHook>['dispose']
   constructor({
     parentNode,
     app,
     userData,
     position,
+    linkID
   }: {
     parentNode: Container
     app: IBaseSceneParams['app']
     userData: IBaseSceneParams['userData']
     position: PointData
+    linkID: string
   }) {
     this.app = app
     this.userData = userData
@@ -28,6 +31,7 @@ export default class LinkPoint {
     this.node.cursor = 'pointer'
     this.position = position
     this.node.position = this.position
+    this.linkID = linkID
     const { dispose } = useDragComponentHook({
       eventNode: this.node,
       app: this.app,
@@ -41,7 +45,7 @@ export default class LinkPoint {
         this.position.y += scaleY
         this.node.position = this.position
         /* 为了重绘连接线 */
-        emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, [])
+        emitter.emit(E_EVENT_SCENE.MOVE_LINK, this.linkID)
       },
     })
 

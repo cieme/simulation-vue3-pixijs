@@ -21,7 +21,7 @@ export default class LinkManager {
   node = new Container()
   graphics = new Graphics()
   PolygonList: Array<{ id: string; polygon: Polygon }> = []
-  labelNodeList: Array<{ id: string; start: Container; end: Container; text: Text }> = []
+  labelNodeList: Array<{ id: string; start: Container; end: Container }> = []
   drawSuccessLink = [ENUM_LINK_TYPE.LINK_SUCCESS, ENUM_LINK_TYPE.LINK_CANCEL]
   /*  */
   labelLength = 32
@@ -44,6 +44,14 @@ export default class LinkManager {
       context: true,
       style: true,
     })
+    this.graphics.destroy()
+    this.labelNodeList.forEach((item) => {
+      item.start.destroy()
+      item.end.destroy()
+    })
+    this.pointList.forEach((item) => {
+      item.dispose()
+    })
     this.unEmit()
   }
   onLinkSuccess = (status: ENUM_LINK_TYPE) => {
@@ -58,10 +66,22 @@ export default class LinkManager {
     this.convert()
     this.draw()
   }
-  onMoveComponent = () => {
+  onMoveComponent = (componentIdArray: string[]) => {
     this.convert()
     this.draw()
   }
+  onMoveLink = (linkId: string) => {
+    this.convert()
+    this.draw()
+    const linkLabelNode = this.getLinkLabelNodeById(linkId)
+    if (linkLabelNode) {
+      const polygon = this.getPolygonById(linkId)
+      if (polygon) {
+        this.updateLabelNodePosition(linkLabelNode.start, linkLabelNode.end, polygon)
+      }
+    }
+  }
+
   onSceneMouseDown = (e: FederatedPointerEvent) => {
     /* 如果之前有选中线 */
     this.clearPointAndClearCurrentLink()
@@ -69,11 +89,13 @@ export default class LinkManager {
   onEmit() {
     emitter.on(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
     emitter.on(E_EVENT_SCENE.MOVE_COMPONENT, this.onMoveComponent)
+    emitter.on(E_EVENT_SCENE.MOVE_LINK, this.onMoveLink)
     emitter.on(E_EVENT_SCENE.MOUSE_DOWN_SCENE, this.onSceneMouseDown)
   }
   unEmit() {
     emitter.off(E_EVENT_SCENE.LINK_STATUS, this.onLinkSuccess)
     emitter.off(E_EVENT_SCENE.MOVE_COMPONENT, this.onMoveComponent)
+    emitter.off(E_EVENT_SCENE.MOVE_LINK, this.onMoveLink)
     emitter.off(E_EVENT_SCENE.MOUSE_DOWN_SCENE, this.onSceneMouseDown)
   }
   selectLink = (e: FederatedPointerEvent) => {
@@ -103,6 +125,7 @@ export default class LinkManager {
             app: this.app,
             userData: this.userData,
             position: link.point[index],
+            linkID: link.uniqueId,
           })
           this.pointList.push(point)
         }
@@ -275,34 +298,17 @@ export default class LinkManager {
   }
   genAllLabelNodes() {
     for (let index = 0; index < this.PolygonList.length; index++) {
-      const item = this.PolygonList[index]
-
-      const startPoint = new Vector2(item.polygon.points[0], item.polygon.points[1])
-
-      const nextPoint = new Vector2(item.polygon.points[2], item.polygon.points[3])
-
-      /*  */
-      const prevPoint = new Vector2(
-        item.polygon.points[item.polygon.points.length - 4],
-        item.polygon.points[item.polygon.points.length - 3],
-      )
-      const endPoint = new Vector2(
-        item.polygon.points[item.polygon.points.length - 2],
-        item.polygon.points[item.polygon.points.length - 1],
-      )
-
-      /* 距离 labelLength 的方向上获得坐标*/
-      const direction = new Vector2().subVectors(nextPoint, startPoint).normalize() // 得到方向向量（单位长度）
-
-      const result = new Vector2().addVectors(
-        startPoint,
-        direction.multiplyScalar(this.labelLength),
-      )
-
       const startTextNode = this.genNewLabelNode('2')
-      startTextNode.position.set(result.x, result.y)
+      const endTextNode = this.genNewLabelNode('2')
+      this.updateLabelNodePosition(startTextNode, endTextNode, this.PolygonList[index])
       /*  */
+      this.labelNodeList.push({
+        id: this.PolygonList[index].id,
+        start: startTextNode,
+        end: endTextNode,
+      })
       this.node.addChild(startTextNode)
+      this.node.addChild(endTextNode)
     }
   }
   genNewLabelNode(text: string) {
@@ -313,7 +319,68 @@ export default class LinkManager {
     textNode.text = text
     return textNode
   }
-  updateLabelNodePosition(node: Container, position: Vector2) {
+  /**
+   * 更新某根连接线的label位置信息
+   *
+   * @param {Container} startTextNode
+   * @param {Container} endTextNode
+   * @param {(typeof this.PolygonList)[number]} item
+   */
+  updateLabelNodePosition(
+    startTextNode: Container,
+    endTextNode: Container,
+    item: (typeof this.PolygonList)[number],
+  ) {
+    const startPoint = new Vector2(item.polygon.points[0], item.polygon.points[1])
+    const nextPoint = new Vector2(item.polygon.points[2], item.polygon.points[3])
+    /*  */
+    const prevPoint = new Vector2(
+      item.polygon.points[item.polygon.points.length - 4],
+      item.polygon.points[item.polygon.points.length - 3],
+    )
+    const endPoint = new Vector2(
+      item.polygon.points[item.polygon.points.length - 2],
+      item.polygon.points[item.polygon.points.length - 1],
+    )
 
+    /* 开始点 */
+    const direction = new Vector2().subVectors(nextPoint, startPoint).normalize() // 得到方向向量（单位长度）
+    const startTextNodePosition = new Vector2().addVectors(
+      startPoint,
+      direction.multiplyScalar(this.labelLength),
+    )
+    /* 结束点 */
+    const endDirection = new Vector2().subVectors(prevPoint, endPoint).normalize() // 得到方向向量（单位长度）
+    const endTextNodePosition = new Vector2().addVectors(
+      endPoint,
+      endDirection.multiplyScalar(this.labelLength),
+    )
+    /*  */
+    startTextNode.position.set(startTextNodePosition.x, startTextNodePosition.y)
+    endTextNode.position.set(endTextNodePosition.x, endTextNodePosition.y)
+  }
+  getPolygonById(linkId: string) {
+    let polygon = undefined
+    for (let index = 0; index < this.PolygonList.length; index++) {
+      const item = this.PolygonList[index]
+      if (item.id === linkId) {
+        polygon = item
+        break
+      }
+    }
+    return polygon
+  }
+
+  /* 获取移动中的组件 */
+  getLinkLabelNodeById(linkId: string) {
+    let linkLabelNode: (typeof this.labelNodeList)[number] | undefined = undefined
+    for (let index = 0; index < this.labelNodeList.length; index++) {
+      const labelItem = this.labelNodeList[index]
+      if (labelItem.id === linkId) {
+        linkLabelNode = labelItem
+        break
+      }
+    }
+    return linkLabelNode
   }
 }

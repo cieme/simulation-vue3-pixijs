@@ -18,6 +18,7 @@ export type MittEvents = {
   [E_EVENT_SCENE.BOX_SELECTION]: IBoxSelectionEvent
   [E_EVENT_SCENE.SCENE_OPERATION_STATUS]: ENUM_TOOL
   [E_EVENT_SCENE.LINK_STATUS]: ENUM_LINK_TYPE
-  [E_EVENT_SCENE.MOVE_COMPONENT]: string[]
+  [E_EVENT_SCENE.MOVE_COMPONENT]: string[] // 移动组件 id
+  [E_EVENT_SCENE.MOVE_LINK]: string // 连接线 id
   [E_EVENT_SCENE.MOUSE_DOWN_SCENE]: FederatedPointerEvent
 }
