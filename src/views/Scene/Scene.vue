@@ -56,6 +56,7 @@ setTimeout(() => {
   // link.end = '2'
   userData.linkReactive.LinkData.push(link)
   linkInstance.render()
+  linkInstance.genAllLabelNodes()
 }, 1e3)
 function genData() {
   const length = 6

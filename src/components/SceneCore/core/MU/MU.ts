@@ -114,26 +114,4 @@ export default class MU {
     console.log(position)
   }
 }
-// new MU({
-//   layout: { x: 1, y: 1, z: 1 },
-//   componentSize: { width: 100, height: 100, length: 100 },
-// }).calculatePosition(0, 0)
-// const mu2 = new MU({
-//   layout: { x: 1, y: 2, z: 1 },
-//   componentSize: { width: 50, height: 100, length: 100 },
-// })
-// mu2.calculatePosition(0, 0)
-// mu2.calculatePosition(0, 1)
-
-const mu3 = new MU({
-  layout: { x: 3, y: 3, z: 3 },
-  componentSize: { width: 300, height: 300, length: 100 },
-})
-mu3.calculatePosition(0, 0)
-mu3.calculatePosition(0, 1)
-mu3.calculatePosition(0, 2)
-mu3.calculatePosition(1, 1)
-mu3.calculatePosition(1, 2)
-mu3.calculatePosition(2, 1)
-mu3.calculatePosition(2, 2)
 

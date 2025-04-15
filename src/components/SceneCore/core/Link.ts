@@ -7,11 +7,12 @@ import {
   Texture,
   FederatedPointerEvent,
 } from 'pixi.js'
+import { Vector2 } from 'three'
 import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/mitt/mitt'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 import LinkPoint from './LinkPoint'
-
+import { useCreateText } from '@/components/SceneCore/hooks/createText'
 export default class LinkManager {
   app: IBaseSceneParams['app']
   root: IBaseSceneParams['root']
@@ -20,7 +21,10 @@ export default class LinkManager {
   node = new Container()
   graphics = new Graphics()
   PolygonList: Array<{ id: string; polygon: Polygon }> = []
+  labelNodeList: Array<{ id: string; start: Container; end: Container; text: Text }> = []
   drawSuccessLink = [ENUM_LINK_TYPE.LINK_SUCCESS, ENUM_LINK_TYPE.LINK_CANCEL]
+  /*  */
+  labelLength = 32
 
   pointList: LinkPoint[] = []
   constructor({ app, root, userData }: IBaseSceneParams) {
@@ -33,6 +37,13 @@ export default class LinkManager {
     this.node.on('destroyed', this.dispose, this)
   }
   dispose() {
+    this.node.destroy({
+      children: true,
+      texture: true,
+      // textureSource: true,
+      context: true,
+      style: true,
+    })
     this.unEmit()
   }
   onLinkSuccess = (status: ENUM_LINK_TYPE) => {
@@ -124,6 +135,7 @@ export default class LinkManager {
   init() {
     this.addEvent()
   }
+
   convert() {
     this.PolygonList = []
     this.userData.linkReactive.LinkData.forEach((item) => {
@@ -260,5 +272,48 @@ export default class LinkManager {
     }
 
     return [left, tip, right]
+  }
+  genAllLabelNodes() {
+    for (let index = 0; index < this.PolygonList.length; index++) {
+      const item = this.PolygonList[index]
+
+      const startPoint = new Vector2(item.polygon.points[0], item.polygon.points[1])
+
+      const nextPoint = new Vector2(item.polygon.points[2], item.polygon.points[3])
+
+      /*  */
+      const prevPoint = new Vector2(
+        item.polygon.points[item.polygon.points.length - 4],
+        item.polygon.points[item.polygon.points.length - 3],
+      )
+      const endPoint = new Vector2(
+        item.polygon.points[item.polygon.points.length - 2],
+        item.polygon.points[item.polygon.points.length - 1],
+      )
+
+      /* 距离 labelLength 的方向上获得坐标*/
+      const direction = new Vector2().subVectors(nextPoint, startPoint).normalize() // 得到方向向量（单位长度）
+
+      const result = new Vector2().addVectors(
+        startPoint,
+        direction.multiplyScalar(this.labelLength),
+      )
+
+      const startTextNode = this.genNewLabelNode('2')
+      startTextNode.position.set(result.x, result.y)
+      /*  */
+      this.node.addChild(startTextNode)
+    }
+  }
+  genNewLabelNode(text: string) {
+    // const node = new Container()
+    const textNode = useCreateText()
+    textNode.anchor.x = 0.5
+    textNode.anchor.y = 0.5
+    textNode.text = text
+    return textNode
+  }
+  updateLabelNodePosition(node: Container, position: Vector2) {
+
   }
 }

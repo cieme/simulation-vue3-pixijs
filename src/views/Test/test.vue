@@ -4,7 +4,8 @@
 <script setup lang="ts">
 import * as PIXI from 'pixi.js'
 import { Viewport } from 'pixi-viewport'
-import { Simple, SpatialHash } from 'pixi-cull'
+import { Simple, SpatialHash, type DisplayObjectWithCulling } from 'pixi-cull'
+
 init()
 async function init() {
   const app = new PIXI.Application()
@@ -37,7 +38,7 @@ async function init() {
 
   const cull = new Simple() // new SpatialHash()
   if (viewport.children) {
-    cull.addList(container.children)
+    cull.addList(container.children as DisplayObjectWithCulling[])
   }
 
   cull.cull(viewport.getVisibleBounds())

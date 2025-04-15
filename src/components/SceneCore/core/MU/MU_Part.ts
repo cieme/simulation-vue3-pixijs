@@ -1,7 +1,7 @@
 import MU from './MU'
 
 export default class MU_Part extends MU {
-  constructor(props: { layout: MU['layout'] }) {
+  constructor(props: ConstructorParameters<typeof MU>[0]) {
     super(props)
   }
 }
