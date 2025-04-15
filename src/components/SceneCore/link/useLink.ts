@@ -22,6 +22,7 @@ const cancelArray = [ENUM_LINK_TYPE.LINK_CANCEL, ENUM_LINK_TYPE.LINK_SUCCESS]
 export function useNextLink({ assets, startComponentConfig, userData, app, root }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
+  nextLink.label = 'nextLink'
   nextLink.tint = 0x76efff
   nextLink.anchor.set(0.5, 0.5)
 
@@ -103,9 +104,10 @@ export function useNextLink({ assets, startComponentConfig, userData, app, root 
 }
 export function usePrevLink({ assets, startComponentConfig, userData, app }: IUseLinkParams) {
   const texture = assets.sheet?.textures['images/icon/link_dot.png']
-  const nextLink = new Sprite(texture)
-  nextLink.tint = 0xea5480
-  nextLink.anchor.set(0.5, 0.5)
+  const prevLink = new Sprite(texture)
+  prevLink.label = 'prevLink'
+  prevLink.tint = 0xea5480
+  prevLink.anchor.set(0.5, 0.5)
 
   function onLinkIn(type: ENUM_LINK_TYPE) {
     if (type === ENUM_LINK_TYPE.LINK_IN) {
@@ -124,10 +126,10 @@ export function usePrevLink({ assets, startComponentConfig, userData, app }: IUs
   }
   /*  */
   function addLinkEvent() {
-    nextLink.interactive = true
-    nextLink.cursor = 'pointer'
+    prevLink.interactive = true
+    prevLink.cursor = 'pointer'
 
-    nextLink.on('mousedown', (e) => {
+    prevLink.on('mousedown', (e) => {
       if (e.button !== E_MOUSE_BUTTON.LEFT) return
       e.stopPropagation()
       /* 不能链接自己 */
@@ -149,9 +151,9 @@ export function usePrevLink({ assets, startComponentConfig, userData, app }: IUs
     })
   }
   function removeLinkEvent() {
-    nextLink.interactive = false
-    nextLink.cursor = 'default'
-    nextLink.removeAllListeners('mousedown')
+    prevLink.interactive = false
+    prevLink.cursor = 'default'
+    prevLink.removeAllListeners('mousedown')
   }
 
   /*  */
@@ -160,9 +162,9 @@ export function usePrevLink({ assets, startComponentConfig, userData, app }: IUs
     unEmit()
     removeLinkEvent()
   }
-  nextLink.on('destroyed', dispose)
+  prevLink.on('destroyed', dispose)
   return {
-    node: nextLink,
+    node: prevLink,
     addLinkEvent,
     removeLinkEvent,
     dispose,

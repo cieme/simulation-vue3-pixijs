@@ -29,6 +29,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   container.position = config.position
   /* 图标 */
   const sprite = new Sprite()
+  sprite.label = 'bg'
   sprite.width = baseWidth
   sprite.height = baseWidth
   sprite.anchor.x = 0.5
@@ -47,6 +48,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   icon.texture = iconTexture!
 
   const select = new Sprite()
+  select.label = 'select'
   select.width = baseWidth
   select.height = baseWidth
   select.anchor.x = 0.5
@@ -86,6 +88,7 @@ export function useCreateNode({ props, config, assets, root, app, userData }: IC
   })
   /* 文字 */
   const text = useCreateText()
+  text.label = 'label'
   text.position.y = baseWidth
   text.anchor.x = 0.5
   text.anchor.y = 1
