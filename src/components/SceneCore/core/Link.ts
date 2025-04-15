@@ -12,11 +12,12 @@ import emitter, { E_EVENT_SCENE, ENUM_LINK_TYPE } from '@/components/SceneCore/m
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 import LinkPoint from './LinkPoint'
-import { useCreateText } from '@/components/SceneCore/hooks/createText'
+import { useCreateLabelNode } from '@/components/SceneCore/hooks/createText'
 export default class LinkManager {
   app: IBaseSceneParams['app']
   root: IBaseSceneParams['root']
   userData: IBaseSceneParams['userData']
+  assets: IBaseSceneParams['assets']
   /*  */
   node = new Container()
   graphics = new Graphics()
@@ -27,10 +28,11 @@ export default class LinkManager {
   labelLength = 32
 
   pointList: LinkPoint[] = []
-  constructor({ app, root, userData }: IBaseSceneParams) {
+  constructor({ app, root, userData,assets }: IBaseSceneParams) {
     this.app = app
     this.root = root
     this.userData = userData
+    this.assets = assets
     this.node.label = 'LinkManager'
     this.node.addChild(this.graphics)
     this.onEmit()
@@ -67,19 +69,11 @@ export default class LinkManager {
     this.draw()
   }
   onMoveComponent = (componentIdArray: string[]) => {
-    this.convert()
-    this.draw()
+    this.render()
   }
   onMoveLink = (linkId: string) => {
-    this.convert()
-    this.draw()
-    const linkLabelNode = this.getLinkLabelNodeById(linkId)
-    if (linkLabelNode) {
-      const polygon = this.getPolygonById(linkId)
-      if (polygon) {
-        this.updateLabelNodePosition(linkLabelNode.start, linkLabelNode.end, polygon)
-      }
-    }
+    this.render()
+    this.updateLinkPositionById(linkId)
   }
 
   onSceneMouseDown = (e: FederatedPointerEvent) => {
@@ -298,8 +292,8 @@ export default class LinkManager {
   }
   genAllLabelNodes() {
     for (let index = 0; index < this.PolygonList.length; index++) {
-      const startTextNode = this.genNewLabelNode('2')
-      const endTextNode = this.genNewLabelNode('2')
+      const startTextNode = this.genNewLabelNode()
+      const endTextNode = this.genNewLabelNode()
       this.updateLabelNodePosition(startTextNode, endTextNode, this.PolygonList[index])
       /*  */
       this.labelNodeList.push({
@@ -311,12 +305,10 @@ export default class LinkManager {
       this.node.addChild(endTextNode)
     }
   }
-  genNewLabelNode(text: string) {
-    // const node = new Container()
-    const textNode = useCreateText()
+  genNewLabelNode() {
+    const textNode = useCreateLabelNode()
     textNode.anchor.x = 0.5
     textNode.anchor.y = 0.5
-    textNode.text = text
     return textNode
   }
   /**
@@ -358,6 +350,15 @@ export default class LinkManager {
     /*  */
     startTextNode.position.set(startTextNodePosition.x, startTextNodePosition.y)
     endTextNode.position.set(endTextNodePosition.x, endTextNodePosition.y)
+  }
+  updateLinkPositionById(linkId: string) {
+    const linkLabelNode = this.getLinkLabelNodeById(linkId)
+    if (linkLabelNode) {
+      const polygon = this.getPolygonById(linkId)
+      if (polygon) {
+        this.updateLabelNodePosition(linkLabelNode.start, linkLabelNode.end, polygon)
+      }
+    }
   }
   getPolygonById(linkId: string) {
     let polygon = undefined
