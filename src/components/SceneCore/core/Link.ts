@@ -131,6 +131,22 @@ export default class LinkManager {
       })
     }
   }
+  /*  */
+  deleteLink(id: string) {
+    for (let index = 0; index < this.userData.linkReactive.LinkData.length; index++) {
+      const item = this.userData.linkReactive.LinkData[index]
+      if (item.uniqueId === id) {
+        this.userData.linkReactive.LinkData.splice(index, 1)
+        const { linkLabelNode, index: i } = this.getLinkLabelNodeById(id)
+        if (linkLabelNode) {
+          linkLabelNode.start.destroy()
+          linkLabelNode.end.destroy()
+          this.labelNodeList.splice(i, 1)
+        }
+        break
+      }
+    }
+  }
   /**
    * 清空当前选择线
    * 销毁拐点
@@ -365,7 +381,7 @@ export default class LinkManager {
     endTextNode.position.set(endTextNodePosition.x, endTextNodePosition.y)
   }
   updateLinkPositionById(linkId: string) {
-    const linkLabelNode = this.getLinkLabelNodeById(linkId)
+    const { linkLabelNode } = this.getLinkLabelNodeById(linkId)
     if (linkLabelNode) {
       const polygon = this.getPolygonById(linkId)
       if (polygon) {
@@ -388,14 +404,19 @@ export default class LinkManager {
   /* 获取移动中的组件 */
   getLinkLabelNodeById(linkId: string) {
     let linkLabelNode: (typeof this.labelNodeList)[number] | undefined = undefined
-    for (let index = 0; index < this.labelNodeList.length; index++) {
-      const labelItem = this.labelNodeList[index]
+    let index = -1
+    for (let i = 0; i < this.labelNodeList.length; i++) {
+      const labelItem = this.labelNodeList[i]
       if (labelItem.id === linkId) {
         linkLabelNode = labelItem
+        index = i
         break
       }
     }
-    return linkLabelNode
+    return {
+      linkLabelNode,
+      index,
+    }
   }
   getLinkArrayByComponentIdArray(componentIdArray: string[]) {
     const linkArray = this.userData.linkReactive.LinkData.filter((item) => {

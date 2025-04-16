@@ -23,7 +23,7 @@ import { ENUM_BOARD_CODE } from '@/components/SceneCore/enum'
 import { type TComponent } from '@/components/SceneCore/types/base'
 import { type IBaseProps } from '@/components/SceneCore/types/props'
 import Stats from 'stats.js'
-import { initDevtools } from '@pixi/devtools';
+import { initDevtools } from '@pixi/devtools'
 import '@/components/SceneCore/core/MU/MU'
 /**
  * 使用场景
@@ -37,7 +37,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   /* 1 */
 
   const app = new Application()
-
 
   provide('app', app)
 
@@ -112,7 +111,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       antialias: true,
       // resolution: window.devicePixelRatio, // 不要给这个字段，放大和缩小，会导致 尺寸不正确的问题
     })
-    initDevtools({ app });
+    initDevtools({ app })
     app.stage.label = 'stage'
     root.addChild(grid.node)
     root.addChild(selectArea.node)
@@ -211,6 +210,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   const boardDelete = (e: KeyboardEvent) => {
     /* 如果有组件选中，删除组件，如果有连接线选中，删除连接线 */
     if (selectedComponent.value.length > 0) {
+      const linkArray: string[] = ([] = [])
       selectedComponent.value.forEach((item) => {
         /* 删除节点缓存 */
         nodeList.delete(item.id)
@@ -218,23 +218,34 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
         const index = userData.configList.value.findIndex((component) => component.id === item.id)
         userData.configList.value.splice(index, 1)
         /* 删除连接线 */
+        for (let index = 0; index < userData.linkReactive.LinkData.length; index++) {
+          const linkItem = userData.linkReactive.LinkData[index]
+          if (linkItem.start === item.id || linkItem.end === item.id) {
+            const id = userData.linkReactive.LinkData[index].uniqueId
+            linkArray.push(id)
+            linkInstance.deleteLink(id)
+            index--
+          }
+        }
       })
       /* 清掉选中的 */
       selectedComponent.value.length = 0
+      /* 假如确实有删除的连接线，重新渲染连接线 */
+      if (linkArray.length > 0) {
+        reRenderLink()
+      }
     }
     /* 删除连接线 */
     if (userData.currentLink) {
       const id = userData.currentLink.uniqueId
-      userData.linkReactive.LinkData.find((item) => {
-        if (item.uniqueId === id) {
-          userData.linkReactive.LinkData.splice(userData.linkReactive.LinkData.indexOf(item), 1)
-          return true
-        }
-        return false
-      })
-      linkInstance.clearPointAndClearCurrentLink()
-      linkInstance.render()
+      linkInstance.deleteLink(id)
+      reRenderLink()
     }
+  }
+
+  function reRenderLink() {
+    linkInstance.clearPointAndClearCurrentLink()
+    linkInstance.render()
   }
   watch(userData.selectComponentLength, (val) => {
     userData.currentLink = null
