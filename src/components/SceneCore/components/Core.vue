@@ -2,20 +2,19 @@
   <div class="pixi-wrapper w-full h-full relative">
     <slot name="default"></slot>
     <template v-if="props.assets && props.hasApp">
-      <component
-        :is="componentMap[item.type]"
+      <Distribute
         :selectedComponent="props.selectedComponent"
         v-for="item in props.componentList"
         :key="item.id"
-        :config="(item as Tets<E_COMPONENT_TYPE.SOURCE>)"
-      ></component>
+        :config="item"
+      ></Distribute>
     </template>
   </div>
 </template>
 <script setup lang="ts">
 import { type Reactive } from 'vue'
-import Source from '@/components/SceneCore/components/Source.vue'
-import Track from '@/components/SceneCore/components/Track.vue'
+
+import Distribute from '@/components/SceneCore/components/Distribute.vue'
 import type {
   TComponent,
   IBaseComponent,
@@ -39,16 +38,10 @@ const props = withDefaults(defineProps<ICoreProps>(), {
   hasApp: () => false,
 })
 
-const componentMap = {
-  [E_COMPONENT_TYPE.SOURCE]: Source,
-  [E_COMPONENT_TYPE.TRACK]: Track,
-}
-
 type Tets<T> = T extends E_COMPONENT_TYPE.SOURCE
- ? ISourceComponent
- : T extends E_COMPONENT_TYPE.TRACK
-   ? ITrackComponent
-   : IBaseComponent
-
+  ? ISourceComponent
+  : T extends E_COMPONENT_TYPE.TRACK
+    ? ITrackComponent
+    : IBaseComponent
 </script>
 <style lang="scss" scoped></style>

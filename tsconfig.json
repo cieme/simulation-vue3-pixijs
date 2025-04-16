@@ -8,7 +8,7 @@
       "path": "./tsconfig.app.json"
     }
   ],
-  "compilerOptions":{
-    "jsx": "preserve"
+  "compilerOptions": {
+    "jsx": "react"
   }
 }

@@ -3,9 +3,11 @@
     <Header class="flex-shrink-0" />
     <section class="flex box-container w-screen relative">
       <div class="left h-full">
-        <router-link to="/login" class="flex items-center justify-center h-full">
-          <a-button type="primary">login</a-button>
-        </router-link>
+        <div class="flex w-full h-full justify-center items-center p-4">
+          <router-link to="/login">
+            <a-button type="primary">login</a-button>
+          </router-link>
+        </div>
       </div>
       <div class="content h-full flex-1 overflow-hidden relative">
         <Tool
@@ -42,6 +44,7 @@ import { useScene } from '@/components/SceneCore/hooks/scene'
 
 import type { TComponent } from '@/components/SceneCore/types/base'
 import { Link } from '@/components/SceneCore/link/Link'
+import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 const refTarget = ref<HTMLDivElement>()
 
@@ -80,7 +83,7 @@ function genData() {
   return Array.from({ length }, (_, index) => {
     const data: TComponent = {
       label: `素材${index + 1}`,
-      type: 'Source',
+      type: E_COMPONENT_TYPE.SOURCE,
       id: `${index + 1}`,
       position: { x: Math.random() * maxX - maxX / 2, y: Math.random() * maxY - maxY / 2 },
     }

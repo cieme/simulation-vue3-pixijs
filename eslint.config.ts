@@ -1,5 +1,9 @@
 import pluginVue from 'eslint-plugin-vue'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import {
+  defineConfigWithVueTs,
+  vueTsConfigs,
+  configureVueProject,
+} from '@vue/eslint-config-typescript'
 import oxlint from 'eslint-plugin-oxlint'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
@@ -8,6 +12,7 @@ import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 // configureVueProject({ scriptLangs: ['ts', 'tsx'] })
 // More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 
+configureVueProject({ scriptLangs: ['ts', 'tsx'] })
 export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
@@ -23,18 +28,11 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
   oxlint.configs['flat/recommended'],
   skipFormatting,
+
   {
     rules: {
       'vue/multi-word-component-names': 'off',
       // "quotes": ["error", "double"]
-      'vue/block-lang': [
-        'error',
-        {
-          script: {
-            lang: ['ts', 'tsx'],
-          },
-        },
-      ],
     },
   },
 )
