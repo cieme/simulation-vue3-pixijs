@@ -7,7 +7,7 @@
         :selectedComponent="props.selectedComponent"
         v-for="item in props.componentList"
         :key="item.id"
-        :config="item"
+        :config="(item as Tets<E_COMPONENT_TYPE.SOURCE>)"
       ></component>
     </template>
   </div>
@@ -43,10 +43,7 @@ const componentMap = {
   [E_COMPONENT_TYPE.SOURCE]: Source,
   [E_COMPONENT_TYPE.TRACK]: Track,
 }
-type ComponentPropsMap = {
-  SOURCE: ISourceComponent;
-  TRACK: ITrackComponent;
-};
+
 type Tets<T> = T extends E_COMPONENT_TYPE.SOURCE
  ? ISourceComponent
  : T extends E_COMPONENT_TYPE.TRACK

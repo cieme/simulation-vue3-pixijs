@@ -17,5 +17,5 @@ export interface ITrackComponent extends IBaseComponent {
   points: PointData[]
 }
 
-// export type TComponent = IBaseComponent | tISourceComponent | ITrackComponent
-export type TComponent = ISourceComponent | ITrackComponent
+export type TComponent = IBaseComponent | ISourceComponent | ITrackComponent
+// export type TComponent = ISourceComponent | ITrackComponent

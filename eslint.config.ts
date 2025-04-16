@@ -27,6 +27,14 @@ export default defineConfigWithVueTs(
     rules: {
       'vue/multi-word-component-names': 'off',
       // "quotes": ["error", "double"]
+      'vue/block-lang': [
+        'error',
+        {
+          script: {
+            lang: ['ts', 'tsx'],
+          },
+        },
+      ],
     },
   },
 )

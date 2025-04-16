@@ -24,6 +24,7 @@ declare module 'vue' {
     ASpace: typeof import('ant-design-vue/es')['Space']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     Core: typeof import('./src/components/SceneCore/components/Core.vue')['default']
+    DynamicRenderer: typeof import('./src/components/SceneCore/components/DynamicRenderer.vue')['default']
     Header: typeof import('./src/components/Header/index.vue')['default']
     Intersection: typeof import('./src/components/Intersection/Intersection.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
