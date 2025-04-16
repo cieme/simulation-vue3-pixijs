@@ -51,5 +51,20 @@ export default defineConfig((config) => {
     define: {
       'process.env': env,
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('pixi.js')) return 'pixi'
+            if (id.includes('ant-design-vue')) return 'ant-design-vue'
+            if (id.includes('vue-router')) return 'vue-router'
+            if (id.includes('vuex')) return 'vuex'
+            if (id.includes('element-plus')) return 'element-plus'
+            if (id.includes('moment')) return'moment'
+            if (id.includes('lodash')) return 'lodash'
+          },
+        },
+      },
+    },
   }
 })
