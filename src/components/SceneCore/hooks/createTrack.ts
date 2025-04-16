@@ -1,54 +1,32 @@
 import { watchEffect, watch } from 'vue'
-import { Application, Container, Sprite, type FederatedPointerEvent } from 'pixi.js'
+import { Application, Container, Graphics, type FederatedPointerEvent } from 'pixi.js'
 
 import { useCreateText } from '@/components/SceneCore/hooks/createText'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
-import type { ICreateTrackParams, ICreateNodeReturn } from '@/components/SceneCore/types/hooks'
+import type { ICreateTrackParams, ICreateTrackReturn } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
-import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link/useLink'
+import {
+  linkWidth,
+  linkHeight,
+  usePrevLink,
+  useNextLink,
+} from '@/components/SceneCore/link/useLink'
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/ENUM_MOUSE'
 import NodeItem from '../core/NodeItem'
 import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 
-export function useCreateTrack(params: ICreateTrackParams): ICreateNodeReturn {
+export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
   const { props, config, assets, userData, app, root } = params
   const baseWidth = 40
   /* 盒子 */
   const container = new Container()
   container.position = config.position
   /* 图标 */
-  const sprite = new Sprite()
-  sprite.label = 'bg'
-  sprite.width = baseWidth
-  sprite.height = baseWidth
-  sprite.anchor.x = 0.5
-  sprite.anchor.y = 0.5
-  sprite.tint = 0x383e50
-  const texture = assets.sheet?.textures['images/icon/default.png']
-  sprite.texture = texture!
+  const sprite = new Graphics()
+  sprite.label = 'grapics'
 
-  const icon = new Sprite()
-  icon.label = 'icon'
-  icon.width = baseWidth
-  icon.height = baseWidth
-  icon.anchor.x = 0.5
-  icon.anchor.y = 0.5
-  const iconTexture = assets.sheet?.textures['images/source/icon_source_000.png']
-  icon.texture = iconTexture!
-
-  const select = new Sprite()
-  select.label = 'select'
-  select.width = baseWidth
-  select.height = baseWidth
-  select.anchor.x = 0.5
-  select.anchor.y = 0.5
-  select.tint = 0x407cf4
-  const selectTexture = assets.sheet?.textures['images/icon/selected-9.png']
-  select.texture = selectTexture!
-  select.visible = false
-
-  icon.interactive = true
-  icon.cursor = 'pointer'
+  sprite.interactive = true
+  sprite.cursor = 'pointer'
   const icoMouseDownHandler = (event: FederatedPointerEvent) => {
     if (event.button !== E_MOUSE_BUTTON.LEFT) return
     event.stopPropagation()
@@ -58,10 +36,10 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateNodeReturn {
       addSelectedComponent(props, config, true)
     }
   }
-  icon.on('mousedown', icoMouseDownHandler)
+  sprite.on('mousedown', icoMouseDownHandler)
 
   const { dispose: dragDispose } = useDragComponentHook({
-    eventNode: icon,
+    eventNode: sprite,
     userData,
     app,
     buttons: [E_MOUSE_BUTTON.LEFT],
@@ -78,15 +56,13 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateNodeReturn {
   /* 文字 */
   const text = useCreateText()
   text.label = 'label'
-  text.position.y = baseWidth
+
   text.anchor.x = 0.5
   text.anchor.y = 1
   /**
    * 顺序比较重要, 会影响事件
    */
   container.addChild(sprite)
-  container.addChild(select)
-  container.addChild(icon)
   container.addChild(text)
 
   const linkParams = {
@@ -96,15 +72,17 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateNodeReturn {
     app,
     root,
   }
+
   const { node: nextLinkNode } = useNextLink(linkParams)
-  nextLinkNode.position.x = 20 + linkWidth / 2
-  container.addChild(nextLinkNode)
   const { node: prevLinkNode } = usePrevLink(linkParams)
-  prevLinkNode.position.x = -20 - linkWidth / 2
+  updateLinkPosition()
+  container.addChild(nextLinkNode)
   container.addChild(prevLinkNode)
+  draw()
+  drawNormal()
   /*  */
   container.on('destroyed', () => {
-    icon.off('mousedown', icoMouseDownHandler)
+    sprite.off('mousedown', icoMouseDownHandler)
     dragDispose()
   })
   /*  */
@@ -115,8 +93,8 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateNodeReturn {
       node: container,
       nextLinkNode,
       prevLinkNode,
-      iconNode: icon,
-      selectNode: select,
+      iconNode: sprite,
+      selectNode: sprite,
     }),
   )
 
@@ -134,19 +112,60 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateNodeReturn {
         break
       }
     }
+    console.log(hasSelect)
     if (hasSelect) {
-      select.visible = true
+      draw()
+      drawSelected()
     } else {
-      select.visible = false
+      draw()
+      drawNormal()
     }
   })
+  function updateLinkPosition() {
+    const startLinkPosition = config.points[0]
+    const endLinkPosition = config.points[config.points.length - 1]
+    prevLinkNode.position.x = startLinkPosition.x
+    prevLinkNode.position.y = startLinkPosition.y
+
+    nextLinkNode.position.x = endLinkPosition.x
+    nextLinkNode.position.y = endLinkPosition.y
+
+    text.position.x = endLinkPosition.x
+    text.position.y = endLinkPosition.y + 24
+  }
+
+  function draw() {
+    sprite.clear()
+    for (let i = 0; i < config.points.length - 1; i++) {
+      const startPoint = config.points[i]
+      const endPoint = config.points[i + 1]
+      sprite.moveTo(startPoint.x, startPoint.y)
+      sprite.lineTo(endPoint.x, endPoint.y)
+    }
+  }
+  function drawNormal() {
+    sprite.stroke({
+      color: 0xff0000,
+      width: 10,
+      join: 'round',
+      cap: 'round',
+    })
+  }
+  function drawSelected() {
+    sprite.stroke({
+      color: 0x00ff00,
+      width: 10,
+      join: 'round',
+      cap: 'round',
+    })
+  }
 
   /*  */
   return {
     container,
-    sprite,
-    select,
-    icon,
+    sprite: sprite,
+    select: sprite,
+    icon: sprite,
     text,
     addToScene: (app: Application) => {
       root.addChild(container)

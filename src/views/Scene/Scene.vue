@@ -98,7 +98,18 @@ function documentRightClick(e: MouseEvent) {
 
 onMounted(() => {
   setTimeout(() => {
-    configList.value = genData()
+    const xx: TComponent = {
+      label: `素材sadadada${1}`,
+      type: E_COMPONENT_TYPE.TRACK,
+      id: `素材sadadada${1}`,
+      position: { x: 100, y: 100 },
+      points: [
+        { x: 200, y: 100 },
+        { x: 200, y: 200 },
+        { x: -400, y: 400 },
+      ],
+    }
+    configList.value = [...genData(), xx]
   }, 0)
   document.addEventListener('contextmenu', documentRightClick)
 })
