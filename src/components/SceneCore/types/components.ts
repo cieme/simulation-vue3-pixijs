@@ -1,1 +1,1 @@
-export type TComponentType = 'Source'
+export type TComponentType = 'Source' | "Track"

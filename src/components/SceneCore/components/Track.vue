@@ -3,21 +3,21 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, useAttrs, watch, render, onUnmounted } from 'vue'
 import { useApp } from '@/components/SceneCore/hooks/index'
-import { useCreateNode } from '@/components/SceneCore/hooks/createNode'
+import { useCreateTrack } from '@/components/SceneCore/hooks/createTrack'
 import { Application, Container } from 'pixi.js'
-import type { ISourceComponent } from '@/components/SceneCore/types/base'
-import type { ISourceProps } from '@/components/SceneCore/types/props'
+import type { ITrackComponent } from '@/components/SceneCore/types/base'
+import type { ITrackProps } from '@/components/SceneCore/types/props'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 
-const props = withDefaults(defineProps<ISourceProps>(), {
-  config: () => ({}) as ISourceComponent,
+const props = withDefaults(defineProps<ITrackProps>(), {
+  config: () => ({}) as ITrackComponent,
   selectedComponent: () => [],
 })
 
 const { app, assets, root, userData } = useApp()
 let disposeNode: () => void
 function init(app: Application, assets: IBaseSceneParams['assets']) {
-  const { addToScene, dispose } = useCreateNode({
+  const { addToScene, dispose } = useCreateTrack({
     props,
     config: props.config,
     app,

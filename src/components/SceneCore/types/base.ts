@@ -1,10 +1,10 @@
 import type { PointData } from 'pixi.js'
-import { type TComponentType } from '@/components/SceneCore/types/components'
+import { type E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 export interface IBaseComponent {
   id: string
   label: string
-  type: TComponentType
+  type: E_COMPONENT_TYPE
   position: PointData
 }
 export interface ISelectedComponent {
@@ -13,5 +13,9 @@ export interface ISelectedComponent {
 export interface ISourceComponent extends IBaseComponent {
   createTime: string
 }
+export interface ITrackComponent extends IBaseComponent {
+  points: PointData[]
+}
 
-export type TComponent = IBaseComponent | ISourceComponent
+// export type TComponent = IBaseComponent | tISourceComponent | ITrackComponent
+export type TComponent = ISourceComponent | ITrackComponent

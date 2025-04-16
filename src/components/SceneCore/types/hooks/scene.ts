@@ -1,6 +1,6 @@
 import type { ComputedRef, Reactive, Ref } from 'vue'
 import { type Spritesheet, Container, Application, type PointData } from 'pixi.js'
-import type { TComponent, IBaseComponent } from '@/components/SceneCore/types/base'
+import type { TComponent, IBaseComponent,ISourceComponent,ITrackComponent } from '@/components/SceneCore/types/base'
 import type { ILinkParams } from '@/components/SceneCore/types/link'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
 import NodeItem from '@/components/SceneCore/core/NodeItem'
@@ -41,29 +41,29 @@ export interface IBaseSceneParams {
  */
 export interface ICreateNodeParams extends IBaseSceneParams {
   props: IBaseProps
-  config: IBaseComponent
+  config: TComponent
 }
 
 /**
- * 世界坐标转本地坐标参数
+ * 创建源节点参数
  *
  * @export
- * @interface IGlobalToLocalParams
- * @typedef {IGlobalToLocalParams}
+ * @interface ICreateSourceParams
+ * @typedef {ICreateSourceParams}
+ * @extends {IBaseSceneParams}
  */
-export interface IGlobalToLocalParams {
-  globalPoint: PointData
-  node: Container
-  root: Container
-  point: PointData
-  app: Application
+export interface ICreateSourceParams extends IBaseSceneParams {
+  props: IBaseProps
+  config: ISourceComponent
 }
-
-export interface INodeItem {
-  id: string
-  node: Container
-  nextLinkNode: Container | null
-  prevLinkNode: Container | null
-  iconNode: Container | null
-  selectNode: Container | null
+/**
+ * 创建轨道节点参数
+ *
+ * @export
+ * @interface ICreateNodeParams
+ * @typedef {ICreateNodeParams}
+ */
+export interface ICreateTrackParams extends IBaseSceneParams {
+  props: IBaseProps
+  config: ITrackComponent
 }

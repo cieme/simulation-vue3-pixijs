@@ -17,4 +17,5 @@ export enum E_MOUSE_BUTTON {
  */
 export enum E_COMPONENT_TYPE {
   SOURCE = 'Source',
+  TRACK = 'Track',
 }

@@ -3,34 +3,15 @@ import { Application, Container, Sprite, type FederatedPointerEvent } from 'pixi
 
 import { useCreateText } from '@/components/SceneCore/hooks/createText'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
-import type {
-  ICreateNodeParams,
-  ICreateSourceParams,
-  ICreateNodeReturn,
-} from '@/components/SceneCore/types/hooks'
+import type { ICreateTrackParams, ICreateNodeReturn } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
 import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link/useLink'
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/ENUM_MOUSE'
 import NodeItem from '../core/NodeItem'
 import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
-import { If } from 'three/tsl'
-/**
- * Description placeholder
- *
- * @export
- * @param {ICreateNodeParams} param0
- * @param {ICreateNodeParams} param0.props
- * @param {ICreateNodeParams} param0.config
- * @param {ICreateNodeParams} param0.assets
- * @param {ICreateNodeParams} param0.root
- * @param {ICreateNodeParams} param0.app
- * @param {ICreateNodeParams} param0.userData
- * @returns {{ container: any; sprite: any; select: any; icon: any; text: any; addToScene: (app: Application) => void; dispose: () => void; }}
- */
 
-export function useCreateNode(params: ICreateSourceParams): ICreateNodeReturn
-export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
-  const { props, config, assets, root, app, userData } = params
+export function useCreateTrack(params: ICreateTrackParams): ICreateNodeReturn {
+  const { props, config, assets, userData, app, root } = params
   const baseWidth = 40
   /* 盒子 */
   const container = new Container()
@@ -180,16 +161,4 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
       })
     },
   }
-}
-
-/**
- * 使用根节点容器
- *
- * @export
- * @returns {{ root: any; }}
- */
-export function useRootContainer() {
-  const root = new Container()
-  root.label = 'root'
-  return { root }
 }

@@ -7,7 +7,7 @@
         :selectedComponent="props.selectedComponent"
         v-for="item in props.componentList"
         :key="item.id"
-        :config="item as Tets<TComponentType>"
+        :config="item"
       ></component>
     </template>
   </div>
@@ -15,14 +15,16 @@
 <script setup lang="ts">
 import { type Reactive } from 'vue'
 import Source from '@/components/SceneCore/components/Source.vue'
+import Track from '@/components/SceneCore/components/Track.vue'
 import type {
   TComponent,
   IBaseComponent,
   ISourceComponent,
+  ITrackComponent,
 } from '@/components/SceneCore/types/base'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
-import type { IAssets } from '@/components/SceneCore/types/hooks'
-import type { TComponentType } from '@/components/SceneCore/types/components'
+import type { IAssets } from '@/components/SceneCore/types/hooks/index'
+import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 interface ICoreProps {
   selectedComponent: IBaseProps['selectedComponent']
@@ -38,14 +40,18 @@ const props = withDefaults(defineProps<ICoreProps>(), {
 })
 
 const componentMap = {
-  Source: Source,
+  [E_COMPONENT_TYPE.SOURCE]: Source,
+  [E_COMPONENT_TYPE.TRACK]: Track,
 }
-const getComponents = (item: TComponent) => {
-  if (item.type === 'Source') {
-    return item as ISourceComponent
-  }
-  return {} as ISourceComponent
-}
-type Tets<T> = T extends 'Source' ? ISourceComponent : IBaseComponent
+type ComponentPropsMap = {
+  SOURCE: ISourceComponent;
+  TRACK: ITrackComponent;
+};
+type Tets<T> = T extends E_COMPONENT_TYPE.SOURCE
+ ? ISourceComponent
+ : T extends E_COMPONENT_TYPE.TRACK
+   ? ITrackComponent
+   : IBaseComponent
+
 </script>
 <style lang="scss" scoped></style>

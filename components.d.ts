@@ -30,5 +30,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Source: typeof import('./src/components/SceneCore/components/Source.vue')['default']
     Tool: typeof import('./src/components/SceneCore/tools/Tool.vue')['default']
+    Track: typeof import('./src/components/SceneCore/components/Track.vue')['default']
   }
 }
