@@ -1,11 +1,11 @@
-import type { Application, Container, Sprite, Text,Graphics } from 'pixi.js'
+import type { Application, Container, Sprite, BitmapText,Graphics } from 'pixi.js'
 
 export interface ICreateNodeReturn {
   container: Container
   sprite: Sprite
   select: Sprite
   icon: Sprite
-  text: Text
+  text: BitmapText
   addToScene: (app: Application) => void
   dispose: () => void
 }
@@ -14,7 +14,7 @@ export interface ICreateTrackReturn {
   sprite: Graphics
   select: Graphics
   icon: Graphics
-  text: Text
+  text: BitmapText
   addToScene: (app: Application) => void
   dispose: () => void
 }

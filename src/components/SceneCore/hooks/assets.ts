@@ -1,12 +1,19 @@
 import { reactive, onBeforeUnmount } from 'vue'
-import { Assets, Spritesheet, Texture, type SpritesheetData } from 'pixi.js'
+import { Assets, Spritesheet, Texture, type BitmapFont } from 'pixi.js'
 import type { IAssets } from '@/components/SceneCore/types/hooks'
 // 预先导入当前目录下所有 png 文件，并把结果作为 URL 处理
 // const images = import.meta.glob('/src/assets/icons/**/*.png', { eager: true })
-const SHEET_URL = '/public_resource/alias.json'
+
 export const assets = reactive<IAssets>({
   sheet: null,
+  font: null,
+  isLoaded: false,
 })
+const options = {
+  SHEET_URL: '/public_resource/alias.json',
+  BITMAP_FONT_URL: '/bmfont/font.fnt',
+}
+Assets.addBundle('main', options)
 
 /**
  * 使用静态资源
@@ -15,19 +22,12 @@ export const assets = reactive<IAssets>({
  * @returns {{ assets: any; }}
  */
 export function useAssets() {
-  Assets.load(SHEET_URL).then((sheet: Spritesheet) => {
-    assets.sheet = sheet
+  Assets.loadBundle('main').then((bundle) => {
+    assets.sheet = bundle.SHEET_URL
+    assets.font = bundle.BITMAP_FONT_URL
+    assets.isLoaded = true
   })
-  function clearAssets() {
-    const hasSheet = Assets.get(SHEET_URL)
-    if (hasSheet) {
-      Assets.unload(SHEET_URL)
-        .catch((err) => {})
-        .finally(() => {
-          assets.sheet = null
-        })
-    }
-  }
+  function clearAssets() {}
   onBeforeUnmount(() => {
     if (import.meta.env.PROD) {
       clearAssets()

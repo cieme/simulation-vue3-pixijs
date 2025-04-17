@@ -11,7 +11,7 @@
       </div>
       <div class="content h-full flex-1 overflow-hidden relative">
         <Tool
-          v-if="hasApp"
+          v-if="isSceneLoaded"
           class="tool-bar absolute top-2 left-2 z-10"
           :userData="userData"
           :app="app"
@@ -21,7 +21,7 @@
         <Core
           :selectedComponent="selectedComponent"
           :assets="assets"
-          :has-app="hasApp"
+          :isSceneLoaded="isSceneLoaded"
           :componentList="configList"
         >
           <template #default>
@@ -34,7 +34,7 @@
   </main>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, type Ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount, type Ref, watch } from 'vue'
 
 import Header from '@/components/Header/index.vue'
 import Core from '@/components/SceneCore/components/Core.vue'
@@ -48,41 +48,18 @@ import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 const refTarget = ref<HTMLDivElement>()
 
-const { selectedComponent, hasApp, userData, app, root, assets, linkInstance } = useScene(refTarget)
+const { selectedComponent, userData, app, root, assets, linkInstance, isSceneLoaded } =
+  useScene(refTarget)
 const configList = userData.configList
 let timer: number | null = null
-timer = setTimeout(() => {
-  const link = new Link({
-    uniqueId: '1',
-    start: '1',
-    end: '2',
-    point: [
-      { x: 100, y: 100 },
-      { x: 200, y: 200 },
-    ],
-  })
-  const link2 = new Link({
-    uniqueId: '2',
-    start: '2',
-    end: '3',
-    point: [
-      { x: 30, y: 30 },
-      { x: 80, y: 90 },
-    ],
-  })
-  // link.end = '2'
-  userData.linkReactive.LinkData.push(link)
-  userData.linkReactive.LinkData.push(link2)
-  linkInstance.render()
-  linkInstance.genAllLabelNodes()
-}, 1e3)
+
 function genData() {
   const length = 6
   const maxX = 500
   const maxY = 500
   return Array.from({ length }, (_, index) => {
     const data: TComponent = {
-      label: `素材${index + 1}`,
+      label: `剪${index + 1}`,
       type: E_COMPONENT_TYPE.SOURCE,
       id: `${index + 1}`,
       position: { x: Math.random() * maxX - maxX / 2, y: Math.random() * maxY - maxY / 2 },
@@ -95,8 +72,37 @@ function documentRightClick(e: MouseEvent) {
   e.preventDefault()
   e.stopPropagation()
 }
-
-onMounted(() => {
+watch(isSceneLoaded, (value) => {
+  if (value) {
+    initTest()
+  }
+})
+function initTest() {
+  timer = setTimeout(() => {
+    const link = new Link({
+      uniqueId: '1',
+      start: '1',
+      end: '2',
+      point: [
+        { x: 100, y: 100 },
+        { x: 200, y: 200 },
+      ],
+    })
+    const link2 = new Link({
+      uniqueId: '2',
+      start: '2',
+      end: '3',
+      point: [
+        { x: 30, y: 30 },
+        { x: 80, y: 90 },
+      ],
+    })
+    // link.end = '2'
+    userData.linkReactive.LinkData.push(link)
+    userData.linkReactive.LinkData.push(link2)
+    linkInstance.render()
+    linkInstance.genAllLabelNodes()
+  }, 1e3)
   setTimeout(() => {
     const xx: TComponent = {
       label: `素材sadadada${1}`,
@@ -111,6 +117,8 @@ onMounted(() => {
     }
     configList.value = [...genData(), xx]
   }, 0)
+}
+onMounted(() => {
   document.addEventListener('contextmenu', documentRightClick)
 })
 onBeforeUnmount(() => {

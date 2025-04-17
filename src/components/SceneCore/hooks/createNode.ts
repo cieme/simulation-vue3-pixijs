@@ -13,7 +13,7 @@ import { linkWidth, usePrevLink, useNextLink } from '@/components/SceneCore/link
 import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/ENUM_MOUSE'
 import NodeItem from '../core/NodeItem'
 import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
-import { If } from 'three/tsl'
+
 /**
  * Description placeholder
  *

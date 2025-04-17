@@ -88,6 +88,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   provide('userData', userData)
 
   const hasApp = ref(false)
+  const isSceneLoaded = computed(() => {
+    return hasApp.value && assets.isLoaded
+  })
   /*  */
   const shallowParams = {
     app,
@@ -256,6 +259,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     assets,
     root,
     hasApp,
+    isSceneLoaded,
     initStage,
     selectedNodes,
     userData,

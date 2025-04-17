@@ -1,6 +1,11 @@
 import type { ComputedRef, Reactive, Ref } from 'vue'
-import { type Spritesheet, Container, Application, type PointData } from 'pixi.js'
-import type { TComponent, IBaseComponent,ISourceComponent,ITrackComponent } from '@/components/SceneCore/types/base'
+import type { Spritesheet, Container, Application, PointData, BitmapFont } from 'pixi.js'
+import type {
+  TComponent,
+  IBaseComponent,
+  ISourceComponent,
+  ITrackComponent,
+} from '@/components/SceneCore/types/base'
 import type { ILinkParams } from '@/components/SceneCore/types/link'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
 import NodeItem from '@/components/SceneCore/core/NodeItem'
@@ -15,6 +20,8 @@ import { Link } from '@/components/SceneCore/link/Link'
  */
 export interface IAssets {
   sheet: Spritesheet | null
+  font: BitmapFont | null
+  isLoaded: boolean
 }
 export interface IBaseSceneParams {
   assets: Reactive<IAssets>

@@ -70,7 +70,6 @@ export const showMessage = (e: any) => {
     text = e.trim()
   }
 
-  console.log(text)
   message.error(text)
   return text
 }

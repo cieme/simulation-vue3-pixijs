@@ -112,7 +112,6 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
         break
       }
     }
-    console.log(hasSelect)
     if (hasSelect) {
       draw()
       drawSelected()

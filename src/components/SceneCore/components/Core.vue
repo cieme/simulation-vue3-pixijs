@@ -1,7 +1,7 @@
 <template>
   <div class="pixi-wrapper w-full h-full relative">
     <slot name="default"></slot>
-    <template v-if="props.assets && props.hasApp">
+    <template v-if="props.isSceneLoaded">
       <Distribute
         :selectedComponent="props.selectedComponent"
         v-for="item in props.componentList"
@@ -29,13 +29,13 @@ interface ICoreProps {
   selectedComponent: IBaseProps['selectedComponent']
   componentList: TComponent[]
   assets: Reactive<IAssets>
-  hasApp: boolean
+  isSceneLoaded: boolean
 }
 const props = withDefaults(defineProps<ICoreProps>(), {
   selectedComponent: () => [],
   componentList: () => [],
   assets: () => ({}) as Reactive<IAssets>,
-  hasApp: () => false,
+    isSceneLoaded: () => false,
 })
 
 type Tets<T> = T extends E_COMPONENT_TYPE.SOURCE

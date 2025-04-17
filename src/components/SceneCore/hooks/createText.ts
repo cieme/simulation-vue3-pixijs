@@ -1,14 +1,16 @@
-import { Text, TextStyle, Sprite, Assets, Texture } from 'pixi.js'
+import { Text, TextStyle, Sprite, Assets, Texture, BitmapFont, BitmapText } from 'pixi.js'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
-export function useCreateText(): Text {
+
+
+export function useCreateText(): BitmapText {
   const _textStyle = new TextStyle({
     fontSize: 14,
     lineHeight: 16,
     fill: 0xffffff,
-    fontFamily: 'Arial',
+    fontFamily: '黑体',
     align: 'center',
   })
-  const text = new Text({
+  const text = new BitmapText({
     style: _textStyle,
   })
   return text

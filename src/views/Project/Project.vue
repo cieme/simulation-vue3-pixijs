@@ -75,7 +75,6 @@ const getData = () => {
     list.value.push(...res.data.records)
     count.value = res.data.total
     setCurrent('0')
-    console.log(current.value)
   })
 }
 const resetParams = () => {
