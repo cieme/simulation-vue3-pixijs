@@ -1,5 +1,5 @@
 import { inject } from 'vue'
-import { Application, Container } from 'pixi.js'
+import { Container } from 'pixi.js'
 import type { ICreateNodeParams, IGlobalToLocalParams } from '@/components/SceneCore/types/hooks'
 
 /**
@@ -8,14 +8,8 @@ import type { ICreateNodeParams, IGlobalToLocalParams } from '@/components/Scene
  * @returns {{ app: Application; assets: any; root: Container; userData: ICreateNodeParams["userData"]; }}
  */
 export function useApp() {
-  const app = inject<ICreateNodeParams['userData']['app']>('app')
-  const assets = inject<ICreateNodeParams['userData']['assets']>('assets')
-  const root = inject<ICreateNodeParams['userData']['root']>('root')
   const userData = inject<ICreateNodeParams['userData']>('userData')
   return {
-    app: app as Application,
-    assets,
-    root: root as Container,
     userData: userData as ICreateNodeParams['userData'],
   }
 }

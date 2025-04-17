@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<ITrackProps>(), {
   selectedComponent: () => [],
 })
 
-const { app, assets, root, userData } = useApp()
+const {  userData } = useApp()
 let disposeNode: () => void
 function init(app: Application) {
   const { addToScene, dispose } = useCreateTrack({
@@ -27,7 +27,7 @@ function init(app: Application) {
   disposeNode = dispose
 }
 onMounted(() => {
-  init(app as Application)
+  init(userData.app as Application)
 })
 onUnmounted(() => {
   if (disposeNode) {

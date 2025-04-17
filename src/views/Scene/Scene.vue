@@ -123,7 +123,7 @@ function initTest() {
         { x: -88, y: 250 },
       ],
     }
-    configList.value = [xx, ...genData(), yy]
+    configList.value = [xx, yy, ...genData()]
   }, 0)
 }
 onMounted(() => {
