@@ -16,7 +16,7 @@ export default class LinkPoint {
     app,
     userData,
     position,
-    linkID
+    linkID,
   }: {
     parentNode: Container
     app: IBaseSceneParams['app']
@@ -67,10 +67,7 @@ export default class LinkPoint {
     this.disposeMove()
     this.node.destroy({
       children: true,
-      texture: true,
-      // textureSource: true,
-      context: true,
-      style: true,
+      context:true
     })
   }
 }

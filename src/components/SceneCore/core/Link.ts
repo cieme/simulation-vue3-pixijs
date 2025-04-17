@@ -51,10 +51,7 @@ export default class LinkManager {
     /*  */
     this.node.destroy({
       children: true,
-      texture: true,
-      // textureSource: true,
       context: true,
-      style: true,
     })
   }
   onLinkSuccess = (status: ENUM_LINK_TYPE) => {

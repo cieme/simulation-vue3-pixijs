@@ -144,9 +144,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
       },
       {
         children: true,
-        texture: true,
-        // textureSource: true,
         context: true,
+        texture: false,
+        textureSource: true,
         style: true,
       },
     )
@@ -161,6 +161,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   })
   onBeforeUnmount(() => {
     dispose()
+    // clearAssets()
     window.removeEventListener('resize', resize)
   })
 

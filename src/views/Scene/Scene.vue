@@ -115,7 +115,18 @@ function initTest() {
         { x: -400, y: 400 },
       ],
     }
-    configList.value = [...genData(), xx]
+    const yy: TComponent = {
+      label: `素材sadadada${2}`,
+      type: E_COMPONENT_TYPE.TRACK,
+      id: `素材sadadada${2}`,
+      position: { x: 100, y: 180 },
+      points: [
+        { x: 300, y: 200 },
+        { x: 12, y: 66 },
+        { x: -88, y: 250 },
+      ],
+    }
+    configList.value = [xx, ...genData(), yy]
   }, 0)
 }
 onMounted(() => {

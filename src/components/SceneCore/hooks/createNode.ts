@@ -1,7 +1,7 @@
 import { watchEffect, watch } from 'vue'
 import { Application, Container, Sprite, type FederatedPointerEvent } from 'pixi.js'
 
-import { useCreateText } from '@/components/SceneCore/hooks/createText'
+import { TEXT_Y, useCreateText } from '@/components/SceneCore/hooks/createText'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
 import type {
   ICreateNodeParams,
@@ -97,9 +97,8 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
   /* 文字 */
   const text = useCreateText()
   text.label = 'label'
-  text.position.y = baseWidth
-  text.anchor.x = 0.5
-  text.anchor.y = 1
+  text.position.y = baseWidth / 2 + TEXT_Y
+
   /**
    * 顺序比较重要, 会影响事件
    */
@@ -173,10 +172,7 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
     dispose: () => {
       container.destroy({
         children: true,
-        texture: true,
         context: true,
-        // textureSource: true, // 其他组件可能会用，不在这删
-        style: true,
       })
     },
   }
