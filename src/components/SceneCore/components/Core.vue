@@ -3,7 +3,7 @@
     <slot name="default"></slot>
     <template v-if="props.isSceneLoaded">
       <Distribute
-        :selectedComponent="props.selectedComponent"
+        :Ref_selectedComponent="props.Ref_selectedComponent"
         v-for="item in props.componentList"
         :key="item.id"
         :config="item"
@@ -25,12 +25,12 @@ import type { IBaseProps } from '@/components/SceneCore/types/props'
 import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 interface ICoreProps {
-  selectedComponent: IBaseProps['selectedComponent']
+  Ref_selectedComponent: IBaseProps['Ref_selectedComponent']
   componentList: TComponent[]
   isSceneLoaded: boolean
 }
 const props = withDefaults(defineProps<ICoreProps>(), {
-  selectedComponent: () => [],
+  Ref_selectedComponent: () => [],
   componentList: () => [],
   isSceneLoaded: () => false,
 })

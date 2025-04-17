@@ -31,8 +31,8 @@ export function useDragComponentHook(params: IDragComponentHookParams) {
     const currentMousePosition = event.global
     const { deltaX, deltaY } = getDelta(currentMousePosition)
     /*  */
-    const scaleX = deltaX / userData.refScale.value.x
-    const scaleY = deltaY / userData.refScale.value.y
+    const scaleX = deltaX / userData.Ref_scale.value.x
+    const scaleY = deltaY / userData.Ref_scale.value.y
     moveHandler({
       deltaX,
       deltaY,

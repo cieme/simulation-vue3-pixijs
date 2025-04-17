@@ -45,12 +45,12 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
     app,
     buttons: [E_MOUSE_BUTTON.LEFT],
     moveHandler: ({ scaleX, scaleY }) => {
-      userData.selectedNodes.value.forEach((targetNode) => {
+      userData.Com_selectedNodes.value.forEach((targetNode) => {
         const position = targetNode.node.position
         targetNode.node.position.x = position.x + scaleX
         targetNode.node.position.y = position.y + scaleY
       })
-      const idArray = userData.selectedComponent.value.map((item) => item.id)
+      const idArray = userData.Ref_selectedComponent.value.map((item) => item.id)
       emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, idArray)
       updateLinkPosition()
     },
@@ -92,7 +92,7 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
     dragDispose()
   })
   /*  */
-  userData.nodeList.set(
+  userData.M_nodeList.set(
     config.id,
     new NodeItem({
       id: config.id,
@@ -111,9 +111,9 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
   })
 
   /* 经过检验，销毁时，这里会销毁，不必担心内存泄漏 */
-  watch(userData.selectComponentLength, () => {
+  watch(userData.Com_selectComponentLength, () => {
     let hasSelect = false
-    for (const item of props.selectedComponent) {
+    for (const item of props.Ref_selectedComponent) {
       if (item.id === config.id) {
         hasSelect = true
         break

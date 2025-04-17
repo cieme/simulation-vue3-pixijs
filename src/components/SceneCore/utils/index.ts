@@ -3,7 +3,7 @@ import type { IBaseProps } from '@/components/SceneCore/types/props'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import { nextTick } from 'vue'
 export function hasSelectedComponent(props: IBaseProps, item: TComponent) {
-  return props.selectedComponent.some((componentItem) => componentItem.id === item.id)
+  return props.Ref_selectedComponent.some((componentItem) => componentItem.id === item.id)
 }
 
 export function useSelectedComponent() {
@@ -38,10 +38,10 @@ export function addSelectedComponent(
     return
   }
   if (needClear) {
-    props.selectedComponent.length = 0
+    props.Ref_selectedComponent.length = 0
   }
   nextTick(() => {
-    props.selectedComponent.push(item)
+    props.Ref_selectedComponent.push(item)
   })
 }
 
@@ -51,13 +51,13 @@ export function addSelectedComponentList(
   needClear: boolean = false,
 ) {
   if (needClear) {
-    props.selectedComponent.length = 0
+    props.Ref_selectedComponent.length = 0
   }
-  props.selectedComponent.push(...itemList)
+  props.Ref_selectedComponent.push(...itemList)
 }
 export function replaceSelectedComponentList(
-  selectedComponent: IBaseSceneParams['userData']['selectedComponent'],
+  Ref_selectedComponent: IBaseSceneParams['userData']['Ref_selectedComponent'],
   itemList: TComponent[],
 ) {
-  selectedComponent.value = itemList
+  Ref_selectedComponent.value = itemList
 }

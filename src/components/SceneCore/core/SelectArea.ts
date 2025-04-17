@@ -23,11 +23,11 @@ export default class SelectArea {
   gap = 10
   selectedComponentMapInstance = useSelectedComponent()
   eventNode: Container
-  alignConfigMap: Map<string, (typeof this.userData.configList.value)[number]> = new Map()
+  alignConfigMap: Map<string, (typeof this.userData.Ref_configList.value)[number]> = new Map()
   computedUserConfigObject = computed(() => {
     this.alignConfigMap.clear()
-    for (let i = 0; i < this.userData.configList.value.length; i++) {
-      const item = this.userData.configList.value[i]
+    for (let i = 0; i < this.userData.Ref_configList.value.length; i++) {
+      const item = this.userData.Ref_configList.value[i]
       this.alignConfigMap.set(item.id, item)
     }
     return this.alignConfigMap
@@ -155,16 +155,16 @@ export default class SelectArea {
 
   checkoutArea(data: ReturnType<typeof this.getArea>) {
     /* TODO */
-    const nodeMap = this.userData.nodeList
-    const configList = this.userData.configList.value
-    // const keys = Array.from(nodeList.keys())
+    const nodeMap = this.userData.M_nodeList
+    const Ref_configList = this.userData.Ref_configList.value
+    // const keys = Array.from(M_nodeList.keys())
     this.selectedComponentMapInstance.clear()
 
     for (const item of nodeMap) {
       const node = item[1].iconNode
       if (!node) continue
       if (this.detectIntersection(node, data)) {
-        const config: (typeof configList)[number] | undefined =
+        const config: (typeof Ref_configList)[number] | undefined =
           this.computedUserConfigObject.value.get(item[0])
 
         if (config) {
@@ -177,7 +177,7 @@ export default class SelectArea {
 
   updateSelectedComponent = throttleForResize<void>(() => {
     replaceSelectedComponentList(
-      this.userData.selectedComponent,
+      this.userData.Ref_selectedComponent,
       this.selectedComponentMapInstance.getValues(),
     )
   })

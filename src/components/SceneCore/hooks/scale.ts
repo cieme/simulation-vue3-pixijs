@@ -5,12 +5,12 @@ export function useScale({
   targetNode,
   app,
   scale,
-  refScale,
+  Ref_scale,
 }: {
   targetNode: Container
   app: Application
   scale?: number
-  refScale: PointData
+  Ref_scale: PointData
 }) {
   if (scale) {
     targetNode.scale.set(scale, scale)
@@ -19,9 +19,9 @@ export function useScale({
   const maxScale = 5
   // 根据鼠标位置,缩放
   const onWheel = (e: FederatedWheelEvent) => {
-    const currentScale = new Big(refScale.x)
+    const currentScale = new Big(Ref_scale.x)
 
-    const beforeNodeScaleX = refScale.x
+    const beforeNodeScaleX = Ref_scale.x
     let afterNodeScaleX = beforeNodeScaleX
     /* 需要计算变化之后位置 */
     let delta = 0.1
@@ -33,9 +33,9 @@ export function useScale({
       afterNodeScaleX = newScale.toNumber()
       /*  */
       calcPosition(e, beforeNodeScaleX, afterNodeScaleX, targetNode)
-      refScale.x = afterNodeScaleX
-      refScale.y = afterNodeScaleX
-      // targetNode.scale = refScale
+      Ref_scale.x = afterNodeScaleX
+      Ref_scale.y = afterNodeScaleX
+      // targetNode.scale = Ref_scale
     }
   }
 
@@ -50,13 +50,13 @@ export function useScale({
     removeEvent()
   }
   const resetScale = () => {
-    refScale.x = 1
-    refScale.y = 1
+    Ref_scale.x = 1
+    Ref_scale.y = 1
     targetNode.scale.set(1, 1)
     targetNode.position.set(0, 0)
   }
   return {
-    refScale,
+    Ref_scale,
     minScale,
     maxScale,
     addEvent,

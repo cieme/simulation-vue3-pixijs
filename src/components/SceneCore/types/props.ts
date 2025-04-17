@@ -1,6 +1,6 @@
 import type { IBaseComponent, ISourceComponent,ITrackComponent } from '@/components/SceneCore/types/base'
 export interface IBaseProps {
-  selectedComponent: IBaseComponent[]
+  Ref_selectedComponent: IBaseComponent[]
 }
 export interface ISourceProps extends IBaseProps {
   config: ISourceComponent

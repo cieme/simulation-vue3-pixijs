@@ -30,7 +30,7 @@ import '@/components/SceneCore/core/MU/MU'
  *
  * @export
  * @param {Ref<HTMLDivElement | undefined>} refTarget
- * @returns {{ app: any; assets: any; root: any; showComponent: any; initStage: () => any; selectedComponent: any; selectedNodes: any; }}
+ * @returns {{ app: any; assets: any; root: any; showComponent: any; initStage: () => any; Ref_selectedComponent: any; Com_selectedNodes: any; }}
  */
 export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   // useStats()
@@ -45,22 +45,22 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   const { node: trackLabelManagerNode } = useRootContainer('trackLabelManager')
 
   /* 2 */
-  const grid = new Grid()
+  const Ins_Grid = new Grid()
 
-  const nodeList: ICreateNodeParams['userData']['nodeList'] = new Map()
-  const selectedComponent = ref<IBaseProps['selectedComponent']>([])
-  const selectedNodes = computed(() => {
-    const list = selectedComponent.value
+  const M_nodeList: ICreateNodeParams['userData']['M_nodeList'] = new Map()
+  const Ref_selectedComponent = ref<IBaseProps['Ref_selectedComponent']>([])
+  const Com_selectedNodes = computed(() => {
+    const list = Ref_selectedComponent.value
       .map((node) => {
-        return nodeList.get(node.id)
+        return M_nodeList.get(node.id)
       })
       .filter((item) => !!item)
 
     return list
   })
-  const configList = ref<TComponent[]>([])
-  const selectComponentLength = computed(() => {
-    return selectedComponent.value.length
+  const Ref_configList = ref<TComponent[]>([])
+  const Com_selectComponentLength = computed(() => {
+    return Ref_selectedComponent.value.length
   })
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     app,
@@ -69,23 +69,23 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     trackManagerNode,
     trackLabelManagerNode,
     /*  */
-    configList,
-    nodeList,
-    selectedNodes,
-    selectedComponent,
-    selectComponentLength,
-    operationStatus: ref(ENUM_TOOL.SELECT),
-    refScale: ref<PointData>(root.scale),
-    currentLink: null,
-    linkReactive: {
+    Ref_configList,
+    M_nodeList,
+    Com_selectedNodes,
+    Ref_selectedComponent,
+    Com_selectComponentLength,
+    Ref_operationStatus: ref(ENUM_TOOL.SELECT),
+    Ref_scale: ref<PointData>(root.scale),
+    Ins_currentLink: null,
+    linkModule: {
       status: null,
       startComponentConfig: null,
       linking: null,
       LinkData: [],
       reset: () => {
-        userData.linkReactive.status = null
-        userData.linkReactive.startComponentConfig = null
-        userData.linkReactive.linking = null
+        userData.linkModule.status = null
+        userData.linkModule.startComponentConfig = null
+        userData.linkModule.linking = null
       },
     },
   })
@@ -103,12 +103,12 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     assets,
     userData,
     props: {
-      selectedComponent,
+      Ref_selectedComponent,
     },
   }
   /* 4 */
-  const selectArea = new SelectArea(shallowParams)
-  const linkInstance = new LinkManager(shallowParams)
+  const Ins_selectArea = new SelectArea(shallowParams)
+  const Ins_linkManager = new LinkManager(shallowParams)
 
   /* 5 */
   async function initStage() {
@@ -121,16 +121,16 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     })
     initDevtools({ app })
     app.stage.label = 'stage'
-    root.addChild(grid.node)
-    root.addChild(selectArea.node)
+    root.addChild(Ins_Grid.node)
+    root.addChild(Ins_selectArea.node)
     /* 这个顺序很重要，顺序错了会多一次重绘 */
     root.addChild(trackManagerNode)
     root.addChild(trackLabelManagerNode)
-    root.addChild(linkInstance.node)
+    root.addChild(Ins_linkManager.node)
     /*  */
     app.stage.addChild(root)
-    selectArea.init()
-    linkInstance.init()
+    Ins_selectArea.init()
+    Ins_linkManager.init()
     refTarget.value!.appendChild(app.canvas)
     addAppEvent()
     hasApp.value = true
@@ -190,21 +190,21 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   }
   const appMouseDownHandler = (e: FederatedPointerEvent) => {
     console.log('scene mousedown')
-    selectedComponent.value.length = 0
-    linkInstance.clearPointAndClearCurrentLink()
+    Ref_selectedComponent.value.length = 0
+    Ins_linkManager.clearPointAndClearCurrentLink()
     emitter.emit(E_EVENT_SCENE.MOUSE_DOWN_SCENE, e)
   }
 
-  const keyDownMap = new Map()
+  const M_keyDown = new Map()
   const onkeyDown = (e: KeyboardEvent) => {
     if (e.defaultPrevented) {
       return // 如果事件已经在进行中，则不做任何事。
     }
-    if (keyDownMap.has(e.code)) {
+    if (M_keyDown.has(e.code)) {
       return
     }
     console.log(e)
-    keyDownMap.set(e.code, true)
+    M_keyDown.set(e.code, true)
     switch (e.code) {
       case ENUM_BOARD_CODE.Delete:
       case ENUM_BOARD_CODE.Backspace:
@@ -218,70 +218,72 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     // e.preventDefault()
   }
   const onkeyUp = (e: KeyboardEvent) => {
-    keyDownMap.delete(e.code)
+    M_keyDown.delete(e.code)
   }
   const boardDelete = (e: KeyboardEvent) => {
     /* 如果有组件选中，删除组件，如果有连接线选中，删除连接线 */
-    if (selectedComponent.value.length > 0) {
+    if (Ref_selectedComponent.value.length > 0) {
       const linkArray: string[] = ([] = [])
-      selectedComponent.value.forEach((item) => {
+      Ref_selectedComponent.value.forEach((item) => {
         /* 删除节点缓存 */
-        nodeList.delete(item.id)
+        M_nodeList.delete(item.id)
         /* 删除组件 */
-        const index = userData.configList.value.findIndex((component) => component.id === item.id)
-        userData.configList.value.splice(index, 1)
+        const index = userData.Ref_configList.value.findIndex(
+          (component) => component.id === item.id,
+        )
+        userData.Ref_configList.value.splice(index, 1)
         /* 删除连接线 */
-        for (let index = 0; index < userData.linkReactive.LinkData.length; index++) {
-          const linkItem = userData.linkReactive.LinkData[index]
+        for (let index = 0; index < userData.linkModule.LinkData.length; index++) {
+          const linkItem = userData.linkModule.LinkData[index]
           if (linkItem.start === item.id || linkItem.end === item.id) {
-            const id = userData.linkReactive.LinkData[index].uniqueId
+            const id = userData.linkModule.LinkData[index].uniqueId
             linkArray.push(id)
-            linkInstance.deleteLink(id)
+            Ins_linkManager.deleteLink(id)
             index--
           }
         }
       })
       /* 清掉选中的 */
-      selectedComponent.value.length = 0
+      Ref_selectedComponent.value.length = 0
       /* 假如确实有删除的连接线，重新渲染连接线 */
       if (linkArray.length > 0) {
         reRenderLink()
       }
     }
     /* 删除连接线 */
-    if (userData.currentLink) {
-      const id = userData.currentLink.uniqueId
-      linkInstance.deleteLink(id)
+    if (userData.Ins_currentLink) {
+      const id = userData.Ins_currentLink.uniqueId
+      Ins_linkManager.deleteLink(id)
       reRenderLink()
     }
   }
 
   function reRenderLink() {
-    linkInstance.clearPointAndClearCurrentLink()
-    linkInstance.render()
+    Ins_linkManager.clearPointAndClearCurrentLink()
+    Ins_linkManager.render()
   }
-  watch(userData.selectComponentLength, (val) => {
-    userData.currentLink = null
-    linkInstance.clearPointAndClearCurrentLink()
+  watch(userData.Com_selectComponentLength, (val) => {
+    userData.Ins_currentLink = null
+    Ins_linkManager.clearPointAndClearCurrentLink()
   })
   return {
     hasApp,
     isSceneLoaded,
     initStage,
-    selectedNodes,
+    Com_selectedNodes,
     userData,
-    selectedComponent,
-    linkInstance,
+    Ref_selectedComponent,
+    Ins_linkManager,
   }
 }
 export function useStats() {
-  const stats = new Stats()
-  stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.body.appendChild(stats.dom)
+  const Ins_stats = new Stats()
+  Ins_stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+  document.body.appendChild(Ins_stats.dom)
   const update = () => {
-    stats.update()
+    Ins_stats.update()
     requestAnimationFrame(update)
   }
   update()
-  return stats
+  return Ins_stats
 }

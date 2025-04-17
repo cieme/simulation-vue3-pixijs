@@ -30,7 +30,7 @@ export default class MU {
    * 网格物料
    * @type {{ [key: string]: string }}
    */
-  _gridMu: { [key: string]: string } = {}
+  _Ins_GridMu: { [key: string]: string } = {}
 
   /*  */
   constructor({ layout, componentSize }: IMUParams) {
@@ -45,7 +45,7 @@ export default class MU {
     const maxZ = this.layout.z
     const maxX = this.layout.x
     const maxY = this.layout.y
-    const box = this._gridMu
+    const box = this._Ins_GridMu
     for (let y = 0; y < maxY; y++) {
       for (let x = 0; x < maxX; x++) {
         for (let z = 0; z < maxZ; z++) {
@@ -68,7 +68,7 @@ export default class MU {
   cacheZ = 0
   placeOneItemWithCache() {
     const { x: maxX, y: maxY, z: maxZ } = this.layout
-    const box = this._gridMu
+    const box = this._Ins_GridMu
 
     for (let y = this.cacheY; y < maxY; y++) {
       for (let x = this.cacheX; x < maxX; x++) {

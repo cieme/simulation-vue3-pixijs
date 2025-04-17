@@ -1,7 +1,7 @@
 <template>
   <a-space>
     <a-radio-group
-      :value="userData.operationStatus"
+      :value="userData.Ref_operationStatus"
       buttonStyle="solid"
       :size="state.size"
       @change="changeToolStatus"
@@ -13,7 +13,7 @@
         <NodeIndexOutlined />
       </a-radio-button>
     </a-radio-group>
-    <a-button title="缩放" size="small" class="w-10 text-center">{{ refScale.x }}</a-button>
+    <a-button title="缩放" size="small" class="w-10 text-center">{{ Ref_scale.x }}</a-button>
     <a-button title="缩放" size="small" @click="resetScale"><ReloadOutlined /></a-button>
     <a-button title="截图" size="small" type="primary" @click="shotScreen"
       ><VideoCameraOutlined
@@ -42,11 +42,11 @@ import { useScale } from '@/components/SceneCore/hooks/scale'
 import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 interface IToolProps {
   userData: ICreateNodeParams['userData']
-  refScale: PointData
+  Ref_scale: PointData
 }
 const props = withDefaults(defineProps<IToolProps>(), {
   userData: () => ({}) as ICreateNodeParams['userData'],
-  refScale: () => ({ x: 1, y: 1 }) as PointData,
+  Ref_scale: () => ({ x: 1, y: 1 }) as PointData,
 })
 
 const state = reactive<{ size: RadioGroupProps['size'] }>({
@@ -55,7 +55,7 @@ const state = reactive<{ size: RadioGroupProps['size'] }>({
 setTimeout(() => {}, 0)
 const changeToolStatus = (e: RadioChangeEvent) => {
   // eslint-disable-next-line vue/no-mutating-props
-  props.userData.operationStatus.value = e.target.value
+  props.userData.Ref_operationStatus.value = e.target.value
   emitter.emit(E_EVENT_SCENE.SCENE_OPERATION_STATUS, e.target.value)
 }
 
@@ -88,7 +88,7 @@ let disposeScale: (() => void) | null = null
 const { dispose, minScale, maxScale, addEvent, resetScale } = useScale({
   targetNode: props.userData.root,
   app: props.userData.app,
-  refScale: props.refScale,
+  Ref_scale: props.Ref_scale,
 })
 
 disposeScale = dispose

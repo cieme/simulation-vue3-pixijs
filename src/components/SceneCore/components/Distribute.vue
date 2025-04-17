@@ -20,7 +20,7 @@ export default defineComponent({
       required: true,
       default: () => ({}),
     },
-    selectedComponent: {
+    Ref_selectedComponent: {
       type: Array as () => IBaseComponent[],
       default: () => [],
     },
@@ -30,14 +30,14 @@ export default defineComponent({
       return () => (
         <SourceComponent
           config={props.config as ISourceComponent}
-          selectedComponent={props.selectedComponent}
+          Ref_selectedComponent={props.Ref_selectedComponent}
         />
       )
     } else if (props.config.type === E_COMPONENT_TYPE.TRACK) {
       return () => (
         <TrackComponent
           config={props.config as ITrackComponent}
-          selectedComponent={props.selectedComponent}
+          Ref_selectedComponent={props.Ref_selectedComponent}
         />
       )
     }

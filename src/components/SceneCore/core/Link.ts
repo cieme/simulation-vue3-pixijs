@@ -94,7 +94,7 @@ export default class LinkManager {
     emitter.off(E_EVENT_SCENE.MOUSE_DOWN_SCENE, this.onSceneMouseDown)
   }
   selectLink = (e: FederatedPointerEvent) => {
-    if (this.userData.linkReactive.linking) return
+    if (this.userData.linkModule.linking) return
     if (e.button !== E_MOUSE_BUTTON.LEFT) return
     e.stopPropagation()
     // e.stopPropagation() // 不加这行会自动 清除选择的组件,如果增加，因为面板互斥,需要手动清除，暂时自动清除
@@ -104,16 +104,16 @@ export default class LinkManager {
       return hit
     })
 
-    if (!polygonOne || !this.userData?.linkReactive) return
-    const link = this.userData.linkReactive.LinkData.find((item) => item.uniqueId === polygonOne.id)
+    if (!polygonOne || !this.userData?.linkModule) return
+    const link = this.userData.linkModule.LinkData.find((item) => item.uniqueId === polygonOne.id)
 
     if (link) {
-      this.userData.selectedComponent.value.length = 0
+      this.userData.Ref_selectedComponent.value.length = 0
       /* 这行有用，如果没选组件，也要清除一次 */
       this.clearPointAndClearCurrentLink()
       /* 这微任务是因为 scene watch 了 组件数量 */
       Promise.resolve().then(() => {
-        this.userData.currentLink = link
+        this.userData.Ins_currentLink = link
         for (let index = 0; index < link.point.length; index++) {
           const point = new LinkPoint({
             parentNode: this.node,
@@ -128,10 +128,10 @@ export default class LinkManager {
   }
   /*  */
   deleteLink(id: string) {
-    for (let index = 0; index < this.userData.linkReactive.LinkData.length; index++) {
-      const item = this.userData.linkReactive.LinkData[index]
+    for (let index = 0; index < this.userData.linkModule.LinkData.length; index++) {
+      const item = this.userData.linkModule.LinkData[index]
       if (item.uniqueId === id) {
-        this.userData.linkReactive.LinkData.splice(index, 1)
+        this.userData.linkModule.LinkData.splice(index, 1)
         const { linkLabelNode, index: i } = this.getLinkLabelNodeById(id)
         if (linkLabelNode) {
           linkLabelNode.start.destroy()
@@ -147,7 +147,7 @@ export default class LinkManager {
    * 销毁拐点
    */
   clearPointAndClearCurrentLink() {
-    this.userData.currentLink = null
+    this.userData.Ins_currentLink = null
     for (let index = 0; index < this.pointList.length; index++) {
       const point = this.pointList[index]
       point.dispose()
@@ -171,10 +171,10 @@ export default class LinkManager {
 
   convert() {
     this.PolygonList = []
-    this.userData.linkReactive.LinkData.forEach((item) => {
+    this.userData.linkModule.LinkData.forEach((item) => {
       const points: PointData[] = []
 
-      const startNode = this.userData.nodeList.get(item.start)?.nextLinkNode
+      const startNode = this.userData.M_nodeList.get(item.start)?.nextLinkNode
       const startLocalPosition = startNode?.getGlobalPosition()
       if (startLocalPosition) {
         const startPosition = this.toLocal(startLocalPosition)
@@ -188,7 +188,7 @@ export default class LinkManager {
       })
       points.push(...linkingPoints)
       if (item.end) {
-        const endNode = this.userData.nodeList.get(item.end)?.prevLinkNode
+        const endNode = this.userData.M_nodeList.get(item.end)?.prevLinkNode
         const endLocalPosition = endNode?.getGlobalPosition()
         if (endLocalPosition) {
           const endPosition = this.toLocal(endLocalPosition)
@@ -224,9 +224,9 @@ export default class LinkManager {
   }
   drawing() {
     const points: PointData[] = []
-    if (this.userData.linkReactive.linking) {
-      const startNode = this.userData.nodeList.get(
-        this.userData.linkReactive.linking.start,
+    if (this.userData.linkModule.linking) {
+      const startNode = this.userData.M_nodeList.get(
+        this.userData.linkModule.linking.start,
       )?.nextLinkNode
       const startLocalPosition = startNode?.getGlobalPosition()
       if (startLocalPosition) {
@@ -235,12 +235,12 @@ export default class LinkManager {
           points.push(startPosition)
         }
       }
-      const linkingPoints = this.userData.linkReactive.linking.point.map((item) => {
+      const linkingPoints = this.userData.linkModule.linking.point.map((item) => {
         return item
       })
       points.push(...linkingPoints)
-      if (this.userData.linkReactive.linking.linking) {
-        points.push(this.toLocal(this.userData.linkReactive.linking.linking))
+      if (this.userData.linkModule.linking.linking) {
+        points.push(this.toLocal(this.userData.linkModule.linking.linking))
       }
     }
     const numberPoints = this.PointDataToNumber(points)
@@ -414,7 +414,7 @@ export default class LinkManager {
     }
   }
   getLinkArrayByComponentIdArray(componentIdArray: string[]) {
-    const linkArray = this.userData.linkReactive.LinkData.filter((item) => {
+    const linkArray = this.userData.linkModule.LinkData.filter((item) => {
       if (!item.end) {
         return componentIdArray.includes(item.start)
       }

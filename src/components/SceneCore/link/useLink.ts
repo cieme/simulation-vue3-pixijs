@@ -20,7 +20,7 @@ export function useNextLink({ startComponentConfig, userData }: IUseLinkParams) 
   const texture = userData.assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.label = 'nextLink'
-  nextLink.tint = 0x76efff
+  // nextLink.tint = 0x76efff
   nextLink.anchor.set(0.5, 0.5)
 
   const operationHandler = (status: ENUM_TOOL) => {
@@ -41,12 +41,12 @@ export function useNextLink({ startComponentConfig, userData }: IUseLinkParams) 
       if (e.button !== E_MOUSE_BUTTON.LEFT) return
       e.stopPropagation()
       /* 如果是第一次进入连线状态 */
-      if (userData.linkReactive.status === null) {
-        userData.linkReactive.status = ENUM_LINK_TYPE.LINK_IN
-        userData.linkReactive.startComponentConfig = startComponentConfig
+      if (userData.linkModule.status === null) {
+        userData.linkModule.status = ENUM_LINK_TYPE.LINK_IN
+        userData.linkModule.startComponentConfig = startComponentConfig
 
         const link = new Link({ uniqueId: uuid(), start: startComponentConfig!.id })
-        userData.linkReactive.linking = link
+        userData.linkModule.linking = link
         const { dispose: AppDispose } = appLink({
           link,
           userData,
@@ -101,7 +101,7 @@ export function usePrevLink({ startComponentConfig, userData }: IUseLinkParams) 
   const texture = userData.assets.sheet?.textures['images/icon/link_dot.png']
   const prevLink = new Sprite(texture)
   prevLink.label = 'prevLink'
-  prevLink.tint = 0xea5480
+  // prevLink.tint = 0xea5480
   prevLink.anchor.set(0.5, 0.5)
 
   function onLinkIn(type: ENUM_LINK_TYPE) {
@@ -130,17 +130,17 @@ export function usePrevLink({ startComponentConfig, userData }: IUseLinkParams) 
       /* 不能链接自己 */
       if (
         startComponentConfig &&
-        userData.linkReactive.startComponentConfig &&
-        startComponentConfig.id === userData.linkReactive.startComponentConfig.id
+        userData.linkModule.startComponentConfig &&
+        startComponentConfig.id === userData.linkModule.startComponentConfig.id
       ) {
         console.log('不能链接自己')
       } else {
-        const link = userData.linkReactive.linking
+        const link = userData.linkModule.linking
         if (link) {
           link.end = startComponentConfig!.id
-          userData.linkReactive.LinkData.push(link)
+          userData.linkModule.LinkData.push(link)
           emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_SUCCESS)
-          userData.linkReactive.reset()
+          userData.linkModule.reset()
         }
       }
     })
@@ -191,7 +191,7 @@ export function appLink({
   }
   const onRightDown = (e: FederatedPointerEvent) => {
     emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_CANCEL)
-    userData.linkReactive.reset()
+    userData.linkModule.reset()
     dispose()
   }
   const pointerMove = throttleForResize<FederatedPointerEvent>((e) => {

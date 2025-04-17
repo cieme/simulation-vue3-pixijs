@@ -10,7 +10,7 @@ import type { ISourceProps } from '@/components/SceneCore/types/props'
 
 const props = withDefaults(defineProps<ISourceProps>(), {
   config: () => ({}) as ISourceComponent,
-  selectedComponent: () => [],
+  Ref_selectedComponent: () => [],
 })
 
 const { userData } = useApp()

@@ -14,12 +14,12 @@
           v-if="isSceneLoaded"
           class="tool-bar absolute top-2 left-2 z-10"
           :userData="userData"
-          :ref-scale="userData.refScale.value"
+          :Ref_scale="userData.Ref_scale.value"
         ></Tool>
         <Core
-          :selectedComponent="selectedComponent"
+          :Ref_selectedComponent="Ref_selectedComponent"
           :isSceneLoaded="isSceneLoaded"
-          :componentList="configList"
+          :componentList="Ref_configList"
         >
           <template #default>
             <div class="w-full h-full" ref="refTarget"></div>
@@ -45,8 +45,8 @@ import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 const refTarget = ref<HTMLDivElement>()
 
-const { selectedComponent, userData, linkInstance, isSceneLoaded } = useScene(refTarget)
-const configList = userData.configList
+const { Ref_selectedComponent, userData, Ins_linkManager, isSceneLoaded } = useScene(refTarget)
+const Ref_configList = userData.Ref_configList
 let timer: number | null = null
 
 function genData() {
@@ -94,10 +94,10 @@ function initTest() {
       ],
     })
     // link.end = '2'
-    userData.linkReactive.LinkData.push(link)
-    userData.linkReactive.LinkData.push(link2)
-    linkInstance.render()
-    linkInstance.genAllLabelNodes()
+    userData.linkModule.LinkData.push(link)
+    userData.linkModule.LinkData.push(link2)
+    Ins_linkManager.render()
+    Ins_linkManager.genAllLabelNodes()
   }, 1e3)
   setTimeout(() => {
     const xx: TComponent = {
@@ -122,7 +122,7 @@ function initTest() {
         { x: -88, y: 250 },
       ],
     }
-    configList.value = [xx, ...genData(), yy]
+    Ref_configList.value = [xx, ...genData(), yy]
   }, 0)
 }
 onMounted(() => {

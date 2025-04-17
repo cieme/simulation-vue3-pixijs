@@ -11,7 +11,7 @@ import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 
 const props = withDefaults(defineProps<ITrackProps>(), {
   config: () => ({}) as ITrackComponent,
-  selectedComponent: () => [],
+  Ref_selectedComponent: () => [],
 })
 
 const { userData } = useApp()
