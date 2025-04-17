@@ -8,9 +8,9 @@ import type { ICreateNodeParams, IGlobalToLocalParams } from '@/components/Scene
  * @returns {{ app: Application; assets: any; root: Container; userData: ICreateNodeParams["userData"]; }}
  */
 export function useApp() {
-  const app = inject<ICreateNodeParams['app']>('app')
-  const assets = inject<ICreateNodeParams['assets']>('assets')
-  const root = inject<ICreateNodeParams['root']>('root')
+  const app = inject<ICreateNodeParams['userData']['app']>('app')
+  const assets = inject<ICreateNodeParams['userData']['assets']>('assets')
+  const root = inject<ICreateNodeParams['userData']['root']>('root')
   const userData = inject<ICreateNodeParams['userData']>('userData')
   return {
     app: app as Application,

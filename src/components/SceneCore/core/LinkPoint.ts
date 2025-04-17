@@ -4,7 +4,6 @@ import { E_MOUSE_BUTTON } from '@/components/SceneCore/enum/ENUM_MOUSE'
 import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
 import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 export default class LinkPoint {
-  app: IBaseSceneParams['app']
   userData: IBaseSceneParams['userData']
   node: Graphics = new Graphics()
   parentNode: Container
@@ -13,18 +12,17 @@ export default class LinkPoint {
   disposeMove: ReturnType<typeof useDragComponentHook>['dispose']
   constructor({
     parentNode,
-    app,
+
     userData,
     position,
     linkID,
   }: {
     parentNode: Container
-    app: IBaseSceneParams['app']
+
     userData: IBaseSceneParams['userData']
     position: PointData
     linkID: string
   }) {
-    this.app = app
     this.userData = userData
     this.node.pivot.set(5, 5)
     this.node.interactive = true
@@ -34,7 +32,7 @@ export default class LinkPoint {
     this.linkID = linkID
     const { dispose } = useDragComponentHook({
       eventNode: this.node,
-      app: this.app,
+      app: this.userData.app,
       userData: this.userData,
       buttons: [E_MOUSE_BUTTON.LEFT],
       downHandler: (e) => {
@@ -67,7 +65,7 @@ export default class LinkPoint {
     this.disposeMove()
     this.node.destroy({
       children: true,
-      context:true
+      context: true,
     })
   }
 }

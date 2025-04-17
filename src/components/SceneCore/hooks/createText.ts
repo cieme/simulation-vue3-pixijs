@@ -23,7 +23,7 @@ export function useCreateLabelNode(): Sprite {
 }
 export function useCreateLabelText(
   text: string,
-  assets: IBaseSceneParams['assets'],
+  assets: IBaseSceneParams['userData']['assets'],
 ): Texture | undefined {
   const texture = assets.sheet?.textures[`images/label_number/${text}.png`]
   return texture

@@ -22,20 +22,17 @@ import type {
   ITrackComponent,
 } from '@/components/SceneCore/types/base'
 import type { IBaseProps } from '@/components/SceneCore/types/props'
-import type { IAssets } from '@/components/SceneCore/types/hooks/index'
 import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 interface ICoreProps {
   selectedComponent: IBaseProps['selectedComponent']
   componentList: TComponent[]
-  assets: Reactive<IAssets>
   isSceneLoaded: boolean
 }
 const props = withDefaults(defineProps<ICoreProps>(), {
   selectedComponent: () => [],
   componentList: () => [],
-  assets: () => ({}) as Reactive<IAssets>,
-    isSceneLoaded: () => false,
+  isSceneLoaded: () => false,
 })
 
 type Tets<T> = T extends E_COMPONENT_TYPE.SOURCE

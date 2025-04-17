@@ -41,15 +41,11 @@ import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHoo
 import { useScale } from '@/components/SceneCore/hooks/scale'
 import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 interface IToolProps {
-  app: Application
   userData: ICreateNodeParams['userData']
-  root: ICreateNodeParams['root']
   refScale: PointData
 }
 const props = withDefaults(defineProps<IToolProps>(), {
-  app: () => ({}) as Application,
   userData: () => ({}) as ICreateNodeParams['userData'],
-  root: () => ({}) as ICreateNodeParams['root'],
   refScale: () => ({ x: 1, y: 1 }) as PointData,
 })
 
@@ -67,15 +63,15 @@ let disposeDrag: (() => void) | null = null
 
 function addMoveEvent() {
   const { dispose } = useDragComponentHook({
-    eventNode: props.app.stage,
-    app: props.app,
+    eventNode: props.userData.app.stage,
+    app: props.userData.app,
     userData: props.userData,
     buttons: [E_MOUSE_BUTTON.MIDDLE],
     moveHandler: ({ deltaX, deltaY }) => {
       // eslint-disable-next-line vue/no-mutating-props
-      props.root.position.x = props.root.position.x + deltaX
+      props.userData.root.position.x = props.userData.root.position.x + deltaX
       // eslint-disable-next-line vue/no-mutating-props
-      props.root.position.y = props.root.position.y + deltaY
+      props.userData.root.position.y = props.userData.root.position.y + deltaY
     },
   })
   disposeDrag = dispose
@@ -90,8 +86,8 @@ function removeMoveEvent() {
 }
 let disposeScale: (() => void) | null = null
 const { dispose, minScale, maxScale, addEvent, resetScale } = useScale({
-  targetNode: props.root,
-  app: props.app,
+  targetNode: props.userData.root,
+  app: props.userData.app,
   refScale: props.refScale,
 })
 
@@ -111,7 +107,7 @@ onBeforeUnmount(() => {
   removeScaleEvent()
 })
 const shotScreen = () => {
-  props.app.canvas.toBlob(
+  props.userData.app.canvas.toBlob(
     (blob) => {
       if (!blob) return
       const a = document.createElement('a')

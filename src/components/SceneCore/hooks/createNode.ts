@@ -30,7 +30,8 @@ import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 
 export function useCreateNode(params: ICreateSourceParams): ICreateNodeReturn
 export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
-  const { props, config, assets, root, app, userData } = params
+  const { props, config, userData } = params
+  const { assets, root, app } = userData
   const baseWidth = 40
   /* 盒子 */
   const container = new Container()

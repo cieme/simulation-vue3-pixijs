@@ -14,13 +14,10 @@
           v-if="isSceneLoaded"
           class="tool-bar absolute top-2 left-2 z-10"
           :userData="userData"
-          :app="app"
-          :root="root"
           :ref-scale="userData.refScale.value"
         ></Tool>
         <Core
           :selectedComponent="selectedComponent"
-          :assets="assets"
           :isSceneLoaded="isSceneLoaded"
           :componentList="configList"
         >
@@ -48,7 +45,7 @@ import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 const refTarget = ref<HTMLDivElement>()
 
-const { selectedComponent, userData, app, root, assets, linkInstance, isSceneLoaded } =
+const { selectedComponent, userData, linkInstance, isSceneLoaded } =
   useScene(refTarget)
 const configList = userData.configList
 let timer: number | null = null

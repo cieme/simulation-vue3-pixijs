@@ -14,10 +14,9 @@ import { E_MOUSE_BUTTON } from '../enum/ENUM_MOUSE'
 import LinkPoint from './LinkPoint'
 import { useCreateLabelNode, useCreateLabelText } from '@/components/SceneCore/hooks/createText'
 export default class LinkManager {
-  app: IBaseSceneParams['app']
-  root: IBaseSceneParams['root']
+
   userData: IBaseSceneParams['userData']
-  assets: IBaseSceneParams['assets']
+
   /*  */
   node = new Container()
   graphics = new Graphics()
@@ -28,11 +27,11 @@ export default class LinkManager {
   labelLength = 32
 
   pointList: LinkPoint[] = []
-  constructor({ app, root, userData, assets }: IBaseSceneParams) {
-    this.app = app
-    this.root = root
+  constructor({  userData }: IBaseSceneParams) {
+
+
     this.userData = userData
-    this.assets = assets
+
     this.node.label = 'LinkManager'
     this.node.addChild(this.graphics)
     this.onEmit()
@@ -118,7 +117,6 @@ export default class LinkManager {
         for (let index = 0; index < link.point.length; index++) {
           const point = new LinkPoint({
             parentNode: this.node,
-            app: this.app,
             userData: this.userData,
             position: link.point[index],
             linkID: link.uniqueId,
@@ -321,8 +319,8 @@ export default class LinkManager {
       })
       this.node.addChild(startTextNode)
       this.node.addChild(endTextNode)
-      const startTexture = useCreateLabelText('1', this.assets)
-      const endTexture = useCreateLabelText('2', this.assets)
+      const startTexture = useCreateLabelText('1', this.userData.assets)
+      const endTexture = useCreateLabelText('2', this.userData.assets)
       if (startTexture) {
         startTextNode.texture = startTexture
       }

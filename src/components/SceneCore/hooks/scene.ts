@@ -64,6 +64,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     return selectedComponent.value.length
   })
   const userData = shallowReactive<ICreateNodeParams['userData']>({
+    app,
+    assets,
+    root,
     configList,
     nodeList,
     selectedNodes,
@@ -256,9 +259,6 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     linkInstance.clearPointAndClearCurrentLink()
   })
   return {
-    app,
-    assets,
-    root,
     hasApp,
     isSceneLoaded,
     initStage,

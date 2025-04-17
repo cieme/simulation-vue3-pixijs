@@ -16,20 +16,18 @@ const props = withDefaults(defineProps<ITrackProps>(), {
 
 const { app, assets, root, userData } = useApp()
 let disposeNode: () => void
-function init(app: Application, assets: IBaseSceneParams['assets']) {
+function init(app: Application) {
   const { addToScene, dispose } = useCreateTrack({
     props,
     config: props.config,
-    app,
-    assets,
-    root,
+
     userData,
   })
   addToScene(app)
   disposeNode = dispose
 }
 onMounted(() => {
-  init(app as Application, assets as IBaseSceneParams['assets'])
+  init(app as Application)
 })
 onUnmounted(() => {
   if (disposeNode) {

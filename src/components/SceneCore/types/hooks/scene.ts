@@ -24,10 +24,10 @@ export interface IAssets {
   isLoaded: boolean
 }
 export interface IBaseSceneParams {
-  assets: Reactive<IAssets>
-  root: Container
-  app: Application
   userData: {
+    assets: Reactive<IAssets>
+    root: Container
+    app: Application
     currentLink: Link | null
     selectedComponent: Ref<IBaseComponent[]>
     selectComponentLength: ComputedRef<number>

@@ -1,7 +1,7 @@
 import { watchEffect, watch } from 'vue'
 import { Application, Container, Graphics, type FederatedPointerEvent } from 'pixi.js'
 
-import { TEXT_Y,useCreateText } from '@/components/SceneCore/hooks/createText'
+import { TEXT_Y, useCreateText } from '@/components/SceneCore/hooks/createText'
 import { useDragComponentHook } from '@/components/SceneCore/eventHooks/mouseHook'
 import type { ICreateTrackParams, ICreateTrackReturn } from '@/components/SceneCore/types/hooks'
 import { addSelectedComponent } from '@/components/SceneCore/utils/index'
@@ -16,7 +16,8 @@ import NodeItem from '../core/NodeItem'
 import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 
 export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
-  const { props, config, assets, userData, app, root } = params
+  const { props, config, userData } = params
+  const { assets, root, app } = userData
   const baseWidth = 40
   /* 盒子 */
   const container = new Container()
@@ -172,7 +173,7 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
     dispose: () => {
       container.destroy({
         children: true,
-        context:true
+        context: true,
       })
     },
   }

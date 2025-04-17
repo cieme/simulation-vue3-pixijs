@@ -11,8 +11,6 @@ import {
 import { throttleForResize } from '@/utils/index'
 
 export default class SelectArea {
-  app: IBaseSceneParams['app']
-  root: IBaseSceneParams['root']
   userData: IBaseSceneParams['userData']
   /*  */
   node = new Graphics()
@@ -34,10 +32,9 @@ export default class SelectArea {
     }
     return this.alignConfigMap
   })
-  constructor({ app, root, userData }: IBaseSceneParams) {
-    this.eventNode = app.stage
-    this.app = app
-    this.root = root
+  constructor({ userData }: IBaseSceneParams) {
+    this.eventNode = userData.app.stage
+
     this.userData = userData
     this.node.label = 'SelectArea'
   }
@@ -87,8 +84,8 @@ export default class SelectArea {
     useGlobalToLocal({
       globalPoint: e.global,
       node: this.node,
-      app: this.app,
-      root: this.root,
+      app: this.userData.app,
+      root: this.userData.root,
       point: this.startPoint,
     })
 
@@ -101,8 +98,8 @@ export default class SelectArea {
       useGlobalToLocal({
         globalPoint: e.global,
         node: this.node,
-        app: this.app,
-        root: this.root,
+        app: this.userData.app,
+        root: this.userData.root,
         point: this.endPoint,
       })
 
@@ -201,8 +198,8 @@ export default class SelectArea {
     const rect2 = new Rectangle(
       data.startGlobalPoint.x,
       data.startGlobalPoint.y,
-      data.width * this.root.scale.x,
-      data.height * this.root.scale.x,
+      data.width * this.userData.root.scale.x,
+      data.height * this.userData.root.scale.x,
     )
 
     if (rect1.intersects(rect2)) {

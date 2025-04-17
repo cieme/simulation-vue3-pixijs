@@ -11,16 +11,13 @@ export const linkWidth = 15
 export const linkHeight = 9
 
 export interface IUseLinkParams {
-  assets: IBaseSceneParams['assets']
   /* 判断当前链接组件的 */
   startComponentConfig: ILinkParams['startComponentConfig'] | null
   userData: IBaseSceneParams['userData']
-  app: Application
-  root: IBaseSceneParams['root']
 }
 const cancelArray = [ENUM_LINK_TYPE.LINK_CANCEL, ENUM_LINK_TYPE.LINK_SUCCESS]
-export function useNextLink({ assets, startComponentConfig, userData, app, root }: IUseLinkParams) {
-  const texture = assets.sheet?.textures['images/icon/link_dot.png']
+export function useNextLink({ startComponentConfig, userData }: IUseLinkParams) {
+  const texture = userData.assets.sheet?.textures['images/icon/link_dot.png']
   const nextLink = new Sprite(texture)
   nextLink.label = 'nextLink'
   nextLink.tint = 0x76efff
@@ -53,8 +50,6 @@ export function useNextLink({ assets, startComponentConfig, userData, app, root 
         const { dispose: AppDispose } = appLink({
           link,
           userData,
-          app,
-          root,
         })
         AppDisposeHandler = AppDispose
         onEmitLinkSuccessOrCancel()
@@ -102,8 +97,8 @@ export function useNextLink({ assets, startComponentConfig, userData, app, root 
     unEmit,
   }
 }
-export function usePrevLink({ assets, startComponentConfig, userData, app }: IUseLinkParams) {
-  const texture = assets.sheet?.textures['images/icon/link_dot.png']
+export function usePrevLink({ startComponentConfig, userData }: IUseLinkParams) {
+  const texture = userData.assets.sheet?.textures['images/icon/link_dot.png']
   const prevLink = new Sprite(texture)
   prevLink.label = 'prevLink'
   prevLink.tint = 0xea5480
@@ -175,13 +170,9 @@ export function usePrevLink({ assets, startComponentConfig, userData, app }: IUs
 export function appLink({
   link,
   userData,
-  app,
-  root,
 }: {
   link: Link
   userData: IBaseSceneParams['userData']
-  app: Application
-  root: IBaseSceneParams['root']
 }) {
   const onMouseDown = (e: FederatedPointerEvent) => {
     if (e.button === E_MOUSE_BUTTON.LEFT) {
@@ -189,7 +180,7 @@ export function appLink({
       const mouseY = e.global.y
       const point = { x: mouseX, y: mouseY }
       /*  */
-      const LinkManager = root.getChildByLabel('LinkManager')
+      const LinkManager = userData.root.getChildByLabel('LinkManager')
 
       const localPoint = LinkManager!.toLocal(point)
       link.point.push(localPoint)
@@ -209,14 +200,14 @@ export function appLink({
     emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_ING)
   }, 30)
 
-  app.stage.on('mousedown', onMouseDown)
-  app.stage.on('rightdown', onRightDown)
-  app.stage.on('mousemove', pointerMove)
+  userData.app.stage.on('mousedown', onMouseDown)
+  userData.app.stage.on('rightdown', onRightDown)
+  userData.app.stage.on('mousemove', pointerMove)
 
   const dispose = () => {
-    app.stage.off('mousedown', onMouseDown)
-    app.stage.off('rightdown', onRightDown)
-    app.stage.off('mousemove', pointerMove)
+    userData.app.stage.off('mousedown', onMouseDown)
+    userData.app.stage.off('rightdown', onRightDown)
+    userData.app.stage.off('mousemove', pointerMove)
   }
   return {
     dispose,
