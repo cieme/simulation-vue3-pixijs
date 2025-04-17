@@ -138,7 +138,7 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
       selectNode: select,
     }),
   )
-
+  root.addChild(container)
   watchEffect(() => {
     container.label = config.label
     text.text = config.label
@@ -167,9 +167,6 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
     select,
     icon,
     text,
-    addToScene: (app: Application) => {
-      root.addChild(container)
-    },
     dispose: () => {
       container.destroy({
         children: true,
@@ -185,8 +182,8 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
  * @export
  * @returns {{ root: any; }}
  */
-export function useRootContainer() {
-  const root = new Container()
-  root.label = 'root'
-  return { root }
+export function useRootContainer(label?: string) {
+  const node = new Container()
+  node.label = label || 'root'
+  return { node }
 }

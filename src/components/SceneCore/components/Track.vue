@@ -14,16 +14,14 @@ const props = withDefaults(defineProps<ITrackProps>(), {
   selectedComponent: () => [],
 })
 
-const {  userData } = useApp()
+const { userData } = useApp()
 let disposeNode: () => void
 function init(app: Application) {
-  const { addToScene, dispose } = useCreateTrack({
+  const { dispose } = useCreateTrack({
     props,
     config: props.config,
-
     userData,
   })
-  addToScene(app)
   disposeNode = dispose
 }
 onMounted(() => {

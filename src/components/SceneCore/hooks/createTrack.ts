@@ -17,7 +17,7 @@ import emitter, { E_EVENT_SCENE } from '../mitt/mitt'
 
 export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
   const { props, config, userData } = params
-  const { assets, root, app } = userData
+  const { assets, root, trackManagerNode, app } = userData
   const baseWidth = 40
   /* 盒子 */
   const container = new Container()
@@ -52,6 +52,7 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
       })
       const idArray = userData.selectedComponent.value.map((item) => item.id)
       emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, idArray)
+      updateLinkPosition()
     },
   })
   /* 文字 */
@@ -64,7 +65,7 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
    * 顺序比较重要, 会影响事件
    */
   container.addChild(sprite)
-  container.addChild(text)
+  trackManagerNode.addChild(container)
 
   const linkParams = {
     assets,
@@ -76,9 +77,13 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
 
   const { node: nextLinkNode } = useNextLink(linkParams)
   const { node: prevLinkNode } = usePrevLink(linkParams)
-  updateLinkPosition()
-  container.addChild(nextLinkNode)
-  container.addChild(prevLinkNode)
+
+  userData.trackLabelManagerNode.addChild(text)
+  userData.trackLabelManagerNode.addChild(nextLinkNode)
+  userData.trackLabelManagerNode.addChild(prevLinkNode)
+
+  /*  */
+
   draw()
   drawNormal()
   /*  */
@@ -99,6 +104,7 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
     }),
   )
 
+  updateLinkPosition()
   watchEffect(() => {
     container.label = config.label
     text.text = config.label
@@ -124,14 +130,21 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
   function updateLinkPosition() {
     const startLinkPosition = config.points[0]
     const endLinkPosition = config.points[config.points.length - 1]
-    prevLinkNode.position.x = startLinkPosition.x
-    prevLinkNode.position.y = startLinkPosition.y
 
-    nextLinkNode.position.x = endLinkPosition.x
-    nextLinkNode.position.y = endLinkPosition.y
+    const globalStartLinkPosition = container.toGlobal({ ...startLinkPosition })
+    const globalEndLinkPosition = container.toGlobal({ ...endLinkPosition })
 
-    text.position.x = endLinkPosition.x
-    text.position.y = endLinkPosition.y + TEXT_Y
+    const localStartLinkPosition = userData.trackLabelManagerNode.toLocal(globalStartLinkPosition)
+    const localEndLinkPosition = userData.trackLabelManagerNode.toLocal(globalEndLinkPosition)
+
+    prevLinkNode.position.x = localStartLinkPosition.x
+    prevLinkNode.position.y = localStartLinkPosition.y
+
+    nextLinkNode.position.x = localEndLinkPosition.x
+    nextLinkNode.position.y = localEndLinkPosition.y
+
+    text.position.x = localEndLinkPosition.x
+    text.position.y = localEndLinkPosition.y + TEXT_Y
   }
 
   function draw() {
@@ -167,9 +180,6 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
     select: sprite,
     icon: sprite,
     text,
-    addToScene: (app: Application) => {
-      root.addChild(container)
-    },
     dispose: () => {
       container.destroy({
         children: true,

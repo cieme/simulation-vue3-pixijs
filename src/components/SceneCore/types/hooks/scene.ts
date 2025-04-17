@@ -28,6 +28,8 @@ export interface IBaseSceneParams {
     assets: Reactive<IAssets>
     root: Container
     app: Application
+    trackManagerNode: Container
+    trackLabelManagerNode: Container
     currentLink: Link | null
     selectedComponent: Ref<IBaseComponent[]>
     selectComponentLength: ComputedRef<number>

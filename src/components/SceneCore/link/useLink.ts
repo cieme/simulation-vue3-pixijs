@@ -154,6 +154,7 @@ export function usePrevLink({ startComponentConfig, userData }: IUseLinkParams) 
   /*  */
 
   function dispose() {
+    console.log('prev 销毁')
     unEmit()
     removeLinkEvent()
   }
@@ -194,8 +195,8 @@ export function appLink({
     dispose()
   }
   const pointerMove = throttleForResize<FederatedPointerEvent>((e) => {
-    const mouseX = e.global.x
-    const mouseY = e.global.y
+    const mouseX = e.global.x - 3
+    const mouseY = e.global.y - 3
     link.linking = { x: mouseX, y: mouseY }
     emitter.emit(E_EVENT_SCENE.LINK_STATUS, ENUM_LINK_TYPE.LINK_ING)
   }, 30)

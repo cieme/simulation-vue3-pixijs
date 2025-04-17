@@ -38,13 +38,12 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
 
   const app = new Application()
 
-  provide('app', app)
-
   const { assets } = useAssets()
-  provide('assets', assets)
 
-  const { root } = useRootContainer()
-  provide('root', root)
+  const { node: root } = useRootContainer()
+  const { node: trackManagerNode } = useRootContainer('trackManager')
+  const { node: trackLabelManagerNode } = useRootContainer('trackLabelManager')
+
   /* 2 */
   const grid = new Grid()
 
@@ -67,6 +66,9 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     app,
     assets,
     root,
+    trackManagerNode,
+    trackLabelManagerNode,
+    /*  */
     configList,
     nodeList,
     selectedNodes,
@@ -121,7 +123,11 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     app.stage.label = 'stage'
     root.addChild(grid.node)
     root.addChild(selectArea.node)
+    /* 这个顺序很重要，顺序错了会多一次重绘 */
+    root.addChild(trackManagerNode)
+    root.addChild(trackLabelManagerNode)
     root.addChild(linkInstance.node)
+    /*  */
     app.stage.addChild(root)
     selectArea.init()
     linkInstance.init()

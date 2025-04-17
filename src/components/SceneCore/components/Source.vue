@@ -13,15 +13,14 @@ const props = withDefaults(defineProps<ISourceProps>(), {
   selectedComponent: () => [],
 })
 
-const {  userData } = useApp()
+const { userData } = useApp()
 let disposeNode: () => void
 function init(app: Application) {
-  const { addToScene, dispose } = useCreateNode({
+  const { dispose } = useCreateNode({
     props,
     config: props.config,
     userData,
   })
-  addToScene(app)
   disposeNode = dispose
 }
 onMounted(() => {

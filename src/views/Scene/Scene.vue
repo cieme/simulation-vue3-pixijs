@@ -45,8 +45,7 @@ import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 const refTarget = ref<HTMLDivElement>()
 
-const { selectedComponent, userData, linkInstance, isSceneLoaded } =
-  useScene(refTarget)
+const { selectedComponent, userData, linkInstance, isSceneLoaded } = useScene(refTarget)
 const configList = userData.configList
 let timer: number | null = null
 
@@ -78,7 +77,7 @@ function initTest() {
   timer = setTimeout(() => {
     const link = new Link({
       uniqueId: '1',
-      start: '1',
+      start: '素材sadadada1',
       end: '2',
       point: [
         { x: 100, y: 100 },
@@ -88,7 +87,7 @@ function initTest() {
     const link2 = new Link({
       uniqueId: '2',
       start: '2',
-      end: '3',
+      end: '素材sadadada1',
       point: [
         { x: 30, y: 30 },
         { x: 80, y: 90 },
@@ -123,7 +122,7 @@ function initTest() {
         { x: -88, y: 250 },
       ],
     }
-    configList.value = [xx, yy, ...genData()]
+    configList.value = [xx, ...genData(), yy]
   }, 0)
 }
 onMounted(() => {

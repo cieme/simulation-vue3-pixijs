@@ -6,7 +6,6 @@ export interface ICreateNodeReturn {
   select: Sprite
   icon: Sprite
   text: BitmapText
-  addToScene: (app: Application) => void
   dispose: () => void
 }
 export interface ICreateTrackReturn {
@@ -15,6 +14,5 @@ export interface ICreateTrackReturn {
   select: Graphics
   icon: Graphics
   text: BitmapText
-  addToScene: (app: Application) => void
   dispose: () => void
 }
