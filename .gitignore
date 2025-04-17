@@ -13,7 +13,7 @@ dist
 dist-ssr
 coverage
 *.local
-Ins_stats.html
+stats.html
 
 /cypress/videos/
 /cypress/screenshots/
