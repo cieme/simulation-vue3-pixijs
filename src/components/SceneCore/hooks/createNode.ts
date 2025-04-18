@@ -86,12 +86,12 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
     app,
     buttons: [E_MOUSE_BUTTON.LEFT],
     moveHandler: ({ scaleX, scaleY }) => {
-      userData.Com_selectedNodes.value.forEach((targetNode) => {
+      userData.Com_M_selectedNodes.value.forEach((targetNode) => {
         const position = targetNode.node.position
         targetNode.node.position.x = position.x + scaleX
         targetNode.node.position.y = position.y + scaleY
       })
-      const idArray = userData.Ref_selectedComponent.value.map((item) => item.id)
+      const idArray = Array.from(userData.Ref_selectedComponent.value.keys())
       emitter.emit(E_EVENT_SCENE.MOVE_COMPONENT, idArray)
     },
   })
@@ -149,7 +149,7 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
   watch(userData.Com_selectComponentLength, () => {
     let hasSelect = false
     for (const item of props.Ref_selectedComponent) {
-      if (item.id === config.id) {
+    if (item[0] === config.id) {
         hasSelect = true
         break
       }

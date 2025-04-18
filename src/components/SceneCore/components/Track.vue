@@ -7,11 +7,9 @@ import { useCreateTrack } from '@/components/SceneCore/hooks/createTrack'
 import { Application, Container } from 'pixi.js'
 import type { ITrackComponent } from '@/components/SceneCore/types/base'
 import type { ITrackProps } from '@/components/SceneCore/types/props'
-import type { IBaseSceneParams } from '@/components/SceneCore/types/hooks'
-
 const props = withDefaults(defineProps<ITrackProps>(), {
   config: () => ({}) as ITrackComponent,
-  Ref_selectedComponent: () => [],
+  Ref_selectedComponent: () => new Map<string, ITrackComponent>(),
 })
 
 const { userData } = useApp()

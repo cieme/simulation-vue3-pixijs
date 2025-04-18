@@ -7,10 +7,9 @@ import { useCreateNode } from '@/components/SceneCore/hooks/createNode'
 import { Application } from 'pixi.js'
 import type { ISourceComponent } from '@/components/SceneCore/types/base'
 import type { ISourceProps } from '@/components/SceneCore/types/props'
-
 const props = withDefaults(defineProps<ISourceProps>(), {
   config: () => ({}) as ISourceComponent,
-  Ref_selectedComponent: () => [],
+  Ref_selectedComponent: () => new Map<string, ISourceComponent>(),
 })
 
 const { userData } = useApp()

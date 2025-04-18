@@ -30,7 +30,7 @@ import '@/components/SceneCore/core/MU/MU'
  *
  * @export
  * @param {Ref<HTMLDivElement | undefined>} refTarget
- * @returns {{ app: any; assets: any; root: any; showComponent: any; initStage: () => any; Ref_selectedComponent: any; Com_selectedNodes: any; }}
+ * @returns {{ app: any; assets: any; root: any; showComponent: any; initStage: () => any; Ref_selectedComponent: any; Com_M_selectedNodes: any; }}
  */
 export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   // useStats()
@@ -48,19 +48,21 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   const Ins_Grid = new Grid()
 
   const M_nodeList: ICreateNodeParams['userData']['M_nodeList'] = new Map()
-  const Ref_selectedComponent = ref<IBaseProps['Ref_selectedComponent']>([])
-  const Com_selectedNodes = computed(() => {
-    const list = Ref_selectedComponent.value
-      .map((node) => {
-        return M_nodeList.get(node.id)
-      })
-      .filter((item) => !!item)
-
-    return list
+  const Ref_selectedComponent = ref<Map<string, TComponent>>(new Map())
+  const Com_M_selectedNodes = computed(() => {
+    const map = new Map();
+    Ref_selectedComponent.value.forEach((item) => {
+      const node = M_nodeList.get(item.id)
+      if (node) {
+        map.set(item.id, node)
+      }
+    })
+    return map
   })
+
   const Ref_M_configList = ref<Map<string,TComponent>>(new Map())
   const Com_selectComponentLength = computed(() => {
-    return Ref_selectedComponent.value.length
+    return Ref_selectedComponent.value.size
   })
   const userData = shallowReactive<ICreateNodeParams['userData']>({
     app,
@@ -71,7 +73,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     /*  */
     Ref_M_configList,
     M_nodeList,
-    Com_selectedNodes,
+    Com_M_selectedNodes,
     Ref_selectedComponent,
     Com_selectComponentLength,
     Ref_operationStatus: ref(ENUM_TOOL.SELECT),
@@ -190,7 +192,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   }
   const appMouseDownHandler = (e: FederatedPointerEvent) => {
     console.log('scene mousedown')
-    Ref_selectedComponent.value.length = 0
+    Ref_selectedComponent.value.clear()
     Ins_linkManager.clearPointAndClearCurrentLink()
     emitter.emit(E_EVENT_SCENE.MOUSE_DOWN_SCENE, e)
   }
@@ -222,7 +224,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
   }
   const boardDelete = (e: KeyboardEvent) => {
     /* 如果有组件选中，删除组件，如果有连接线选中，删除连接线 */
-    if (Ref_selectedComponent.value.length > 0) {
+    if (Ref_selectedComponent.value.size > 0) {
       const linkArray: string[] = ([] = [])
       Ref_selectedComponent.value.forEach((item) => {
         /* 删除节点缓存 */
@@ -242,7 +244,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
         }
       })
       /* 清掉选中的 */
-      Ref_selectedComponent.value.length = 0
+      Ref_selectedComponent.value.clear()
       /* 假如确实有删除的连接线，重新渲染连接线 */
       if (linkArray.length > 0) {
         reRenderLink()
@@ -268,7 +270,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     hasApp,
     isSceneLoaded,
     initStage,
-    Com_selectedNodes,
+    Com_M_selectedNodes,
     userData,
     Ref_selectedComponent,
     Ins_linkManager,

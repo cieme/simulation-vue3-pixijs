@@ -21,8 +21,8 @@ export default defineComponent({
       default: () => ({}),
     },
     Ref_selectedComponent: {
-      type: Array as () => IBaseComponent[],
-      default: () => [],
+      type: Object as () => Map<string, TComponent>,
+      default: () => new Map<string, TComponent>(),
     },
   },
   setup(props) {

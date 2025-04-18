@@ -108,7 +108,7 @@ export default class LinkManager {
     const link = this.userData.linkModule.LinkData.find((item) => item.uniqueId === polygonOne.id)
 
     if (link) {
-      this.userData.Ref_selectedComponent.value.length = 0
+      this.userData.Ref_selectedComponent.value.clear()
       /* 这行有用，如果没选组件，也要清除一次 */
       this.clearPointAndClearCurrentLink()
       /* 这微任务是因为 scene watch 了 组件数量 */

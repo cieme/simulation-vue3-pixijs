@@ -20,17 +20,17 @@ import type {
   ISourceComponent,
   ITrackComponent,
 } from '@/components/SceneCore/types/base'
-import type { IBaseProps } from '@/components/SceneCore/types/props'
+import type { AllComponentProps } from '@/components/SceneCore/types/props'
 import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 interface ICoreProps {
-  Ref_selectedComponent: IBaseProps['Ref_selectedComponent']
+  Ref_selectedComponent: Map<string, TComponent>
   M_componentList: Map<string, TComponent>
   isSceneLoaded: boolean
 }
 const props = withDefaults(defineProps<ICoreProps>(), {
-  Ref_selectedComponent: () => [],
-  M_componentList: () => (new Map<string, TComponent>()),
+  Ref_selectedComponent: () => new Map<string, TComponent>(),
+  M_componentList: () => new Map<string, TComponent>(),
   isSceneLoaded: () => false,
 })
 

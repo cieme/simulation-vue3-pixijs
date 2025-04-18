@@ -30,22 +30,22 @@ export interface IBaseSceneParams {
     app: Application
     trackManagerNode: Container
     trackLabelManagerNode: Container
-    /* 选中的连接线 */
-    Ins_currentLink: Link | null
+    /* 组件配置列表 */
+    Ref_M_configList: Ref<Map<string, TComponent>>
     /* 选中的组件配置 */
-    Ref_selectedComponent: Ref<TComponent[]>
+    Ref_selectedComponent: Ref<Map<string, TComponent>>
     /* 选中的组件数量 */
     Com_selectComponentLength: ComputedRef<number>
-    /* 组件配置列表 */
-    Ref_M_configList: Ref<Map<string,TComponent>>
     /* 节点列表,用来获取某些节点 */
     M_nodeList: Map<string, NodeItem>
     /* 选中的节点 */
-    Com_selectedNodes: ComputedRef<NodeItem[]>
+    Com_M_selectedNodes: ComputedRef<Map<string, NodeItem>>
     /* 当前操作状态 */
     Ref_operationStatus: Ref<ENUM_TOOL>
     /* 缩放比例 */
     Ref_scale: Ref<PointData>
+    /* 选中的连接线 */
+    Ins_currentLink: Link | null
     /* 组件连接模块 */
     linkModule: ILinkParams
   }
