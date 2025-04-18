@@ -96,6 +96,7 @@ export function useCreateTrack(params: ICreateTrackParams): ICreateTrackReturn {
     config.id,
     new NodeItem({
       id: config.id,
+      type:config.type,
       node: container,
       nextLinkNode,
       prevLinkNode,

@@ -131,6 +131,7 @@ export function useCreateNode(params: ICreateNodeParams): ICreateNodeReturn {
     config.id,
     new NodeItem({
       id: config.id,
+      type: config.type,
       node: container,
       nextLinkNode,
       prevLinkNode,
