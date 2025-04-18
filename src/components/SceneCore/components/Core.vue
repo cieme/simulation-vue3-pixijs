@@ -4,16 +4,15 @@
     <template v-if="props.isSceneLoaded">
       <Distribute
         :Ref_selectedComponent="props.Ref_selectedComponent"
-        v-for="item in props.componentList"
-        :key="item.id"
-        :config="item"
+        v-for="(item, key) in props.M_componentList"
+        :key="key"
+        :config="item[1]"
       ></Distribute>
     </template>
   </div>
 </template>
 <script setup lang="ts">
-import { type Reactive } from 'vue'
-
+import { ref, defineProps } from 'vue'
 import Distribute from '@/components/SceneCore/components/Distribute.vue'
 import type {
   TComponent,
@@ -26,12 +25,12 @@ import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 
 interface ICoreProps {
   Ref_selectedComponent: IBaseProps['Ref_selectedComponent']
-  componentList: TComponent[]
+  M_componentList: Map<string, TComponent>
   isSceneLoaded: boolean
 }
 const props = withDefaults(defineProps<ICoreProps>(), {
   Ref_selectedComponent: () => [],
-  componentList: () => [],
+  M_componentList: () => (new Map<string, TComponent>()),
   isSceneLoaded: () => false,
 })
 

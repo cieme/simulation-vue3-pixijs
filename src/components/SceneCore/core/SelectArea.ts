@@ -9,6 +9,7 @@ import {
   replaceSelectedComponentList,
 } from '@/components/SceneCore/utils/index'
 import { throttleForResize } from '@/utils/index'
+import { string } from 'three/tsl'
 
 export default class SelectArea {
   userData: IBaseSceneParams['userData']
@@ -23,15 +24,7 @@ export default class SelectArea {
   gap = 10
   selectedComponentMapInstance = useSelectedComponent()
   eventNode: Container
-  alignConfigMap: Map<string, (typeof this.userData.Ref_configList.value)[number]> = new Map()
-  computedUserConfigObject = computed(() => {
-    this.alignConfigMap.clear()
-    for (let i = 0; i < this.userData.Ref_configList.value.length; i++) {
-      const item = this.userData.Ref_configList.value[i]
-      this.alignConfigMap.set(item.id, item)
-    }
-    return this.alignConfigMap
-  })
+
   constructor({ userData }: IBaseSceneParams) {
     this.eventNode = userData.app.stage
 
@@ -156,7 +149,7 @@ export default class SelectArea {
   checkoutArea(data: ReturnType<typeof this.getArea>) {
     /* TODO */
     const nodeMap = this.userData.M_nodeList
-    const Ref_configList = this.userData.Ref_configList.value
+    const Ref_M_configList = this.userData.Ref_M_configList.value
     // const keys = Array.from(M_nodeList.keys())
     this.selectedComponentMapInstance.clear()
 
@@ -164,8 +157,8 @@ export default class SelectArea {
       const node = item[1].iconNode
       if (!node) continue
       if (this.detectIntersection(node, data)) {
-        const config: (typeof Ref_configList)[number] | undefined =
-          this.computedUserConfigObject.value.get(item[0])
+        const config: ReturnType<(typeof Ref_M_configList)['get']> | undefined =
+          this.userData.Ref_M_configList.value.get(item[0])
 
         if (config) {
           this.selectedComponentMapInstance.add(config)

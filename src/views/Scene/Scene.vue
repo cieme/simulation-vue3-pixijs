@@ -19,7 +19,7 @@
         <Core
           :Ref_selectedComponent="Ref_selectedComponent"
           :isSceneLoaded="isSceneLoaded"
-          :componentList="Ref_configList"
+          :M_componentList="Ref_M_configList"
         >
           <template #default>
             <div class="w-full h-full" ref="refTarget"></div>
@@ -46,7 +46,7 @@ import { E_COMPONENT_TYPE } from '@/components/SceneCore/enum'
 const refTarget = ref<HTMLDivElement>()
 
 const { Ref_selectedComponent, userData, Ins_linkManager, isSceneLoaded } = useScene(refTarget)
-const Ref_configList = userData.Ref_configList
+const Ref_M_configList = userData.Ref_M_configList
 let timer: number | null = null
 
 function genData() {
@@ -122,7 +122,10 @@ function initTest() {
         { x: -88, y: 250 },
       ],
     }
-    Ref_configList.value = [xx, ...genData(), yy]
+    const testArray = [xx, ...genData(), yy]
+    testArray.forEach((item) => {
+      Ref_M_configList.value.set(item.id, item)
+    })
   }, 0)
 }
 onMounted(() => {

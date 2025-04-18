@@ -58,7 +58,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
 
     return list
   })
-  const Ref_configList = ref<TComponent[]>([])
+  const Ref_M_configList = ref<Map<string,TComponent>>(new Map())
   const Com_selectComponentLength = computed(() => {
     return Ref_selectedComponent.value.length
   })
@@ -69,7 +69,7 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
     trackManagerNode,
     trackLabelManagerNode,
     /*  */
-    Ref_configList,
+    Ref_M_configList,
     M_nodeList,
     Com_selectedNodes,
     Ref_selectedComponent,
@@ -228,10 +228,8 @@ export function useScene(refTarget: Ref<HTMLDivElement | undefined>) {
         /* 删除节点缓存 */
         M_nodeList.delete(item.id)
         /* 删除组件 */
-        const index = userData.Ref_configList.value.findIndex(
-          (component) => component.id === item.id,
-        )
-        userData.Ref_configList.value.splice(index, 1)
+        userData.Ref_M_configList.value.delete(item.id)
+
         /* 删除连接线 */
         for (let index = 0; index < userData.linkModule.LinkData.length; index++) {
           const linkItem = userData.linkModule.LinkData[index]

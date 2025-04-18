@@ -33,11 +33,11 @@ export interface IBaseSceneParams {
     /* 选中的连接线 */
     Ins_currentLink: Link | null
     /* 选中的组件配置 */
-    Ref_selectedComponent: Ref<IBaseComponent[]>
+    Ref_selectedComponent: Ref<TComponent[]>
     /* 选中的组件数量 */
     Com_selectComponentLength: ComputedRef<number>
     /* 组件配置列表 */
-    Ref_configList: Ref<TComponent[]>
+    Ref_M_configList: Ref<Map<string,TComponent>>
     /* 节点列表,用来获取某些节点 */
     M_nodeList: Map<string, NodeItem>
     /* 选中的节点 */
